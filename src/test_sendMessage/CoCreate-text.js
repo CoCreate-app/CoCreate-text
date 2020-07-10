@@ -43,7 +43,7 @@ var CoCreateText = {
       
     });
     
-    CoCreateSocket.listen('getDocument', function(data) {
+    CoCreateSocket.listen('readDocument', function(data) {
       
       if (!data.metadata || data.metadata.type != "crdt") {
         return;
@@ -102,7 +102,7 @@ var CoCreateText = {
     
     //. get Crud document
 
-		CoCreate.getDocument({
+		CoCreate.readDocument({
 		  collection: collection,
 		  document_id: document_id,
 		  metadata: {
