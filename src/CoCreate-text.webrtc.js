@@ -7,7 +7,7 @@ var CoCreateText = {
 
   init : function() {
     this.initElements(document);
-    // this.initSockets();
+    this.initSockets();
   },
   
   initElements: function(container) {
@@ -79,7 +79,7 @@ var CoCreateText = {
   			
   			if (data['collection'] == collection && data['document_id'] == id && (name in data.data)) {
   			 // _this.sendChangeData(input, data['data'][name], 0, data['data'][name].length, false);
-  			  CoCreate.replaceDataCrdt({
+  			  CoCreate.replaceInitDataCrdt({
   			    collection: collection,
   			    document_id: id,
   			    name: name,
@@ -118,13 +118,13 @@ var CoCreateText = {
     
     //. get Crud document
 
-		// CoCreate.readDocument({
-		//   collection: collection,
-		//   document_id: document_id,
-		//   metadata: {
-		//     type: 'crdt'
-		//   }
-		// })
+		CoCreate.readDocument({
+		  collection: collection,
+		  document_id: document_id,
+		  metadata: {
+		    type: 'crdt'
+		  }
+		})
 
     this.elements.push(element)
   },
