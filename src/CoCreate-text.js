@@ -34,10 +34,10 @@ var CoCreateText = {
         continue;
       }
       
-			if (CoCreateInit.getInitialized(elements[i])) {
-				continue;
-			}
-			CoCreateInit.setInitialized(elements[i]);
+		// 	if (CoCreateInit.getInitialized(elements[i])) {
+		// 		continue;
+		// 	}
+		// 	CoCreateInit.setInitialized(elements[i]);
       
       this._initEvents(elements[i]);
       
