@@ -8,6 +8,30 @@ var CoCreateText = {
     // this.initSockets();
   },
   
+  refreshElement: function(mutation) {
+    let element = mutation.target;
+    if (!element) return;
+    const tagName = element.tagName.toLowerCase();
+    if (!['input', 'textarea'].includes(tagName) ||
+        !element.getAttribute('data-document_id') ||
+        !element.getAttribute('name')) {
+      return 
+    }
+    
+    if (!CoCreateObserver.isUsageY(element)) return;
+    
+    if (!CoCreate.observer.getInitialized(element, 'text')) {
+      this.__initEvents(element);
+    }
+    CoCreate.observer.setInitialized(element, 'text');
+    
+    if (CoCreate.document_id.checkID(element)) {
+      // element.value = "";
+      this.createYDoc(element, true);
+    }
+    
+  },
+  
   initElement: function(container) {
     var self = this;
     let fetch_container = container || document;
@@ -21,38 +45,36 @@ var CoCreateText = {
       elements = [fetch_container];
     }
 
-    for (var i = 0; i < elements.length; i++) {
-      // CoCreateUtils.disableAutoFill(elements[i])
-      if (!CoCreateInput.isUsageY(elements[i])) {
-        continue;
+    elements.forEach((element) => {
+      if (!CoCreateInput.isUsageY(element)) {
+        return;
       }
       
-      if (this.checkExistElement(elements[i])) {
+      if (self.checkExistElement(element)) {
         // this.setInitValue(elements[i])
-        continue;
+        return;
       }
       
-			if (CoCreateInit.getInitialized(elements[i])) {
-				continue;
+			if (CoCreate.observer.getInitialized(element, 'text')) {
+				return;
 			}
-			CoCreateInit.setInitialized(elements[i]);
+			CoCreate.observer.setInitialized(element, 'text');
       
-      this.__initEvents(elements[i]);
+      self.__initEvents(element);
       
-      if (CoCreateDocument.checkID(elements[i])) {
-        this.createYDoc(elements[i]);
+      if (CoCreate.document_id.checkID(element)) {
+        self.createYDoc(element);
 
       } else {
         //. register create document_id event
-        elements[i].addEventListener('set-document_id', function(event) {
+        element.addEventListener('set-document_id', function(event) {
           var el = this;
           var text_str = el.value;
-
           self.createYDoc(el);
           self.sendChangeData(el, text_str, 0, text_str.length);
         })
       }
-    }
+    })
   },
   
   checkExistElement: function(element) {
@@ -66,31 +88,28 @@ var CoCreateText = {
   
   setInitValue: function(element) {
     var typeId = this.generateTypeName(element);
-    var value = CoCreateCrdt.getWholeString(typeId);
+    var value = CoCreate.crdt.getWholeString(typeId);
     element.value = value;
+    
+    // CoCreateInput.setValue(element, value);
   },
   
-  createYDoc: function(element) {
+  createYDoc: function(element, isExclude) {
     const collection = element.getAttribute('data-collection')
 		const document_id = element.getAttribute('data-document_id')
-    const status = CoCreate.initDataCrdt({
+		const name = element.getAttribute('name');
+    const status = CoCreate.crdt.init({
       collection: collection,
       document_id: document_id,
-      name: element.getAttribute('name'),
+      name: name,
       element: element,
     })
-    
-    //. get Crud document
-
-		// CoCreate.readDocument({
-		//   collection: collection,
-		//   document_id: document_id,
-		//   metadata: {
-		//     type: 'crdt'
-		//   }
-		// })
-
-    this.elements.push(element)
+    if (!isExclude) {
+      this.elements.push(element)
+    } else {
+      element.value = CoCreate.crdt.get({collection, document_id, name })
+      // CoCreateInput.setValue(element, CoCreate.crdt.get({collection, document_id, name }));
+    }
   },
   
   
@@ -118,7 +137,7 @@ var CoCreateText = {
     input_element.addEventListener('keydown', function(event) {
         let arrows = [37,38,39,40];
         if(arrows.indexOf(event.keyCode)!=-1){
-          console.log("keydown")
+          //console.log("keydown ---- ")
           self.sendPosition(this);
         }
     });
@@ -130,7 +149,7 @@ var CoCreateText = {
     
     input_element.addEventListener('blur', function(event) {
         const id = self.generateTypeName(this);
-        CoCreateCrdt.setCursorNull(id);
+        CoCreate.crdt.setCursorNull(id);
     });
     
     input_element.addEventListener('input', function(event) {
@@ -170,7 +189,7 @@ var CoCreateText = {
           //. delete event
           let character_deleted = selection_info.start - selection_info.end;
           
-          //recalculate_local_cursors(this,character_deleted)
+          //CoCreateCursors.recalculate_local_cursors(this,character_deleted)
           
           self.sendChangeData(this, "", selection_info.start, selection_info.end);
           if (content_text.length > 0) {
@@ -178,7 +197,6 @@ var CoCreateText = {
           }
           self.setSelectionInfo(this, false, this.selectionStart, this.selectionStart);
         } else {
-          
           self.sendChangeData(this, content_text, nowstart, nowend);
         }
       }
@@ -204,7 +222,7 @@ var CoCreateText = {
       }
       if(start==end){
         // to calculate Cursors in collaboration 
-        // recalculate_local_cursors(this,content_text.length)
+        // CoCreateCursors.recalculate_local_cursors(this,content_text.length)
       }
       //. insert event
       self.sendChangeData(this, content_text, start, start, false);
@@ -213,7 +231,6 @@ var CoCreateText = {
     
     input_element.addEventListener('cocreate-y-update', function(event) {
       var info = event.detail;
-      
       input_element.crudSetted = true;
       
       var pos = 0;
@@ -241,41 +258,7 @@ var CoCreateText = {
       })
     })
   },
-  
-  __initSockets: function() {
-    const self = this;
-    CoCreateSocket.listen('readDocument', function(data) {
-      
-      if (!data.metadata || data.metadata.type != "crdt") {
-        return;
-      }
-      self.elements.forEach((input) => {
 
-  			if (input.crudSetted == true) {
-  			  return
-  			}
-
-  			const collection = input.getAttribute('data-collection')
-  			const id = input.getAttribute('data-document_id')
-  			const name = input.getAttribute('name')
-  			const data_fetch_value = input.getAttribute('data-fetch_value');
-  			
-  			if (data_fetch_value === "false" || !CoCreateUtils.isReadValue(input)) return;
-  			
-  			if (data['collection'] == collection && data['document_id'] == id && (name in data.data)) {
-  			 // self.sendChangeData(input, data['data'][name], 0, data['data'][name].length, false);
-  			  CoCreate.replaceDataCrdt({
-  			    collection: collection,
-  			    document_id: id,
-  			    name: name,
-  			    value: data['data'][name],
-  			  })
-  			  input.crudSetted = true;
-  			}
-  		})
-    })
-  },
-  
   setSelectionInfo:function(e, isSelect, start, end) {
     e.setAttribute("is_selected", isSelect);
     e.setAttribute("selection_start", start);
@@ -304,7 +287,7 @@ var CoCreateText = {
   sendChangeData: function(element, content, start, end, isRemove = true) {
 
     if (!this.checkDocumentID(element)) {
-      CoCreateDocument.requestDocumentId(element)
+      CoCreate.document_id.request({element: element, nameAttr: "name"})
       element.setAttribute('data-document_id', 'pending');
       return ;
     }
@@ -320,44 +303,41 @@ var CoCreateText = {
     if (element.getAttribute('data-save_value') == 'false') {
       return;
     }
-    console.log(" Remove ",isRemove)
-    console.log(" tart ",start)
-    console.log(" end ",end)
-    console.log(" content.length ",content.length)
-    console.log(" content ",content)
-    
+    //console.log("SendChangeDataFrom Cocreate-Text")
     let character_count = content.length > 0 ? content.length : -1;
-    recalculate_local_cursors(element,character_count);
+    CoCreateCursors.recalculate_local_cursors(element,character_count);
     
       //send position when keyUp 
-      this.sendPosition(element)
+    this.sendPosition(element)
     if (content.length > 0) {
-      if (isRemove) element.setRangeText("", start, start + content.length, "start")
-      CoCreate.insertDataCrdt({
+      if (isRemove)  {
+        element.setRangeText("", start, start + content.length, "start")
+      }
+      CoCreate.crdt.insert({
         collection, document_id, name,
         value: content,
         position: start
       })
     } else {
       if (isRemove) element.setRangeText(" ".repeat(end - start), start, start, "end")
-      CoCreate.deleteDataCrdt({
+      CoCreate.crdt.delete({
         collection, document_id, name,
         position: start,
         length: end - start,
       })
     }
-
-    if(document.activeElement === element)
+    if(document.activeElement === element){
+      this.setSelectionInfo(element, false, element.selectionStart, element.selectionStart);
       this.sendPosition(element);
+    }
   },
 
   updateChangeData: function(element, content, start, end) {
 
     let prev_start = element.selectionStart;
     let prev_end = element.selectionEnd;
-      
     element.setRangeText(content, start, end, "end");
-    
+
     if (prev_start >= start) {
       if (content == "") {
         prev_start -= end - start;
@@ -377,10 +357,10 @@ var CoCreateText = {
     element.selectionEnd = prev_end;
 
     var isFocused = (document.activeElement === element);
-    refresh_mirror(element);
+    CoCreateCursors.refresh_mirror(element);
     
-    if (CoCreateFloatLabel)   {
-      CoCreateFloatLabel.update(element, element.value)
+    if (CoCreateFloatingLabel)   {
+      CoCreateFloatingLabel.update(element, element.value)
     }
 
   },
@@ -390,7 +370,7 @@ var CoCreateText = {
     var document_id = element.getAttribute('data-document_id');
     var name = element.getAttribute('name');
     
-    return CoCreateYSocket.generateID(config.organization_Id, collection, document_id, name);
+    return CoCreate.crdt.generateID(config.organization_Id, collection, document_id, name);
   },
   
   setText: function(element_id, info) {
@@ -420,8 +400,11 @@ var CoCreateText = {
   },
   
   isAvaiableEl: function(element) {
+    //console.log(this.elements)
+    
     for (var  i = 0; i < this.elements.length; i++) {
-      if (this.elements[i].isEqualNode(element)) {
+      console.log(this.elements[i].isEqualNode(element),element)
+      if (this.elements[i].isEqualNode(element)===true) {
         return true;
       }
     }
@@ -429,20 +412,44 @@ var CoCreateText = {
   },
   
   sendPosition: function(element) {
-    if (!this.isAvaiableEl(element)) {
+    //console.log("Se envio ")
+    /*if (!this.isAvaiableEl(element)) {
       return;
-    }
+    }*/
     
     const id = this.generateTypeName(element);
     //console.log(" SEnd Position Selector ID ",id)
-    console.log(element.selectionStart, element.selectionEnd);
+    //console.log(element.selectionStart, element.selectionEnd);
     let from = element.selectionStart;
     let to = element.selectionEnd;
-    CoCreateCrdt.setPositionYJS(id, from, to);
+    //console.log("Se envio la position ",id,from, to)
+    CoCreate.crdt.setPositionYJS(id, from, to);
     
   }
 }
 
 
 CoCreateText.init();
-CoCreateInit.register('CoCreateText', CoCreateText, CoCreateText.initElement);
+// CoCreateInit.register('CoCreateText', CoCreateText, CoCreateText.initElement);
+
+CoCreate.observer.add({ 
+	name: 'CoCreateTextCreate', 
+	observe: ['subtree', 'childList'],
+	include: '[data-collection][data-document_id][name]', 
+	callback: function(mutation) {
+	  console.log('cocreate-text init')
+		CoCreateText.initElement(mutation.target)
+	}
+});
+
+CoCreate.observer.add({ 
+	name: 'CoCreateTextNameObserver', 
+	observe: ['attributes'],
+	attributes: ['name'],
+	callback: function(mutation) {
+		console.log('change cocreate-text name')
+		CoCreateText.refreshElement(mutation)
+	}
+});
+
+export default CoCreateText;
