@@ -18,7 +18,7 @@ var CoCreateText = {
       return 
     }
     
-    if (!CoCreateObserver.isUsageY(element)) return;
+    if (!CoCreate.input.isUsageY(element)) return;
     
     if (!CoCreate.observer.getInitialized(element, 'text')) {
       this.__initEvents(element);
@@ -46,7 +46,7 @@ var CoCreateText = {
     }
 
     elements.forEach((element) => {
-      if (!CoCreateInput.isUsageY(element)) {
+      if (!CoCreate.input.isUsageY(element)) {
         return;
       }
       
@@ -91,7 +91,7 @@ var CoCreateText = {
     var value = CoCreate.crdt.getWholeString(typeId);
     element.value = value;
     
-    // CoCreateInput.setValue(element, value);
+    // CoCreate.input.setValue(element, value);
   },
   
   createYDoc: function(element, isExclude) {
@@ -107,8 +107,8 @@ var CoCreateText = {
     if (!isExclude) {
       this.elements.push(element)
     } else {
-      element.value = CoCreate.crdt.get({collection, document_id, name })
-      // CoCreateInput.setValue(element, CoCreate.crdt.get({collection, document_id, name }));
+      element.value = CoCreate.crdt.getText({collection, document_id, name })
+      // CoCreate.input.setValue(element, CoCreate.crdt.getText({collection, document_id, name }));
     }
   },
   
@@ -189,7 +189,7 @@ var CoCreateText = {
           //. delete event
           let character_deleted = selection_info.start - selection_info.end;
           
-          //CoCreateCursors.recalculate_local_cursors(this,character_deleted)
+          //CoCreate.cursors.recalculate_local_cursors(this,character_deleted)
           
           self.sendChangeData(this, "", selection_info.start, selection_info.end);
           if (content_text.length > 0) {
@@ -222,7 +222,7 @@ var CoCreateText = {
       }
       if(start==end){
         // to calculate Cursors in collaboration 
-        // CoCreateCursors.recalculate_local_cursors(this,content_text.length)
+        // CoCreate.cursors.recalculate_local_cursors(this,content_text.length)
       }
       //. insert event
       self.sendChangeData(this, content_text, start, start, false);
@@ -305,7 +305,7 @@ var CoCreateText = {
     }
     //console.log("SendChangeDataFrom Cocreate-Text")
     let character_count = content.length > 0 ? content.length : -1;
-    CoCreateCursors.recalculate_local_cursors(element,character_count);
+    CoCreate.cursors.recalculate_local_cursors(element,character_count);
     
       //send position when keyUp 
     this.sendPosition(element)
@@ -313,14 +313,14 @@ var CoCreateText = {
       if (isRemove)  {
         element.setRangeText("", start, start + content.length, "start")
       }
-      CoCreate.crdt.insert({
+      CoCreate.crdt.insertText({
         collection, document_id, name,
         value: content,
         position: start
       })
     } else {
       if (isRemove) element.setRangeText(" ".repeat(end - start), start, start, "end")
-      CoCreate.crdt.delete({
+      CoCreate.crdt.deleteText({
         collection, document_id, name,
         position: start,
         length: end - start,
@@ -357,10 +357,10 @@ var CoCreateText = {
     element.selectionEnd = prev_end;
 
     var isFocused = (document.activeElement === element);
-    CoCreateCursors.refresh_mirror(element);
+    CoCreate.cursors.refresh_mirror(element);
     
-    if (CoCreateFloatingLabel)   {
-      CoCreateFloatingLabel.update(element, element.value)
+    if (CoCreate.floatingLabel)   {
+      CoCreate.floatingLabel.update(element, element.value)
     }
 
   },

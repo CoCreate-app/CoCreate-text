@@ -324,14 +324,14 @@ var CoCreateText = {
     if (content.length > 0) {
       
       if (isRemove) element.setRangeText("", start, start + content.length, "start")
-      CoCreate.crdt.insert({
+      CoCreate.crdt.insertText({
         collection, document_id, name,
         value: content,
         position: start
       })
     } else {
       if (isRemove) element.setRangeText(" ".repeat(end - start), start, start, "end")
-      CoCreate.crdt.delete({
+      CoCreate.crdt.deleteText({
         collection, document_id, name,
         position: start,
         length: end - start,
