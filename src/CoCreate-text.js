@@ -432,7 +432,7 @@ var CoCreateText = {
 CoCreateText.init();
 // CoCreateInit.register('CoCreateText', CoCreateText, CoCreateText.initElement);
 
-CoCreate.observer.add({ 
+CoCreate.observer.init({ 
 	name: 'CoCreateTextCreate', 
 	observe: ['subtree', 'childList'],
 	include: '[data-collection][data-document_id][name]', 
@@ -442,7 +442,7 @@ CoCreate.observer.add({
 	}
 });
 
-CoCreate.observer.add({ 
+CoCreate.observer.init({ 
 	name: 'CoCreateTextNameObserver', 
 	observe: ['attributes'],
 	attributes: ['name'],
