@@ -41,7 +41,7 @@ var CoCreateText = {
       
       this._initEvents(elements[i]);
       
-      if (CoCreate.document_id.checkID(elements[i])) {
+      if (CoCreate.form.checkID(elements[i])) {
         this.createYDoc(elements[i]);
 
       } else {
@@ -305,7 +305,7 @@ var CoCreateText = {
   sendChangeData: function(element, content, start, end, isRemove = true) {
 
     if (!this.checkDocumentID(element)) {
-      CoCreate.document_id.request({element: element, nameAttr: "name"})
+      CoCreate.form.request({element: element, nameAttr: "name"})
       element.setAttribute('data-document_id', 'pending');
       return ;
     }

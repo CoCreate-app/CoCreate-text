@@ -1,6 +1,12 @@
-"use strict";
+import observer from '../../CoCreate-observer/src'
+import ccutils from '../../../CoCreateJS/src/utils';
+import {socket, crud} from '../../../CoCreateJS/src';
+import crdt from '../../CoCreate-crdt/src'
+import cursors from '../../CoCreate-cursors/src'
+import form from '../../CoCreate-form/src'
+import floatingLabel from '../../CoCreate-floating-label/src'
 
-var CoCreateText = {
+const CoCreateText = {
   elements: [],
   
   init : function() {
@@ -18,14 +24,14 @@ var CoCreateText = {
       return 
     }
     
-    if (!CoCreate.input.isUsageY(element)) return;
+    if (!ccutils.isUsageY(element)) return;
     
-    if (!CoCreate.observer.getInitialized(element, 'text')) {
+    if (!observer.getInitialized(element, 'text')) {
       this.__initEvents(element);
     }
-    CoCreate.observer.setInitialized(element, 'text');
+    observer.setInitialized(element, 'text');
     
-    if (CoCreate.document_id.checkID(element)) {
+    if (form.checkID(element)) {
       // element.value = "";
       this.createYDoc(element, true);
     }
@@ -46,7 +52,7 @@ var CoCreateText = {
     }
 
     elements.forEach((element) => {
-      if (!CoCreate.input.isUsageY(element)) {
+      if (!ccutils.isUsageY(element)) {
         return;
       }
       
@@ -55,22 +61,25 @@ var CoCreateText = {
         return;
       }
       
-			if (CoCreate.observer.getInitialized(element, 'text')) {
+			if (observer.getInitialized(element, 'text')) {
 				return;
 			}
-			CoCreate.observer.setInitialized(element, 'text');
+			observer.setInitialized(element, 'text');
       
       self.__initEvents(element);
       
-      if (CoCreate.document_id.checkID(element)) {
+      if (form.checkID(element)) {
         self.createYDoc(element);
 
       } else {
         //. register create document_id event
         element.addEventListener('set-document_id', function(event) {
-          var el = this;
-          var text_str = el.value;
+          let el = this;
+          let text_str = el.value;
+          
           self.createYDoc(el);
+          
+          el.value = "";
           self.sendChangeData(el, text_str, 0, text_str.length);
         })
       }
@@ -88,17 +97,17 @@ var CoCreateText = {
   
   setInitValue: function(element) {
     var typeId = this.generateTypeName(element);
-    var value = CoCreate.crdt.getWholeString(typeId);
+    var value = crdt.getWholeString(typeId);
     element.value = value;
     
-    // CoCreate.input.setValue(element, value);
+    // input.setValue(element, value);
   },
   
   createYDoc: function(element, isExclude) {
     const collection = element.getAttribute('data-collection')
 		const document_id = element.getAttribute('data-document_id')
 		const name = element.getAttribute('name');
-    const status = CoCreate.crdt.init({
+    const status = crdt.init({
       collection: collection,
       document_id: document_id,
       name: name,
@@ -107,8 +116,8 @@ var CoCreateText = {
     if (!isExclude) {
       this.elements.push(element)
     } else {
-      element.value = CoCreate.crdt.getText({collection, document_id, name })
-      // CoCreate.input.setValue(element, CoCreate.crdt.getText({collection, document_id, name }));
+      element.value = crdt.getText({collection, document_id, name })
+      // input.setValue(element, crdt.getText({collection, document_id, name }));
     }
   },
   
@@ -149,7 +158,7 @@ var CoCreateText = {
     
     input_element.addEventListener('blur', function(event) {
         const id = self.generateTypeName(this);
-        CoCreate.crdt.setCursorNull(id);
+        crdt.setCursorNull(id);
     });
     
     input_element.addEventListener('input', function(event) {
@@ -189,7 +198,7 @@ var CoCreateText = {
           //. delete event
           let character_deleted = selection_info.start - selection_info.end;
           
-          //CoCreate.cursors.recalculate_local_cursors(this,character_deleted)
+          //cursors.recalculate_local_cursors(this,character_deleted)
           
           self.sendChangeData(this, "", selection_info.start, selection_info.end);
           if (content_text.length > 0) {
@@ -222,7 +231,7 @@ var CoCreateText = {
       }
       if(start==end){
         // to calculate Cursors in collaboration 
-        // CoCreate.cursors.recalculate_local_cursors(this,content_text.length)
+        // cursors.recalculate_local_cursors(this,content_text.length)
       }
       //. insert event
       self.sendChangeData(this, content_text, start, start, false);
@@ -287,7 +296,7 @@ var CoCreateText = {
   sendChangeData: function(element, content, start, end, isRemove = true) {
 
     if (!this.checkDocumentID(element)) {
-      CoCreate.document_id.request({element: element, nameAttr: "name"})
+      form.request({element: element, nameAttr: "name"})
       element.setAttribute('data-document_id', 'pending');
       return ;
     }
@@ -305,7 +314,7 @@ var CoCreateText = {
     }
     //console.log("SendChangeDataFrom Cocreate-Text")
     let character_count = content.length > 0 ? content.length : -1;
-    CoCreate.cursors.recalculate_local_cursors(element,character_count);
+    cursors.recalculate_local_cursors(element,character_count);
     
       //send position when keyUp 
     this.sendPosition(element)
@@ -313,14 +322,14 @@ var CoCreateText = {
       if (isRemove)  {
         element.setRangeText("", start, start + content.length, "start")
       }
-      CoCreate.crdt.insertText({
+      crdt.insertText({
         collection, document_id, name,
         value: content,
         position: start
       })
     } else {
       if (isRemove) element.setRangeText(" ".repeat(end - start), start, start, "end")
-      CoCreate.crdt.deleteText({
+      crdt.deleteText({
         collection, document_id, name,
         position: start,
         length: end - start,
@@ -357,10 +366,10 @@ var CoCreateText = {
     element.selectionEnd = prev_end;
 
     var isFocused = (document.activeElement === element);
-    CoCreate.cursors.refresh_mirror(element);
+    cursors.refresh_mirror(element);
     
-    if (CoCreate.floatingLabel)   {
-      CoCreate.floatingLabel.update(element, element.value)
+    if (floatingLabel)   {
+      floatingLabel.update(element, element.value)
     }
 
   },
@@ -370,7 +379,7 @@ var CoCreateText = {
     var document_id = element.getAttribute('data-document_id');
     var name = element.getAttribute('name');
     
-    return CoCreate.crdt.generateID(config.organization_Id, collection, document_id, name);
+    return crdt.generateID(config.organization_Id, collection, document_id, name);
   },
   
   setText: function(element_id, info) {
@@ -423,7 +432,7 @@ var CoCreateText = {
     let from = element.selectionStart;
     let to = element.selectionEnd;
     //console.log("Se envio la position ",id,from, to)
-    CoCreate.crdt.setPositionYJS(id, from, to);
+    crdt.setPositionYJS(id, from, to);
     
   }
 }
@@ -432,7 +441,7 @@ var CoCreateText = {
 CoCreateText.init();
 // CoCreateInit.register('CoCreateText', CoCreateText, CoCreateText.initElement);
 
-CoCreate.observer.init({ 
+observer.init({ 
 	name: 'CoCreateTextCreate', 
 	observe: ['subtree', 'childList'],
 	include: '[data-collection][data-document_id][name]', 
@@ -442,7 +451,7 @@ CoCreate.observer.init({
 	}
 });
 
-CoCreate.observer.init({ 
+observer.init({ 
 	name: 'CoCreateTextNameObserver', 
 	observe: ['attributes'],
 	attributes: ['name'],
