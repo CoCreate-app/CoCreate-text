@@ -1,10 +1,10 @@
-import observer from '../../CoCreate-observer/src'
-import ccutils from '../../../CoCreateJS/src/utils';
+import observer from '@cocreate/observer'
+import ccutils from '@cocreate/utils';
 import {socket, crud} from '../../../CoCreateJS/src';
-import crdt from '../../CoCreate-crdt/src'
-import cursors from '../../CoCreate-cursors/src'
-import form from '../../CoCreate-form/src'
-import floatingLabel from '../../CoCreate-floating-label/src'
+import crdt from '@cocreate/crdt'
+import cursors from '@cocreate/cursors'
+import form from '@cocreate/form'
+import floatingLabel from '@cocreate/floating-label'
 
 const CoCreateText = {
   elements: [],
