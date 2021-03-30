@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.3...v1.0.4) (2021-03-30)
+
+
+### Bug Fixes
+
+* import from npm ([6fd2b5d](https://github.com/CoCreate-app/CoCreate-text/commit/6fd2b5d4896f1e76cb60aa0a02891f57be9ecf34))
+
 ## [1.0.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.2...v1.0.3) (2021-03-30)
 
 
