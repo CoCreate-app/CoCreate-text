@@ -1,6 +1,6 @@
 import observer from '@cocreate/observer'
 import ccutils from '@cocreate/utils';
-import crud from '@cocreate/cocreatejs';
+import crud from '@cocreate/crud';
 import crdt from '@cocreate/crdt'
 import cursors from '@cocreate/cursors'
 import form from '@cocreate/form'
