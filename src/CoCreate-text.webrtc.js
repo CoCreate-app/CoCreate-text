@@ -246,7 +246,7 @@ var CoCreateText = {
       event.preventDefault()
     })
     
-    input_element.addEventListener('cocreate-y-update', function(event) {
+    input_element.addEventListener('cocreate-crdt-update', function(event) {
       var info = event.detail;
       
       input_element.crudSetted = true;

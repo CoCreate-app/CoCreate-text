@@ -1,6 +1,5 @@
 import observer from '@cocreate/observer'
-import ccutils from '@cocreate/utils';
-import crud from '@cocreate/crud';
+import crud from '@cocreate/crud-client'
 import crdt from '@cocreate/crdt'
 import cursors from '@cocreate/cursors'
 import form from '@cocreate/form'
@@ -24,7 +23,7 @@ const CoCreateText = {
       return 
     }
     
-    if (!ccutils.isUsageY(element)) return;
+    if (!crud.isCRDT(element)) return;
     
     if (!observer.getInitialized(element, 'text')) {
       this.__initEvents(element);
@@ -52,7 +51,7 @@ const CoCreateText = {
     }
 
     elements.forEach((element) => {
-      if (!ccutils.isUsageY(element)) {
+      if (!crud.isCRDT(element)) {
         return;
       }
       
@@ -104,15 +103,9 @@ const CoCreateText = {
   },
   
   createYDoc: function(element, isExclude) {
-    const collection = element.getAttribute('data-collection')
-		const document_id = element.getAttribute('data-document_id')
-		const name = element.getAttribute('name');
-    const status = crdt.init({
-      collection: collection,
-      document_id: document_id,
-      name: name,
-      element: element,
-    })
+    const { collection, document_id, name } = crud.getAttr(element)
+    if (!crud.checkValue(collection) || !crud.checkValue(document_id) || !crud.checkValue(name)) return;
+    const status = crdt.init({ collection, document_id, name, element })
     if (!isExclude) {
       this.elements.push(element)
     } else {
@@ -238,7 +231,7 @@ const CoCreateText = {
       event.preventDefault()
     })
     
-    input_element.addEventListener('cocreate-y-update', function(event) {
+    input_element.addEventListener('cocreate-crdt-update', function(event) {
       var info = event.detail;
       input_element.crudSetted = true;
       
@@ -283,33 +276,20 @@ const CoCreateText = {
       end:parseInt(e.getAttribute("selection_end"))
     }
   },
-  
-  checkDocumentID: function(element) {
-    let document_id = element.getAttribute('data-document_id');
-    if (!document_id || document_id === "") {
-      return false;
-    }
-    
-    return true;
-  },
-  
-  sendChangeData: function(element, content, start, end, isRemove = true) {
 
-    if (!this.checkDocumentID(element)) {
+  sendChangeData: function(element, content, start, end, isRemove = true) {
+    const { collection, document_id, name } = crud.getAttr(element)
+    if (!document_id || document_id === "") {
       form.request({element: element, nameAttr: "name"})
       element.setAttribute('data-document_id', 'pending');
       return ;
     }
     
-    if (element.getAttribute('data-document_id') == 'pending') {
+    if (document_id == 'pending') {
       return;
     }
-    
-    const collection = element.getAttribute('data-collection'),
-          document_id = element.getAttribute('data-document_id'),
-          name = element.getAttribute('name');
-    
-    if (element.getAttribute('data-save_value') == 'false') {
+
+    if (!crud.isSaveAttr(element)) {
       return;
     }
     //console.log("SendChangeDataFrom Cocreate-Text")
@@ -375,9 +355,7 @@ const CoCreateText = {
   },
   
   generateTypeName: function(element) {
-    var collection = element.getAttribute('data-collection');
-    var document_id = element.getAttribute('data-document_id');
-    var name = element.getAttribute('name');
+    const { collection, document_id, name } = crud.getAttr(element)
     
     return crdt.generateID(config.organization_Id, collection, document_id, name);
   },
