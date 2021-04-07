@@ -1,14 +1,9 @@
-import CoCreateSocket from '@cocreate/socket-client'
-import crud from '@cocreate/crud-client'
-
-
 import observer from '@cocreate/observer'
-
+import crud from '@cocreate/crud-client'
 import crdt from '@cocreate/crdt'
 import cursors from '@cocreate/cursors'
 import form from '@cocreate/form'
-// import floatingLabel from '@cocreate/floating-label'
-
+import floatingLabel from '@cocreate/floating-label'
 
 const CoCreateText = {
   elements: [],
@@ -353,9 +348,9 @@ const CoCreateText = {
     var isFocused = (document.activeElement === element);
     cursors.refresh_mirror(element);
     
-    // if (floatingLabel)   {
-    //   floatingLabel.update(element, element.value)
-    // }
+    if (floatingLabel)   {
+      floatingLabel.update(element, element.value)
+    }
 
   },
   

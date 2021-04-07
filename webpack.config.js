@@ -54,32 +54,32 @@ module.exports = {
   // add source map
   ...(isProduction ? {} : { devtool: "eval-source-map" }),
 
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        extractComments: true,
-        // cache: true,
-        parallel: true,
-        // sourceMap: true, // Must be set to true if using source-maps in production
-        terserOptions: {
-          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
-          // extractComments: 'all',
-          compress: {
-            drop_console: true,
-          },
-        },
-      }),
-    ],
-    splitChunks: {
-      chunks: "all",
-      minSize: 200,
-      // maxSize: 99999,
-      //minChunks: 1,
+  // optimization: {
+  //   minimize: true,
+  //   minimizer: [
+  //     new TerserPlugin({
+  //       extractComments: true,
+  //       // cache: true,
+  //       parallel: true,
+  //       // sourceMap: true, // Must be set to true if using source-maps in production
+  //       terserOptions: {
+  //         // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+  //         // extractComments: 'all',
+  //         compress: {
+  //           drop_console: true,
+  //         },
+  //       },
+  //     }),
+  //   ],
+  //   splitChunks: {
+  //     chunks: "all",
+  //     minSize: 200,
+  //     // maxSize: 99999,
+  //     //minChunks: 1,
 
-      cacheGroups: {
-        defaultVendors: false,
-      },
-    },
-  },
+  //     cacheGroups: {
+  //       defaultVendors: false,
+  //     },
+    // },
+  // },
 }
