@@ -831,16 +831,25 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@cocreate/crdt@^1.0.0":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@cocreate/crdt/-/crdt-1.0.8.tgz#2c9634ce4bfb685f7c4dca17546234cf5df2d5a5"
-  integrity sha512-u+MejrTDGXJQQcOgbN2ct3u/MtCWqiGXxDX/ufxAjftvX0SQ3wFEHzuH2tl37DmMeygr57UU+SGvVplMFPpQug==
+"@cocreate/crdt@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@cocreate/crdt/-/crdt-1.0.9.tgz#2b9a4c8651087de598e352c21f300709f681a98e"
+  integrity sha512-IdQizSZfVKQ5+gXypw4o/RlxaLVzj/NOo0k/nDXBVLbECNmDRN26pj8R6J65jvXThEThbSHBc4HxWljejZW37Q==
   dependencies:
-    mini-css-extract-plugin "^1.4.0"
+    "@cocreate/crud-client" "^1.0.3"
+    mini-css-extract-plugin "^1.4.1"
     y-indexeddb "^9.0.5"
     y-webrtc "^10.1.5"
     y-websocket "^1.2.5"
     yjs "^13.0.0-89"
+
+"@cocreate/crud-client@^1.0.0", "@cocreate/crud-client@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@cocreate/crud-client/-/crud-client-1.0.3.tgz#978513d3a44f1df333b80e9f331cd18ad3db21f6"
+  integrity sha512-NE+L6lYJujyblSfb8u8A8fJfDzJX2t5fj2IZarbNoEe1RJy++Qm92VMFsC86li0H+68yShGYuZ04vTaF4UxiyQ==
+  dependencies:
+    "@cocreate/docs" "^1.0.3"
+    "@cocreate/socket-client" "^1.0.2"
 
 "@cocreate/docs@^1.0.3":
   version "1.1.1"
@@ -872,6 +881,14 @@
   integrity sha512-IgsoumhEq5qsFwCLL9iVPXXdOgzvMDxoNrMgrBmvMsM+6PYUA781FBRUG9a8nGWwfmDMP7sahO84fojyjE2g6w==
   dependencies:
     "@cocreate/docs" "^1.0.3"
+
+"@cocreate/socket-client@^1.0.2":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@cocreate/socket-client/-/socket-client-1.0.3.tgz#1d1934d06f7a2c213120c57b028a8c5ce5826997"
+  integrity sha512-JlvXd/t3QY37LQfuyuuhTLud2hlasW1qGnYuBtad+M9yO2BVCvPrCoFpG4julwAWWGsfh96z3rOHcZPpb3P53w==
+  dependencies:
+    "@cocreate/docs" "^1.0.3"
+    ws "^7.4.4"
 
 "@cocreate/utils@^1.0.0":
   version "1.0.2"
@@ -2453,10 +2470,10 @@ mimic-fn@^2.1.0:
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
 
-mini-css-extract-plugin@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-1.4.0.tgz#c8e571c4b6d63afa56c47260343adf623349c473"
-  integrity sha512-DyQr5DhXXARKZoc4kwvCvD95kh69dUupfuKOmBUqZ4kBTmRaRZcU32lYu3cLd6nEGXhQ1l7LzZ3F/CjItaY6VQ==
+mini-css-extract-plugin@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-1.4.1.tgz#975e27c1d0bd8e052972415f47c79cea5ed37548"
+  integrity sha512-COAGbpAsU0ioFzj+/RRfO5Qv177L1Z/XAx2EmCF33b8GDDqKygMffBTws2lit8iaPdrbKEY5P+zsseBUCREZWQ==
   dependencies:
     loader-utils "^2.0.0"
     schema-utils "^3.0.0"
@@ -3450,7 +3467,7 @@ ws@^6.2.1:
   dependencies:
     async-limiter "~1.0.0"
 
-ws@^7.2.0, ws@^7.3.1:
+ws@^7.2.0, ws@^7.3.1, ws@^7.4.4:
   version "7.4.4"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.4.tgz#383bc9742cb202292c9077ceab6f6047b17f2d59"
   integrity sha512-Qm8k8ojNQIMx7S+Zp8u/uHOx7Qazv3Yv4q68MiWWWOJhiwG5W3x7iqmRtJo8xxrciZUY4vRxUTJCKuRnF28ZZw==
