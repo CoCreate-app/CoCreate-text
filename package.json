@@ -61,6 +61,7 @@
   "dependencies": {
     "@cocreate/crdt": "^1.0.10",
     "@cocreate/crud-client": "^1.0.0",
+    "@cocreate/cursors": "^1.1.5",
     "@cocreate/docs": "^1.0.3",
     "@cocreate/floating-label": "^1.0.0",
     "@cocreate/form": "^1.0.0",
