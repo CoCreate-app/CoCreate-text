@@ -9,7 +9,7 @@ A simple text component in vanilla javascript. Easily configured using HTML5 dat
 
 ![CoCreate-text](https://cdn.cocreate.app/docs/CoCreate-text.gif)
 
-## [Docs & Demo](https://cocreate.app/docs/clone)
+## [Docs & Demo](https://cocreate.app/docs/text)
 
 For a complete guide and working demo refer to the [doumentation](https://cocreate.app/docs/text)
 
