@@ -1,3 +1,13 @@
+## [1.0.7](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.6...v1.0.7) (2021-05-08)
+
+
+### Bug Fixes
+
+* add css auto parse and save to docs. ([d296e5e](https://github.com/CoCreate-app/CoCreate-text/commit/d296e5e1d4eb271e15f1fbe53278c6d76dde2df4))
+* ci and build process ([24e519e](https://github.com/CoCreate-app/CoCreate-text/commit/24e519e05ea169c0e4bb2ce01929bb1189db6dd8))
+* npm publish and cdn deployment ([8ab8c23](https://github.com/CoCreate-app/CoCreate-text/commit/8ab8c23873f08e6333ab5cfa99cb868b00255909))
+* update packages ([b4b64f8](https://github.com/CoCreate-app/CoCreate-text/commit/b4b64f8f1c5d46147c98cff4d9a378aee38e58e4))
+
 ## [1.0.6](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.5...v1.0.6) (2021-04-07)
 
 
