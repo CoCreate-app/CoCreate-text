@@ -284,6 +284,8 @@ const CoCreateText = {
 
   sendChangeData: function(element, content, start, end, isRemove = true) {
     const { collection, document_id, name } = crud.getAttr(element)
+    const isCrud = element.getAttribute('data-crud') == "false" ? false : true;
+    
     if (!document_id || document_id === "") {
       form.request({element: element, nameAttr: "name"})
       element.setAttribute('data-document_id', 'pending');
@@ -310,7 +312,8 @@ const CoCreateText = {
       crdt.insertText({
         collection, document_id, name,
         value: content,
-        position: start
+        position: start,
+        crud: isCrud
       })
     } else {
       if (isRemove) element.setRangeText(" ".repeat(end - start), start, start, "end")
@@ -318,6 +321,7 @@ const CoCreateText = {
         collection, document_id, name,
         position: start,
         length: end - start,
+        crud: isCrud
       })
     }
     if(document.activeElement === element){
