@@ -1,9 +1,5 @@
-// import CoCreateSocket from '@cocreate/socket-client'
-import crud from '@cocreate/crud-client'
-
-
 import observer from '@cocreate/observer'
-
+import crud from '@cocreate/crud-client'
 import crdt from '@cocreate/crdt'
 import cursors from '@cocreate/cursors'
 import form from '@cocreate/form'
