@@ -60,14 +60,14 @@
     "webpack-log": "^3.0.1"
   },
   "dependencies": {
-    "@cocreate/crdt": "^1.0.10",
-    "@cocreate/crud-client": "^1.0.8",
-    "@cocreate/cursors": "^1.1.5",
-    "@cocreate/docs": "^1.0.3",
+    "@cocreate/crdt": "latest",
+    "@cocreate/crud-client": "latest",
+    "@cocreate/cursors": "latest",
+    "@cocreate/docs": "latest",
     "@cocreate/floating-label": "^1.0.0",
-    "@cocreate/form": "^1.0.0",
-    "@cocreate/observer": "^1.0.0",
-    "@cocreate/utils": "^1.0.0",
-    "mini-css-extract-plugin": "^1.5.0"
+    "@cocreate/form": "latest",
+    "@cocreate/observer": "latest",
+    "@cocreate/utils": "latest",
+    "mini-css-extract-plugin": "latest"
   }
 }
