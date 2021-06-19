@@ -26,10 +26,10 @@ const CoCreateText = {
 
     if (!crud.isCRDT(element)) return;
 
-    if (!observer.getInitialized(element, 'text')) {
+    // if (!observer.getInitialized(element, 'text')) {
       this.__initEvents(element);
-    }
-    observer.setInitialized(element, 'text');
+    // }
+    // observer.setInitialized(element, 'text');
 
     if (form.checkID(element)) {
       // element.value = "";
@@ -60,10 +60,10 @@ const CoCreateText = {
         return;
       }
 
-      if (observer.getInitialized(element, 'text')) {
-        return;
-      }
-      observer.setInitialized(element, 'text');
+      // if (observer.getInitialized(element, 'text')) {
+      //   return;
+      // }
+      // observer.setInitialized(element, 'text');
 
       self.__initEvents(element);
 
@@ -442,10 +442,15 @@ CoCreateText.init();
 
 observer.init({
   name: 'CoCreateTextCreate',
-  observe: ['subtree', 'childList'],
-  include: '[data-collection][data-document_id][name]',
+	observe: ['addedNodes'],
+	attributeFilter: ['data-collection', 'data-document_id', 'name'],
   callback: function(mutation) {
+    if (!mutation.target.tagName) return;
     console.log('cocreate-text init')
+    		let el = mutation.target;
+		el.hasAttribute('data-collection') &&
+		el.hasAttribute('data-document_id') &&
+		el.hasAttribute('name') &&
     CoCreateText.initElement(mutation.target)
   }
 });
@@ -453,9 +458,12 @@ observer.init({
 observer.init({
   name: 'CoCreateTextNameObserver',
   observe: ['attributes'],
-  attributes: ['name'],
+	attributeFilter: ['data-collection', 'data-document_id', 'name'],
   callback: function(mutation) {
     // console.log('change cocreate-text name')
+    		mutation.target.hasAttribute('collection') &&
+    		mutation.target.hasAttribute('data-document_id') &&
+    		mutation.target.hasAttribute('name') &&
     CoCreateText.refreshElement(mutation)
   }
 });
