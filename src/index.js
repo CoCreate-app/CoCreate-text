@@ -445,7 +445,7 @@ observer.init({
 	observe: ['addedNodes'],
 	attributeFilter: ['data-collection', 'data-document_id', 'name'],
   callback: function(mutation) {
-    if (!mutation.target.tagName) return;
+
     console.log('cocreate-text init')
     		let el = mutation.target;
 		el.hasAttribute('data-collection') &&
