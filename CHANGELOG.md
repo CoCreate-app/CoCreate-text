@@ -1,3 +1,10 @@
+## [1.0.10](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.9...v1.0.10) (2021-06-20)
+
+
+### Bug Fixes
+
+* new mutaionObserver init function ([90800de](https://github.com/CoCreate-app/CoCreate-text/commit/90800de5251484292775af385b1c1a01545814ed))
+
 ## [1.0.9](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.8...v1.0.9) (2021-06-16)
 
 
