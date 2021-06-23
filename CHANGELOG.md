@@ -1,3 +1,10 @@
+## [1.0.11](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.10...v1.0.11) (2021-06-23)
+
+
+### Bug Fixes
+
+* update to new crud.save and crud.read ([46a4981](https://github.com/CoCreate-app/CoCreate-text/commit/46a49814973c632f25fc2e388bc1a9cfc8e7f641))
+
 ## [1.0.10](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.9...v1.0.10) (2021-06-20)
 
 
