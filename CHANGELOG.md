@@ -1,3 +1,10 @@
+## [1.0.14](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.13...v1.0.14) (2021-06-23)
+
+
+### Bug Fixes
+
+* update checkValue to crud.checkAttrValue ([28529f0](https://github.com/CoCreate-app/CoCreate-text/commit/28529f0f3739cb03722f4b3b29433925fbdd69e3))
+
 ## [1.0.13](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.12...v1.0.13) (2021-06-23)
 
 
