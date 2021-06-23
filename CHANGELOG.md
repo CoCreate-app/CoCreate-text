@@ -1,3 +1,10 @@
+## [1.0.12](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.11...v1.0.12) (2021-06-23)
+
+
+### Bug Fixes
+
+* remve css from readme ([3aee127](https://github.com/CoCreate-app/CoCreate-text/commit/3aee127f654909493fcd524e471757c5a771e7e0))
+
 ## [1.0.11](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.10...v1.0.11) (2021-06-23)
 
 
