@@ -1,3 +1,10 @@
+## [1.0.13](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.12...v1.0.13) (2021-06-23)
+
+
+### Bug Fixes
+
+* update readme to include license details ([a22cfef](https://github.com/CoCreate-app/CoCreate-text/commit/a22cfef9a75cb4caf9b71631baa422f71b4e475e))
+
 ## [1.0.12](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.11...v1.0.12) (2021-06-23)
 
 
