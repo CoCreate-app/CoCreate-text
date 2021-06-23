@@ -105,7 +105,7 @@ const CoCreateText = {
 
   createYDoc: function(element, isExclude) {
     const { collection, document_id, name } = crud.getAttr(element)
-    if (!crud.checkValue(collection) || !crud.checkValue(document_id) || !crud.checkValue(name)) return;
+    if (!crud.checkAttrValue(collection) || !crud.checkAttrValue(document_id) || !crud.checkAttrValue(name)) return;
     const status = crdt.init({ collection, document_id, name, element })
     if (!isExclude) {
       this.elements.push(element)
