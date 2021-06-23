@@ -19,9 +19,6 @@ For a complete guide and working demo refer to the [doumentation](https://cocrea
 <script src="https://cdn.cocreate.app/text/latest/CoCreate-text.min.js"></script>
 ```
 
-```html
-<script src="https://cdn.cocreate.app/text/latest/CoCreate-text.min.css"></script>
-```
 
 ## NPM
 
@@ -72,4 +69,4 @@ We appreciate your continued support, thank you!
 
 # License
 
-[The MIT License (MIT)](https://github.com/CoCreate-app/CoCreate-text/blob/master/LICENSE)
+[GNU GPL license v3 (GPLv3)](https://github.com/CoCreate-app/CoCreate-text/blob/master/LICENSE)
