@@ -3,8 +3,8 @@ import crud from '@cocreate/crud-client'
 import crdt from '@cocreate/crdt'
 import cursors from '@cocreate/cursors'
 import form from '@cocreate/form'
-// import floatingLabel from '@cocreate/floating-label'
 
+// const consoleMessage = CoCreate.utils.logger(off)
 
 const CoCreateText = {
   elements: [],

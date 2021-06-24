@@ -64,7 +64,7 @@
     "@cocreate/crud-client": "latest",
     "@cocreate/cursors": "latest",
     "@cocreate/docs": "latest",
-    "@cocreate/floating-label": "^1.0.0",
+    "@cocreate/floating-label": "latest",
     "@cocreate/form": "latest",
     "@cocreate/observer": "latest",
     "@cocreate/utils": "latest",
