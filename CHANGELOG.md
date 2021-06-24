@@ -1,3 +1,11 @@
+## [1.0.16](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.15...v1.0.16) (2021-06-24)
+
+
+### Bug Fixes
+
+* add method to turn on and off console.log while in development ([db7e03b](https://github.com/CoCreate-app/CoCreate-text/commit/db7e03bc071b265969600eca50ae7a871cd0a8df))
+* update all [@cocreate](https://github.com/cocreate) to use latest versions ([1a721f1](https://github.com/CoCreate-app/CoCreate-text/commit/1a721f1ec4715f06e84458fc05026523604f4808))
+
 ## [1.0.15](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.14...v1.0.15) (2021-06-23)
 
 
