@@ -3,8 +3,9 @@ import crud from '@cocreate/crud-client'
 import crdt from '@cocreate/crdt'
 import cursors from '@cocreate/cursors'
 import form from '@cocreate/form'
+import { logger } from '@cocreate/utils'
 
-// const consoleMessage = CoCreate.utils.logger(off)
+let console = logger('off');
 
 const CoCreateText = {
   elements: [],
@@ -446,7 +447,7 @@ observer.init({
 	attributeFilter: ['data-collection', 'data-document_id', 'name'],
   callback: function(mutation) {
 
-    console.log('cocreate-text init')
+    // console.log('cocreate-text init')
     		let el = mutation.target;
 		el.hasAttribute('data-collection') &&
 		el.hasAttribute('data-document_id') &&
