@@ -1,3 +1,11 @@
+## [1.0.18](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.17...v1.0.18) (2021-06-29)
+
+
+### Bug Fixes
+
+* add logger utility ([0734bc3](https://github.com/CoCreate-app/CoCreate-text/commit/0734bc36b184a3a6d398406b2f71dcd0a963e584))
+* latest version numbers applied to all cocreate packages ([2e1f68f](https://github.com/CoCreate-app/CoCreate-text/commit/2e1f68ff134330212afc18c24ddbb21d85f26f81))
+
 ## [1.0.17](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.16...v1.0.17) (2021-06-24)
 
 
