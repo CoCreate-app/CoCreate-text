@@ -1,3 +1,10 @@
+## [1.0.19](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.18...v1.0.19) (2021-06-30)
+
+
+### Bug Fixes
+
+* automated and manual workflows ([b2064d7](https://github.com/CoCreate-app/CoCreate-text/commit/b2064d760195d34f90b3c42dca47a1d427285c63))
+
 ## [1.0.18](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.17...v1.0.18) (2021-06-29)
 
 
