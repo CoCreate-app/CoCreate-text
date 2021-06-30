@@ -1,3 +1,10 @@
+## [1.0.20](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.19...v1.0.20) (2021-06-30)
+
+
+### Bug Fixes
+
+* Update readme.md ([7fbaf94](https://github.com/CoCreate-app/CoCreate-text/commit/7fbaf944862880a4095bb78077f702acdd1a8b8d))
+
 ## [1.0.19](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.18...v1.0.19) (2021-06-30)
 
 
