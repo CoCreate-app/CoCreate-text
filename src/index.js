@@ -288,6 +288,7 @@ const CoCreateText = {
     }
   },
 
+  // Todo: Add new crud
   sendChangeData: function(element, content, start, end, isRemove = true) {
     const { collection, document_id, name } = crud.getAttr(element)
     const isCrud = element.getAttribute('data-crud') == "false" ? false : true;
