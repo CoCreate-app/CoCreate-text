@@ -1,3 +1,10 @@
+## [1.0.21](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.20...v1.0.21) (2021-07-10)
+
+
+### Bug Fixes
+
+* gitignore all logs ([a920554](https://github.com/CoCreate-app/CoCreate-text/commit/a920554eeb12f99b60c977eba2d0c3fd1ea8ef2a))
+
 ## [1.0.20](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.19...v1.0.20) (2021-06-30)
 
 
