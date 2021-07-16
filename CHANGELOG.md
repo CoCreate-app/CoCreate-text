@@ -1,3 +1,18 @@
+## [1.0.23](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.22...v1.0.23) (2021-07-14)
+
+
+### Bug Fixes
+
+* upgrade all packages ([222ad9a](https://github.com/CoCreate-app/CoCreate-text/commit/222ad9a82996758363a0bc0daf9226e0d9978b96))
+
+## [1.0.22](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.21...v1.0.22) (2021-07-13)
+
+
+### Bug Fixes
+
+* add yarn lockfile to git ignore ([15750fb](https://github.com/CoCreate-app/CoCreate-text/commit/15750fb5fb8206648c32413cfa86271efac70c18))
+* remove yarn.lock ([fb6fccf](https://github.com/CoCreate-app/CoCreate-text/commit/fb6fccf4fc2711408429e3231d8bbabdbf6e8189))
+
 ## [1.0.21](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.20...v1.0.21) (2021-07-10)
 
 

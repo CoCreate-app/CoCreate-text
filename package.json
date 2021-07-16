@@ -1,6 +1,6 @@
 {
   "name": "@cocreate/text",
-  "version": "1.0.21",
+  "version": "1.0.23",
   "description": "A simple text component in vanilla javascript. Easily configured using HTML5 data-attributes and/or JavaScript API.",
   "keywords": [
     "text",
@@ -61,7 +61,7 @@
     "webpack-log": "^3.0.1"
   },
   "dependencies": {
-    "@cocreate/crdt": "^1.1.17",
+    "@cocreate/crdt": "^1.1.20",
     "@cocreate/crud-client": "^1.1.12",
     "@cocreate/cursors": "^1.1.19",
     "@cocreate/docs": "^1.1.29",
