@@ -445,7 +445,7 @@ CoCreateText.init();
 observer.init({
   name: 'CoCreateTextCreate',
 	observe: ['addedNodes'],
-	attributeFilter: ['data-collection', 'data-document_id', 'name'],
+	target: 'input[data-collection][data-document_id][name], textarea[data-collection][data-document_id][name]',
   callback: function(mutation) {
 
     // console.log('cocreate-text init')
@@ -460,7 +460,7 @@ observer.init({
 observer.init({
   name: 'CoCreateTextNameObserver',
   observe: ['attributes'],
-	attributeFilter: ['data-collection', 'data-document_id', 'name'],
+	attributeName: ['data-collection', 'data-document_id', 'name'],
   callback: function(mutation) {
     // console.log('change cocreate-text name')
     		mutation.target.hasAttribute('collection') &&
