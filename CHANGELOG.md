@@ -1,3 +1,11 @@
+## [1.0.24](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.23...v1.0.24) (2021-07-17)
+
+
+### Bug Fixes
+
+* init and update demos scripts ([49259d6](https://github.com/CoCreate-app/CoCreate-text/commit/49259d6421e79dc31ab43cfaa9e90f34a07276d0))
+* workflows ([3713bc3](https://github.com/CoCreate-app/CoCreate-text/commit/3713bc3b3e3d89c0ab94a9e294b98eadf9e3260a))
+
 ## [1.0.23](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.22...v1.0.23) (2021-07-14)
 
 
