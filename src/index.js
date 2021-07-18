@@ -52,9 +52,10 @@ const CoCreateText = {
     }
 
     elements.forEach((element) => {
-      if (!crud.isCRDT(element)) {
-        return;
-      }
+      //ToDo: isCrdt Needs to be improved and located in crdt
+      // if (!crud.isCRDT(element)) {
+      //   return;
+      // }
 
       if (self.checkExistElement(element)) {
         // this.setInitValue(elements[i])

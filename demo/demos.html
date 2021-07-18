@@ -15,12 +15,21 @@
     
     <body class="padding:20px">
         <form > 
-            <input name="name" data-document_id="6037167de683ae2d6ea00695" class="floating-label" placeholder="Input" style="width: 100%">
+            <!--<input name="name" data-document_id="6037167de683ae2d6ea00695" class="floating-label" placeholder="Input" style="width: 100%">-->
             
-            <textarea name="name" data-collection="apples" data-document_id="6037167de683ae2d6ea00695" class="floating-label" placeholder="Textarea"></textarea>
-            
-            <!--<h1 name='name' contenteditable>I will be replaced by crdt</h1>-->
+            <!--<textarea name="name" data-collection="apples" data-document_id="6037167de683ae2d6ea00695" class="floating-label" placeholder="Textarea"></textarea>-->
+        <textarea data-collection="files" data-document_id="60bea334b25613e8da1b4bdf" name="src"></textarea>            <!--<h1 name='name' contenteditable>I will be replaced by crdt</h1>-->
             <!--<p name='name2' contenteditable>I will be replaced by crud</p>-->
+<div class="padding:20px">
+  CoCreateCrdt.init({collection: "files",
+  document_id: "60bea334b25613e8da1b4bdf",
+  name: "src"});
+</div>
+<div class="padding:20px">
+  CoCreateCrdt.getText({collection: "files",
+  document_id: "60bea334b25613e8da1b4bdf",
+  name: "src"});
+</div>
 <div class="padding:20px">
   CoCreate.crdt.getText({collection: "apples",
   document_id: "5fe9e0a11b4a703e71c51ba8",
@@ -29,18 +38,18 @@
         </form>
         
         <script>
-            var config = {
-                apiKey: 'c2b08663-06e3-440c-ef6f-13978b42883a',
-                organization_Id: '5de0387b12e200ea63204d6c',
-                host: 'ws.cocreate.app'
-            }
+             var config = {                 
+                apiKey: '2061acef-0451-4545-f754-60cf8160',                 
+                organization_Id: '5ff747727005da1c272740ab',                 
+                host: 'general.cocreate.app'             
+            }         
         </script>
         
         
         <!--<script src="https://cdn.cocreate.app/latest/CoCreate.min.js"></script>-->
         <!--<script src="https://server.cocreate.app/CoCreate-components/CoCreate-text.rollup/dist/cocreate-text.js"></script>-->
         <!--<script src="https://server.cocreate.app/CoCreate-components/CoCreate-text/dist/CoCreate-text.js"></script>-->
-        <script src="https://server.cocreate.app/CoCreateJS/dist/CoCreate.js" ></script>
-        <!--<script src="../dist/CoCreate-text.js" ></script>-->
+        <!--<script src="https://server.cocreate.app/CoCreateJS/dist/CoCreate.js" ></script>-->
+        <script src="../dist/CoCreate-text.js" ></script>
     </body>
 </html>
