@@ -295,7 +295,8 @@ const CoCreateText = {
     const isCrud = element.getAttribute('data-crud') == "false" ? false : true;
 
     if (!document_id || document_id === "") {
-      form.request({ element: element, nameAttr: "name" })
+      // form.save(form)
+      // form.request({ element: element, nameAttr: "name" })
       element.setAttribute('data-document_id', 'pending');
       return;
     }
