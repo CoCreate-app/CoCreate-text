@@ -32,7 +32,7 @@ const CoCreateText = {
     // }
     // observer.setInitialized(element, 'text');
 
-    if (form.checkID(element)) {
+    if (crud.checkAttrValue(element.getAttribute('data-document_id'))) {
       // element.value = "";
       this.createYDoc(element, true);
     }
@@ -69,7 +69,7 @@ const CoCreateText = {
 
       self.__initEvents(element);
 
-      if (form.checkID(element)) {
+      if (crud.checkAttrValue(element.getAttribute('data-document_id'))) {
         self.createYDoc(element);
 
       }
