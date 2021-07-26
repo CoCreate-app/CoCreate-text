@@ -22,8 +22,9 @@ const CoCreateText = {
 	},
 	
 	initElement: function(element, data) {
+  	const {collection, document_id, name, is_realtime, isCrdt} = crud.getAttr(element);
+		if (isCrdt == "false") return;
     if( element.tagName === "INPUT" &&  ["text", "email", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA"){
-  		const {collection, document_id, name, is_realtime} = crud.getAttr(element);
   		if (!document_id || !is_realtime) return;
   	
   		if (document_id == 'pending') {
@@ -245,6 +246,7 @@ const CoCreateText = {
 
   sendChangeData: function(element, content, start, end, isRemove = true) {
     const { collection, document_id, name } = crud.getAttr(element)
+    // ToDo: isCrud can be retrieved from crud.getAttr not sure if it will have the correct value
     const isCrud = element.getAttribute('data-crud') == "false" ? false : true;
 
     if (!crud.isSaveAttr(element)) {
