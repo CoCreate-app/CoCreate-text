@@ -1,3 +1,11 @@
+## [1.0.27](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.26...v1.0.27) (2021-07-27)
+
+
+### Bug Fixes
+
+* update setCursor functions ([d28290a](https://github.com/CoCreate-app/CoCreate-text/commit/d28290aeb406fd9957f5a18f55a534bc911f712d))
+* use new isCrdt ([ddcb603](https://github.com/CoCreate-app/CoCreate-text/commit/ddcb60397b31f19a8fc7cf1d86b76eaf23dbc8f9))
+
 ## [1.0.26](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.25...v1.0.26) (2021-07-25)
 
 
