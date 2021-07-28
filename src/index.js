@@ -9,7 +9,7 @@ let console = logger('off');
 
 const CoCreateText = {
 
-    selector: "input[data-collection][data-document_id][name], textarea[data-collection][data-document_id][name]",
+    selector: "input[collection][document_id][name], textarea[collection][document_id][name]",
 
     init: function() {
         let elements = document.querySelectorAll(this.selector);
@@ -22,16 +22,13 @@ const CoCreateText = {
     },
 
     initElement: function(element, data) {
-        const { collection, document_id, name, is_realtime, isCrdt } = crud.getAttr(element);
-        if(isCrdt == "false") return;
+        const { collection, document_id, name, isRealtime, isCrdt } = crud.getAttr(element);
+        if(isCrdt == "false" || isRealtime == "false") return;
         if(element.tagName === "INPUT" && ["text", "email", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA") {
-            if(!collection || !document_id || !name || !is_realtime) return;
-
-            if(document_id == 'pending') {
-                return;
-            }
+            if(!collection || !document_id || !name) return;
 
             element.setAttribute('crdt', 'true')
+            element.value = ""
 
             this.__initEvents(element);
 
@@ -299,7 +296,7 @@ CoCreateText.init();
 observer.init({
     name: 'CoCreateTextAddedNodes',
     observe: ['addedNodes'],
-    target: 'input[data-collection][data-document_id][name], textarea[data-collection][data-document_id][name]',
+    target: 'input[collection][document_id][name], textarea[collection][document_id][name]',
     callback: function(mutation) {
         CoCreateText.initElement(mutation.addedNodes)
     }
@@ -308,7 +305,7 @@ observer.init({
 observer.init({
     name: 'CoCreateTextAttribtes',
     observe: ['attributes'],
-    attributeName: ['data-collection', 'data-document_id', 'name'],
+    attributeName: ['collection', 'document_id', 'name'],
     callback: function(mutation) {
         CoCreateText.initElement(mutation.target)
     }
