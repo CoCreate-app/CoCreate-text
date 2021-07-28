@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.27...v1.1.0) (2021-07-28)
+
+
+### Features
+
+* add new is{attribute} system and remove data- from attributtes ([5fc9dcc](https://github.com/CoCreate-app/CoCreate-text/commit/5fc9dcc01af6e4e137c46738c679a66a8b13a065))
+
 ## [1.0.27](https://github.com/CoCreate-app/CoCreate-text/compare/v1.0.26...v1.0.27) (2021-07-27)
 
 
