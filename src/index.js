@@ -5,7 +5,7 @@ import cursors from '@cocreate/cursors'
 import form from '@cocreate/form'
 import { logger } from '@cocreate/utils'
 
-let console = logger('off');
+let console = logger('all');
 
 const CoCreateText = {
 
@@ -112,12 +112,13 @@ const CoCreateText = {
                     if(content_text.length > 0) {
                         self.sendChangeData(this, content_text, nowstart, nowend);
                     }
-                    self.setPositionInfo(this);
+                    // self.setPositionInfo(this);
                 }
                 else {
                     self.sendChangeData(this, content_text, nowstart, nowend);
                 }
             }
+            // self.setPositionInfo(this, false, nowstart, nowend);
         })
 
         /** past events **/
@@ -209,6 +210,7 @@ const CoCreateText = {
         let from = el.selectionStart;
         let to = el.selectionEnd;
         crdt.setPositionYJS(id, from, to);
+        // console.log(from, to);
         // ToDo: use sendPosition
         // crdt.sendPosition(collection, document_id, name, from, to);
     },
@@ -226,7 +228,7 @@ const CoCreateText = {
         cursors.recalculate_local_cursors(element, character_count);
 
         //send position when keyUp 
-        this.sendPosition(element)
+        // this.sendPosition(element)
         if(content.length > 0) {
             if(isRemove) {
                 element.setRangeText("", start, start + content.length, "start")
@@ -251,10 +253,12 @@ const CoCreateText = {
                 crud: isCrud
             })
         }
-        if(document.activeElement === element) {
-            this.setSelectionInfo(element, false, element.selectionStart, element.selectionStart);
-            this.sendPosition(element);
-        }
+        // if(document.activeElement === element) {
+            // this.setSelectionInfo(element, false, element.selectionStart, element.selectionStart);
+            // this.sendPosition(element);
+        // }
+        this.setPositionInfo(element);
+
     },
 
     updateChangeData: function(element, content, start, end) {
@@ -281,10 +285,10 @@ const CoCreateText = {
 
         element.selectionStart = prev_start;
         element.selectionEnd = prev_end;
-        console.log("prev_end ", prev_end, " prev_start ", prev_start)
-        var isFocused = (document.activeElement === element);
-        cursors.refresh_mirror(element);
-
+        // console.log("prev_end ", prev_end, " prev_start ", prev_start)
+        // var isFocused = (document.activeElement === element);
+        this.setPositionInfo(element);
+        // cursors.refresh_mirror(element);
     },
 
 }
