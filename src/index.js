@@ -14,6 +14,7 @@ const CoCreateText = {
     init: function() {
         let elements = document.querySelectorAll(this.selector);
         this.initElements(elements);
+        this.crdtListener()
     },
 
     initElements: function(elements) {
@@ -34,11 +35,6 @@ const CoCreateText = {
 
             crdt.init({ collection, document_id, name, element })
         }
-    },
-
-    generateTypeName: function(element) {
-        const { collection, document_id, name } = crud.getAttr(element)
-        return crdt.generateID(config.organization_Id, collection, document_id, name);
     },
 
     __initEvents: function(element) {
@@ -65,116 +61,63 @@ const CoCreateText = {
         });
 
         element.addEventListener('blur', function(event) {
-            const id = self.generateTypeName(this);
-            crdt.setCursorNull(id);
+            self.removeSelectionInfo(this);
+            // self.setPositionInfo(this);
+            const { collection, document_id, name } = crud.getAttr(element)
+            crdt.sendPosition(collection, document_id, name, null, null)
         });
 
-        element.addEventListener('input', function(event) {
-            let nowstart = this.selectionStart - 1;
-            let nowend = nowstart;
-            let selection_info = self.getSelectionInfo(this);
-            let content_text = "";
-            let isUpdate = false;
-            switch(event.inputType) {
-                case 'deleteContentBackward':
-                    isUpdate = true;
-                    nowstart++;
-                    nowend = nowstart + 1;
-                    break;
-                case 'deleteContentForward':
-                    isUpdate = true;
-                    nowstart++;
-                    nowend = nowstart + 1;
-                    break;
-                case 'insertLineBreak':
-                    isUpdate = true;
-                    content_text = "\n";
-                    nowend++;
-                    break;
-                case 'insertText':
-                    isUpdate = true;
-                    content_text = event.data || "\n";
-                    break;
-                case 'deleteByCut':
-                    isUpdate = true;
-                    break;
-
-            }
-
-            if(isUpdate) {
-                if(selection_info.is_selected) {
-                    //. delete event
-                    let character_deleted = selection_info.start - selection_info.end;
-
-                    //cursors.recalculate_local_cursors(this,character_deleted)
-
-                    self.sendChangeData(this, "", selection_info.start, selection_info.end);
-                    if(content_text.length > 0) {
-                        self.sendChangeData(this, content_text, nowstart, nowend);
-                    }
-                    // self.setPositionInfo(this);
-                }
-                else {
-                    self.sendChangeData(this, content_text, nowstart, nowend);
-                }
-            }
-            // self.setPositionInfo(this, false, nowstart, nowend);
-        })
-
-        /** past events **/
-        element.addEventListener('paste', function(event) {
-            // return;
-            console.log('check paste: text')
-            let content_text;
-            if(event.detail?.data)
-                content_text = event.detail.data;
-            else
-                content_text = event.clipboardData.getData('Text');
+        element.addEventListener('cut', function(event) {
             let start = this.selectionStart;
             let end = this.selectionEnd;
-            //. send delete event
+            const selection = document.getSelection();
+            event.clipboardData.setData('text/plain', selection.toString());
             if(start != end) {
-                this.setSelectionRange(end, end)
-                self.sendChangeData(this, "", start, end, false);
+                self.deleteCharacters(this, start, end);
             }
-            if(start == end) {
-                // to calculate Cursors in collaboration 
-                // cursors.recalculate_local_cursors(this,content_text.length)
-            }
-            //. insert event
-            self.sendChangeData(this, content_text, start, start, false);
             event.preventDefault()
         })
+        
+        element.addEventListener('paste', function(event) {
+            let value = event.clipboardData.getData('Text');
+            let start = this.selectionStart;
+            let end = this.selectionEnd;
 
-        element.addEventListener('cocreate-crdt-update', function(event) {
-            var info = event.detail;
-            element.crudSetted = true;
-
-            var pos = 0;
-            var flag = true;
-
-            info.forEach(item => {
-                if(item.retain) {
-                    flag = true;
-                    pos = item.retain;
-                }
-
-                if(item.insert || item.delete) {
-                    if(flag == false) pos = 0;
-                    flag = false;
-
-                    if(item.insert) {
-                        //. insert process
-                        self.updateChangeData(this, item.insert, pos, pos)
-                    }
-                    else if(item.delete) {
-                        //. delete process
-                        self.updateChangeData(this, "", pos, pos + item.delete);
-                    }
-
-                }
-            })
+            if(start != end) {
+                self.deleteCharacters(this, start, end);
+            }
+            self.insertCharacters(this, value, start);
+            event.preventDefault()
         })
+        
+        element.addEventListener('keydown', function(event) {
+            let start = this.selectionStart;
+            let end = this.selectionEnd;
+            if (event.key == "Backspace") {
+                if(start != end) {
+                    self.deleteCharacters(this, start, end);
+                }
+                else {
+                    let start = this.selectionStart -1;
+                    self.deleteCharacters(this, start, end);
+                }
+                event.preventDefault()
+            }
+        })
+        
+        element.addEventListener('keypress', function(event) {
+            let start = this.selectionStart;
+            let end = this.selectionEnd;
+            if(start != end) {
+                self.deleteCharacters(this, start, end);
+            }
+            if (event.key == "Enter") {
+                self.insertCharacters(this, "\n", start);
+            }
+            event.preventDefault()
+            self.insertCharacters(this, event.key, start);
+        })
+
     },
 
     getSelectionInfo: function(el) {
@@ -184,81 +127,38 @@ const CoCreateText = {
             end: parseInt(el.getAttribute("selection_end"))
         }
     },
+    
+    removeSelectionInfo: function(el) {
+        el.removeAttribute("is_selected");
+        el.removeAttribute("selection_start");
+        el.removeAttribute("selection_end");
+    },
 
     setPositionInfo: function(el) {
-        const { from, to } = this._getCaretPosition(el);
-        let isSelect = from != to;
-        this.setSelectionInfo(el, isSelect, from, to)
-    },
-
-    _getCaretPosition: function(el) {
-        let from = el.selectionStart
-        let to = el.selectionEnd
-        return { from: from, to: to };
-    },
-
-    setSelectionInfo: function(el, isSelect, start, end) {
-        el.setAttribute("is_selected", isSelect);
-        el.setAttribute("selection_start", start);
-        el.setAttribute("selection_end", end);
-        this.sendPosition(el, isSelect, start, end);
-    },
-
-    sendPosition: function(el, isSelect, start, end) {
-        const { collection, document_id, name } = crud.getAttr(el)
-        const id = this.generateTypeName(el);
+        const { collection, document_id, name } = crud.getAttr(el);
         let from = el.selectionStart;
         let to = el.selectionEnd;
-        crdt.setPositionYJS(id, from, to);
-        // console.log(from, to);
-        // ToDo: use sendPosition
-        // crdt.sendPosition(collection, document_id, name, from, to);
+        let isSelect = from != to;
+        
+        el.setAttribute("is_selected", isSelect);
+        el.setAttribute("selection_start", from);
+        el.setAttribute("selection_end", to);
+        crdt.sendPosition(collection, document_id, name, from, to);
     },
 
-    sendChangeData: function(element, content, start, end, isRemove = true) {
+    deleteCharacters: function(element, start, end) {
         const { collection, document_id, name, isCrud } = crud.getAttr(element)
-        // ToDo: isCrud can be retrieved from crud.getAttr not sure if it will have the correct value
-        // const isCrud = element.getAttribute('crud') == "false" ? false : true;
-
-        if(!crud.isSaveAttr(element)) {
-            return;
-        }
-
-        let character_count = content.length > 0 ? content.length : -1;
-        cursors.recalculate_local_cursors(element, character_count);
-
-        //send position when keyUp 
-        // this.sendPosition(element)
-        if(content.length > 0) {
-            if(isRemove) {
-                element.setRangeText("", start, start + content.length, "start")
-            }
-            crdt.insertText({
-                collection,
-                document_id,
-                name,
-                value: content,
-                position: start,
-                crud: isCrud
-            })
-        }
-        else {
-            if(isRemove) element.setRangeText(" ".repeat(end - start), start, start, "end")
-            crdt.deleteText({
-                collection,
-                document_id,
-                name,
-                position: start,
-                length: end - start,
-                crud: isCrud
-            })
-        }
-        // if(document.activeElement === element) {
-            // this.setSelectionInfo(element, false, element.selectionStart, element.selectionStart);
-            // this.sendPosition(element);
-        // }
-        this.setPositionInfo(element);
-
+        let length = end - start; 
+        crdt.deleteText({ collection, document_id, name, position: start, length, crud: isCrud })
+        
+    },
+    
+    insertCharacters: function(element, value, position) {
+        const { collection, document_id, name, isCrud, isSave} = crud.getAttr(element)
+        if (isSave == "false") return;
+        if(value.length > 0) 
+            crdt.insertText({ collection, document_id, name, value, position, crud: isCrud })
+        // cursors.recalculate_local_cursors(element, character_count);
     },
 
     updateChangeData: function(element, content, start, end) {
@@ -277,19 +177,70 @@ const CoCreateText = {
                 prev_start += content.length;
                 prev_end += content.length;
             }
-        } {
             if(content == "" && prev_end >= start) {
                 prev_end = (prev_end >= end) ? prev_end - (end - start) : start
             }
-        }
+            element.selectionStart = prev_start;
+        } 
+        else {
 
-        element.selectionStart = prev_start;
-        element.selectionEnd = prev_end;
+            element.selectionStart = prev_start;
+            element.selectionEnd = prev_end;
+        }
+       
+        if(element === document.activeElement){
+            this.setPositionInfo(element);
+        }
         // console.log("prev_end ", prev_end, " prev_start ", prev_start)
         // var isFocused = (document.activeElement === element);
-        this.setPositionInfo(element);
+        // this.setPositionInfo(element);
         // cursors.refresh_mirror(element);
+        
     },
+    
+    crdtListener: function() {
+        let self = this;
+        window.addEventListener('cocreate-crdt-update', function(event) {
+            var info = event.detail;
+            let collection = info['collection']
+            let document_id = info['document_id']
+            let name = info['name']
+        	let selectors = `[collection='${collection}'][document_id='${document_id}'][name='${name}']`
+        	let elements = document.querySelectorAll(`input${selectors}, textarea${selectors}`);
+        
+        	elements.forEach((element) => {
+        		self.updateText(element, info)
+        	})
+        })
+    },
+    
+    updateText: function(element, info) {
+        element.crudSetted = true;
+
+        var pos = 0;
+        var flag = true;
+        let items = info.eventDelta
+        items.forEach(item => {
+            if(item.retain) {
+                flag = true;
+                pos = item.retain;
+            }
+
+            if(item.insert || item.delete) {
+                if(flag == false) pos = 0;
+                flag = false;
+
+                if(item.insert) {
+                    this.updateChangeData(element, item.insert, pos, pos)
+                }
+                else if(item.delete) {
+                    this.updateChangeData(element, "", pos, pos + item.delete);
+                }
+
+            }
+        })
+    }
+
 
 }
 
