@@ -14,7 +14,7 @@ const CoCreateText = {
     init: function() {
         let elements = document.querySelectorAll(this.selector);
         this.initElements(elements);
-        this.crdtListener()
+        this.crdtUpdateListener()
     },
 
     initElements: function(elements) {
@@ -33,7 +33,7 @@ const CoCreateText = {
 
             this.__initEvents(element);
 
-            crdt.init({ collection, document_id, name, element })
+            crdt.init(collection, document_id, name, element)
         }
     },
 
@@ -42,27 +42,25 @@ const CoCreateText = {
 
         element.addEventListener('select', function() {
             if(this.selectionEnd !== this.selectionStart) {
-                self.setPositionInfo(this);
+                self.sendPosition(this);
             }
         });
 
         element.addEventListener('keyup', function(event) {
             let arrows = [37, 38, 39, 40];
-            self.setPositionInfo(this);
+            self.sendPosition(this);
         });
 
         element.addEventListener('keydown', function(event) {
             let arrows = [37, 38, 39, 40];
-            self.setPositionInfo(this);
+            self.sendPosition(this);
         });
 
         element.addEventListener('click', function(event) {
-            self.setPositionInfo(this);
+            self.sendPosition(this);
         });
 
         element.addEventListener('blur', function(event) {
-            self.removeSelectionInfo(this);
-            // self.setPositionInfo(this);
             const { collection, document_id, name } = crud.getAttr(element)
             crdt.sendPosition(collection, document_id, name, null, null)
         });
@@ -73,7 +71,7 @@ const CoCreateText = {
             const selection = document.getSelection();
             event.clipboardData.setData('text/plain', selection.toString());
             if(start != end) {
-                self.deleteCharacters(this, start, end);
+                self.deleteText(this, start, end);
             }
             event.preventDefault()
         })
@@ -84,9 +82,9 @@ const CoCreateText = {
             let end = this.selectionEnd;
 
             if(start != end) {
-                self.deleteCharacters(this, start, end);
+                self.deleteText(this, start, end);
             }
-            self.insertCharacters(this, value, start);
+            self.insertText(this, value, start);
             event.preventDefault()
         })
         
@@ -95,11 +93,10 @@ const CoCreateText = {
             let end = this.selectionEnd;
             if (event.key == "Backspace") {
                 if(start != end) {
-                    self.deleteCharacters(this, start, end);
+                    self.deleteText(this, start, end);
                 }
                 else {
-                    let start = this.selectionStart -1;
-                    self.deleteCharacters(this, start, end);
+                    self.deleteText(this, start -1, end);
                 }
                 event.preventDefault()
             }
@@ -109,59 +106,80 @@ const CoCreateText = {
             let start = this.selectionStart;
             let end = this.selectionEnd;
             if(start != end) {
-                self.deleteCharacters(this, start, end);
+                self.deleteText(this, start, end);
             }
             if (event.key == "Enter") {
-                self.insertCharacters(this, "\n", start);
+                self.insertText(this, "\n", start);
             }
+            self.insertText(this, event.key, start);
             event.preventDefault()
-            self.insertCharacters(this, event.key, start);
         })
 
     },
 
-    getSelectionInfo: function(el) {
-        return {
-            is_selected: (el.getAttribute("is_selected") === 'true') ? true : false,
-            start: parseInt(el.getAttribute("selection_start")),
-            end: parseInt(el.getAttribute("selection_end"))
-        }
-    },
-    
-    removeSelectionInfo: function(el) {
-        el.removeAttribute("is_selected");
-        el.removeAttribute("selection_start");
-        el.removeAttribute("selection_end");
-    },
-
-    setPositionInfo: function(el) {
+    sendPosition: function(el) {
         const { collection, document_id, name } = crud.getAttr(el);
-        let from = el.selectionStart;
-        let to = el.selectionEnd;
-        let isSelect = from != to;
-        
-        el.setAttribute("is_selected", isSelect);
-        el.setAttribute("selection_start", from);
-        el.setAttribute("selection_end", to);
-        crdt.sendPosition(collection, document_id, name, from, to);
+        let start = el.selectionStart;
+        let end = el.selectionEnd;
+        crdt.sendPosition(collection, document_id, name, start, end);
     },
 
-    deleteCharacters: function(element, start, end) {
+    deleteText: function(element, start, end) {
         const { collection, document_id, name, isCrud } = crud.getAttr(element)
         let length = end - start; 
         crdt.deleteText({ collection, document_id, name, position: start, length, crud: isCrud })
-        
     },
     
-    insertCharacters: function(element, value, position) {
+    insertText: function(element, value, position) {
         const { collection, document_id, name, isCrud, isSave} = crud.getAttr(element)
         if (isSave == "false") return;
-        if(value.length > 0) 
-            crdt.insertText({ collection, document_id, name, value, position, crud: isCrud })
-        // cursors.recalculate_local_cursors(element, character_count);
+        crdt.insertText({ collection, document_id, name, value, position, crud: isCrud })
     },
 
-    updateChangeData: function(element, content, start, end) {
+    crdtUpdateListener: function() {
+        let self = this;
+        window.addEventListener('cocreate-crdt-update', function(event) {
+            var info = event.detail;
+            let collection = info['collection']
+            let document_id = info['document_id']
+            let name = info['name']
+        	let selectors = `[collection='${collection}'][document_id='${document_id}'][name='${name}']`
+        	let elements = document.querySelectorAll(`input${selectors}, textarea${selectors}`);
+        
+        	elements.forEach((element) => {
+        		self.updateElement(element, info)
+        	})
+        })
+    },
+    
+    updateElement: function(element, info) {
+        element.crudSetted = true;
+
+        var pos = 0;
+        var flag = true;
+        let items = info.eventDelta
+        items.forEach(item => {
+            if(item.retain) {
+                flag = true;
+                pos = item.retain;
+            }
+
+            if(item.insert || item.delete) {
+                if(flag == false) pos = 0;
+                flag = false;
+
+                if(item.insert) {
+                    this.updateElementText(element, item.insert, pos, pos)
+                }
+                else if(item.delete) {
+                    this.updateElementText(element, "", pos, pos + item.delete);
+                }
+
+            }
+        })
+    },
+
+    updateElementText: function(element, content, start, end) {
 
         let prev_start = element.selectionStart;
         let prev_end = element.selectionEnd;
@@ -189,64 +207,12 @@ const CoCreateText = {
         }
        
         if(element === document.activeElement){
-            this.setPositionInfo(element);
+            this.sendPosition(element);
         }
-        // console.log("prev_end ", prev_end, " prev_start ", prev_start)
-        // var isFocused = (document.activeElement === element);
-        // this.setPositionInfo(element);
-        // cursors.refresh_mirror(element);
-        
     },
-    
-    crdtListener: function() {
-        let self = this;
-        window.addEventListener('cocreate-crdt-update', function(event) {
-            var info = event.detail;
-            let collection = info['collection']
-            let document_id = info['document_id']
-            let name = info['name']
-        	let selectors = `[collection='${collection}'][document_id='${document_id}'][name='${name}']`
-        	let elements = document.querySelectorAll(`input${selectors}, textarea${selectors}`);
-        
-        	elements.forEach((element) => {
-        		self.updateText(element, info)
-        	})
-        })
-    },
-    
-    updateText: function(element, info) {
-        element.crudSetted = true;
-
-        var pos = 0;
-        var flag = true;
-        let items = info.eventDelta
-        items.forEach(item => {
-            if(item.retain) {
-                flag = true;
-                pos = item.retain;
-            }
-
-            if(item.insert || item.delete) {
-                if(flag == false) pos = 0;
-                flag = false;
-
-                if(item.insert) {
-                    this.updateChangeData(element, item.insert, pos, pos)
-                }
-                else if(item.delete) {
-                    this.updateChangeData(element, "", pos, pos + item.delete);
-                }
-
-            }
-        })
-    }
-
-
 }
 
-
 CoCreateText.init();
-
 
 observer.init({
     name: 'CoCreateTextAddedNodes',
