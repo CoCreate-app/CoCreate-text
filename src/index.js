@@ -33,7 +33,7 @@ const CoCreateText = {
 
             this.__initEvents(element);
 
-            crdt.init(collection, document_id, name, element)
+            crdt.init({collection, document_id, name, element})
         }
     },
 
