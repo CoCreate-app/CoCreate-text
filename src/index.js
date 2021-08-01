@@ -1,11 +1,6 @@
-import observer from '@cocreate/observer'
-import crud from '@cocreate/crud-client'
-import crdt from '@cocreate/crdt'
-import cursors from '@cocreate/cursors'
-import form from '@cocreate/form'
-import { logger } from '@cocreate/utils'
-
-let console = logger('all');
+import observer from '@cocreate/observer';
+import crud from '@cocreate/crud-client';
+import crdt from '@cocreate/crdt';
 
 const CoCreateText = {
 
@@ -14,7 +9,7 @@ const CoCreateText = {
     init: function() {
         let elements = document.querySelectorAll(this.selector);
         this.initElements(elements);
-        this.crdtUpdateListener()
+        this._crdtUpdateListener();
     },
 
     initElements: function(elements) {
@@ -28,136 +23,128 @@ const CoCreateText = {
         if(element.tagName === "INPUT" && ["text", "email", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA") {
             if(!collection || !document_id || !name) return;
 
-            element.setAttribute('crdt', 'true')
-            element.value = ""
+            element.setAttribute('crdt', 'true');
+            element.value = "";
 
-            this.__initEvents(element);
+            this._initEvents(element);
 
-            crdt.init({collection, document_id, name, element})
+            crdt.init({collection, document_id, name, element});
         }
     },
 
-    __initEvents: function(element) {
+    _initEvents: function(element) {
         const self = this;
-
-        element.addEventListener('select', function() {
-            if(this.selectionEnd !== this.selectionStart) {
-                self.sendPosition(this);
-            }
-        });
-
-        element.addEventListener('keyup', function(event) {
-            let arrows = [37, 38, 39, 40];
-            self.sendPosition(this);
-        });
-
-        element.addEventListener('keydown', function(event) {
-            let arrows = [37, 38, 39, 40];
-            self.sendPosition(this);
-        });
 
         element.addEventListener('click', function(event) {
             self.sendPosition(this);
         });
 
         element.addEventListener('blur', function(event) {
-            const { collection, document_id, name } = crud.getAttr(element)
-            crdt.sendPosition(collection, document_id, name, null, null)
+            const { collection, document_id, name } = crud.getAttr(element);
+            crdt.sendPosition({ collection, document_id, name });
+        });
+        
+        element.addEventListener('keyup', function(event) {
+            self.sendPosition(this);
         });
 
         element.addEventListener('cut', function(event) {
-            let start = this.selectionStart;
-            let end = this.selectionEnd;
+            const {start, end} = self.getSelections(this);
             const selection = document.getSelection();
             event.clipboardData.setData('text/plain', selection.toString());
             if(start != end) {
                 self.deleteText(this, start, end);
             }
-            event.preventDefault()
-        })
+            event.preventDefault();
+        });
         
         element.addEventListener('paste', function(event) {
             let value = event.clipboardData.getData('Text');
-            let start = this.selectionStart;
-            let end = this.selectionEnd;
+            const {start, end} = self.getSelections(this);
 
             if(start != end) {
                 self.deleteText(this, start, end);
             }
             self.insertText(this, value, start);
-            event.preventDefault()
-        })
+            event.preventDefault();
+        });
         
         element.addEventListener('keydown', function(event) {
-            let start = this.selectionStart;
-            let end = this.selectionEnd;
-            if (event.key == "Backspace") {
-                if(start != end) {
-                    self.deleteText(this, start, end);
-                }
-                else {
-                    self.deleteText(this, start -1, end);
-                }
-                event.preventDefault()
-            }
-        })
-        
-        element.addEventListener('keypress', function(event) {
-            let start = this.selectionStart;
-            let end = this.selectionEnd;
+            const {start, end} = self.getSelections(this);
+            self.sendPosition(this);
             if(start != end) {
                 self.deleteText(this, start, end);
             }
+            if (event.key == "Backspace" && start == end) {
+                self.deleteText(this, start -1, end);
+                event.preventDefault();
+            }
+            if (event.key == 'Tab') {
+                self.insertText(this, "\t", start);
+                event.preventDefault();
+            }
             if (event.key == "Enter") {
                 self.insertText(this, "\n", start);
+                event.preventDefault();
             }
+        });
+        
+        element.addEventListener('keypress', function(event) {
+            const {start} = self.getSelections(this);
+            if (event.key == "Enter") return;
             self.insertText(this, event.key, start);
-            event.preventDefault()
-        })
-
+            event.preventDefault();
+        });
     },
 
+    getSelections: function(el) {
+        return {
+            start: el.selectionStart,
+            end: el.selectionEnd
+        };
+    },
+    
     sendPosition: function(el) {
         const { collection, document_id, name } = crud.getAttr(el);
         let start = el.selectionStart;
         let end = el.selectionEnd;
-        crdt.sendPosition(collection, document_id, name, start, end);
+        crdt.sendPosition({collection, document_id, name, start, end});
     },
 
     deleteText: function(element, start, end) {
-        const { collection, document_id, name, isCrud } = crud.getAttr(element)
+        const { collection, document_id, name, isCrud } = crud.getAttr(element);
         let length = end - start; 
-        crdt.deleteText({ collection, document_id, name, position: start, length, crud: isCrud })
+        crdt.deleteText({ collection, document_id, name, position: start, length, crud: isCrud });
     },
     
     insertText: function(element, value, position) {
-        const { collection, document_id, name, isCrud, isSave} = crud.getAttr(element)
+        const { collection, document_id, name, isCrud, isSave} = crud.getAttr(element);
         if (isSave == "false") return;
-        crdt.insertText({ collection, document_id, name, value, position, crud: isCrud })
+        crdt.insertText({ collection, document_id, name, value, position, crud: isCrud });
     },
 
-    crdtUpdateListener: function() {
+    _crdtUpdateListener: function() {
         let self = this;
         window.addEventListener('cocreate-crdt-update', function(event) {
             var info = event.detail;
-            let collection = info['collection']
-            let document_id = info['document_id']
-            let name = info['name']
-        	let selectors = `[collection='${collection}'][document_id='${document_id}'][name='${name}']`
+            let collection = info['collection'];
+            let document_id = info['document_id'];
+            let name = info['name'];
+        	let selectors = `[collection='${collection}'][document_id='${document_id}'][name='${name}']`;
         	let elements = document.querySelectorAll(`input${selectors}, textarea${selectors}`);
         
         	elements.forEach((element) => {
-        		self.updateElement(element, info)
-        	})
-        })
+        		self._updateElement(element, info);
+        	});
+        });
     },
     
-    updateElement: function(element, info) {
+    _updateElement: function(element, info) {
         element.crudSetted = true;
 
         var pos = 0;
         var flag = true;
-        let items = info.eventDelta
+        let items = info.eventDelta;
         items.forEach(item => {
             if(item.retain) {
                 flag = true;
@@ -169,17 +156,17 @@ const CoCreateText = {
                 flag = false;
 
                 if(item.insert) {
-                    this.updateElementText(element, item.insert, pos, pos)
+                    this._updateElementText(element, item.insert, pos, pos);
                 }
                 else if(item.delete) {
-                    this.updateElementText(element, "", pos, pos + item.delete);
+                    this._updateElementText(element, "", pos, pos + item.delete);
                 }
 
             }
-        })
+        });
     },
 
-    updateElementText: function(element, content, start, end) {
+    _updateElementText: function(element, content, start, end) {
 
         let prev_start = element.selectionStart;
         let prev_end = element.selectionEnd;
@@ -196,7 +183,7 @@ const CoCreateText = {
                 prev_end += content.length;
             }
             if(content == "" && prev_end >= start) {
-                prev_end = (prev_end >= end) ? prev_end - (end - start) : start
+                prev_end = (prev_end >= end) ? prev_end - (end - start) : start;
             }
             element.selectionStart = prev_start;
         } 
@@ -210,7 +197,7 @@ const CoCreateText = {
             this.sendPosition(element);
         }
     },
-}
+};
 
 CoCreateText.init();
 
@@ -219,7 +206,7 @@ observer.init({
     observe: ['addedNodes'],
     target: 'input[collection][document_id][name], textarea[collection][document_id][name]',
     callback: function(mutation) {
-        CoCreateText.initElement(mutation.addedNodes)
+        CoCreateText.initElement(mutation.addedNodes);
     }
 });
 
@@ -228,7 +215,7 @@ observer.init({
     observe: ['attributes'],
     attributeName: ['collection', 'document_id', 'name'],
     callback: function(mutation) {
-        CoCreateText.initElement(mutation.target)
+        CoCreateText.initElement(mutation.target);
     }
 });
 
