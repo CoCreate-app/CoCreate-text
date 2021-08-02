@@ -20,6 +20,7 @@ const CoCreateText = {
     initElement: function(element, data) {
         const { collection, document_id, name, isRealtime, isCrdt } = crud.getAttr(element);
         if(isCrdt == "false" || isRealtime == "false") return;
+        if (!crud.checkAttrValue(collection) && !crud.checkAttrValue(document_id))
         if(element.tagName === "INPUT" && ["text", "email", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA") {
             if(!collection || !document_id || !name) return;
 
