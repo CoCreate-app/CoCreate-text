@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.1.2...v1.1.3) (2021-08-02)
+
+
+### Bug Fixes
+
+* ignore collections and documents with {{}} ([c1882bf](https://github.com/CoCreate-app/CoCreate-text/commit/c1882bfefaea26b06e6fa19314795cd0e77ee71c))
+
 ## [1.1.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.1.1...v1.1.2) (2021-08-02)
 
 
