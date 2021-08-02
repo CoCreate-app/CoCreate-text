@@ -1,3 +1,13 @@
+## [1.1.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.1.1...v1.1.2) (2021-08-02)
+
+
+### Bug Fixes
+
+* reactored, removed duplicate and dead code, update to cursors ([188ea4c](https://github.com/CoCreate-app/CoCreate-text/commit/188ea4c578431d5ee31fb3be0b8ce9790ba5f8da))
+* remove data- from attributes ([829a070](https://github.com/CoCreate-app/CoCreate-text/commit/829a070e5a50b1c01bc41bac42869a6e4dabc5b2))
+* removed getSelection and setSelections function ([4d7746c](https://github.com/CoCreate-app/CoCreate-text/commit/4d7746c96d72a69a25105610880085c72ed7d3ca))
+* update function names remove dead code ([cd201c9](https://github.com/CoCreate-app/CoCreate-text/commit/cd201c9c8edc54b39befb266c8582abc29ee1fe5))
+
 ## [1.1.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.1.0...v1.1.1) (2021-07-28)
 
 
