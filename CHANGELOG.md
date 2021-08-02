@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.1.3...v1.1.4) (2021-08-02)
+
+
+### Bug Fixes
+
+* send cursor position ([256f85b](https://github.com/CoCreate-app/CoCreate-text/commit/256f85bd889bce345438375c2447283b3f1862fe))
+
 ## [1.1.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.1.2...v1.1.3) (2021-08-02)
 
 
