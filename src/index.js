@@ -135,6 +135,9 @@ const CoCreateText = {
         	let elements = document.querySelectorAll(`input${selectors}, textarea${selectors}`);
         
         	elements.forEach((element) => {
+                if(element === document.activeElement){
+                    self.sendPosition(element);
+                }
         		self._updateElement(element, info);
         	});
         });
