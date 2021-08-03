@@ -1,3 +1,10 @@
+## [1.1.6](https://github.com/CoCreate-app/CoCreate-text/compare/v1.1.5...v1.1.6) (2021-08-03)
+
+
+### Bug Fixes
+
+* removed element from crdt init ([4d097a0](https://github.com/CoCreate-app/CoCreate-text/commit/4d097a02e257775ebf9bc48d9de0f08493b1d4e2))
+
 ## [1.1.5](https://github.com/CoCreate-app/CoCreate-text/compare/v1.1.4...v1.1.5) (2021-08-03)
 
 
