@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/CoCreate-app/CoCreate-text/compare/v1.1.4...v1.1.5) (2021-08-03)
+
+
+### Bug Fixes
+
+* observer addednodes set to mutation.target ([37d8eb3](https://github.com/CoCreate-app/CoCreate-text/commit/37d8eb3974a2d487a56b286c117f0c343b20e61b))
+
 ## [1.1.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.1.3...v1.1.4) (2021-08-02)
 
 
