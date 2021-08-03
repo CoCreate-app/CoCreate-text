@@ -210,7 +210,7 @@ observer.init({
     observe: ['addedNodes'],
     target: 'input[collection][document_id][name], textarea[collection][document_id][name]',
     callback: function(mutation) {
-        CoCreateText.initElement(mutation.addedNodes);
+        CoCreateText.initElement(mutation.target);
     }
 });
 
