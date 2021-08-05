@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.2.0...v1.2.1) (2021-08-05)
+
+
+### Bug Fixes
+
+* dispatch input and keypress after crdt updates element ([ad35c93](https://github.com/CoCreate-app/CoCreate-text/commit/ad35c935426bdf82c5e861046939a6cdbf64a8df))
+
 # [1.2.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.1.6...v1.2.0) (2021-08-05)
 
 
