@@ -27,75 +27,98 @@ const CoCreateText = {
             element.setAttribute('crdt', 'true');
             element.value = "";
 
-            this._initEvents(element);
+            this._addEventListeners(element);
 
             crdt.init({collection, document_id, name});
         }
     },
 
-    _initEvents: function(element) {
-        const self = this;
+    _addEventListeners: function(element) {
+        element.addEventListener('click', this._click);
+        element.addEventListener('blur', this._blur);
+        element.addEventListener('keyup', this._keyup);
+        element.addEventListener('cut', this._cut);
+        element.addEventListener('paste', this._paste);
+        element.addEventListener('keydown', this._keydown);
+        element.addEventListener('keypress', this._keypress);
+    },
+    
+    _click: function(event) {
+        let element = event.target;
+        CoCreateText.sendPosition(element);
+    },
+    
+    _blur: function(event) {
+        let element = event.target;
+        const { collection, document_id, name } = crud.getAttr(element);
+        CoCreateText.sendPosition({ collection, document_id, name });
+    },
+    
+    _keyup: function(event) {
+        let element = event.target;
+        CoCreateText.sendPosition(element);
+    },
+    
+    _cut: function(event) {
+        let element = event.target;
+        const {start, end} = CoCreateText.getSelections(element);
+        const selection = document.getSelection();
+        event.clipboardData.setData('text/plain', selection.toString());
+        if(start != end) {
+            CoCreateText.deleteText(element, start, end);
+        }
+        event.preventDefault();
+    },
+    
+    _paste: function(event) {
+        let element = event.target;
+        let value = event.clipboardData.getData('Text');
+        const {start, end} = CoCreateText.getSelections(element);
 
-        element.addEventListener('click', function(event) {
-            self.sendPosition(this);
-        });
+        if(start != end) {
+            CoCreateText.deleteText(element, start, end);
+        }
+        CoCreateText.insertText(element, value, start);
+        event.preventDefault();
+    },
 
-        element.addEventListener('blur', function(event) {
-            const { collection, document_id, name } = crud.getAttr(element);
-            crdt.sendPosition({ collection, document_id, name });
-        });
-        
-        element.addEventListener('keyup', function(event) {
-            self.sendPosition(this);
-        });
-
-        element.addEventListener('cut', function(event) {
-            const {start, end} = self.getSelections(this);
-            const selection = document.getSelection();
-            event.clipboardData.setData('text/plain', selection.toString());
-            if(start != end) {
-                self.deleteText(this, start, end);
-            }
+    _keydown: function(event) {
+        let element = event.target;
+        const {start, end} = CoCreateText.getSelections(element);
+        CoCreateText.sendPosition(element);
+        if(start != end) {
+            CoCreateText.deleteText(element, start, end);
+        }
+        if (event.key == "Backspace" && start == end) {
+            CoCreateText.deleteText(element, start -1, end);
             event.preventDefault();
-        });
-        
-        element.addEventListener('paste', function(event) {
-            let value = event.clipboardData.getData('Text');
-            const {start, end} = self.getSelections(this);
-
-            if(start != end) {
-                self.deleteText(this, start, end);
-            }
-            self.insertText(this, value, start);
+        }
+        if (event.key == 'Tab') {
+            CoCreateText.insertText(element, "\t", start);
             event.preventDefault();
-        });
-        
-        element.addEventListener('keydown', function(event) {
-            const {start, end} = self.getSelections(this);
-            self.sendPosition(this);
-            if(start != end) {
-                self.deleteText(this, start, end);
-            }
-            if (event.key == "Backspace" && start == end) {
-                self.deleteText(this, start -1, end);
-                event.preventDefault();
-            }
-            if (event.key == 'Tab') {
-                self.insertText(this, "\t", start);
-                event.preventDefault();
-            }
-            if (event.key == "Enter") {
-                self.insertText(this, "\n", start);
-                event.preventDefault();
-            }
-        });
-        
-        element.addEventListener('keypress', function(event) {
-            const {start} = self.getSelections(this);
-            if (event.key == "Enter") return;
-            self.insertText(this, event.key, start);
+        }
+        if (event.key == "Enter") {
+            CoCreateText.insertText(element, "\n", start);
             event.preventDefault();
-        });
+        }
+    },
+   
+    _keypress: function(event) {
+        let element = event.target;
+        let {start} = CoCreateText.getSelections(element);
+        if (event.key == "Enter") return;
+        CoCreateText.insertText(element, event.key, start);
+        event.preventDefault();
+    },
+    
+    _removeEventListeners: function(element) {
+        element.removeEventListener('click', this._click);
+        element.removeEventListener('blur', this._blur);
+        element.removeEventListener('keyup', this._keyup);
+        element.removeEventListener('cut', this._cut);
+        element.removeEventListener('paste', this.paste);
+        element.removeEventListener('keydown', this._keydown);
+        element.removeEventListener('keypress', this._keypress);
     },
 
     getSelections: function(el) {
@@ -218,7 +241,9 @@ observer.init({
     name: 'CoCreateTextAttribtes',
     observe: ['attributes'],
     attributeName: ['collection', 'document_id', 'name'],
+    target: 'input[collection][document_id][name], textarea[collection][document_id][name]',
     callback: function(mutation) {
+        CoCreateText._removeEventListeners(mutation.target);
         CoCreateText.initElement(mutation.target);
     }
 });
