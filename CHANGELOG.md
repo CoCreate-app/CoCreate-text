@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.1.6...v1.2.0) (2021-08-05)
+
+
+### Features
+
+* remove event listners ([a2cc703](https://github.com/CoCreate-app/CoCreate-text/commit/a2cc7032a0261376486dfeb3d61fcc599f75b6a4))
+
 ## [1.1.6](https://github.com/CoCreate-app/CoCreate-text/compare/v1.1.5...v1.1.6) (2021-08-03)
 
 
