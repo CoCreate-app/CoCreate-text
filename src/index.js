@@ -1,6 +1,7 @@
 import observer from '@cocreate/observer';
 import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
+
 let eventObj;
 const CoCreateText = {
 
@@ -24,11 +25,11 @@ const CoCreateText = {
         if(element.tagName === "INPUT" && ["text", "email", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA") {
             if(!collection || !document_id || !name) return;
 
+            if (!isCrdt)
+                this._addEventListeners(element);
+                
             element.setAttribute('crdt', 'true');
             element.value = "";
-
-            this._addEventListeners(element);
-
             crdt.init({ collection, document_id, name });
         }
     },
@@ -41,9 +42,6 @@ const CoCreateText = {
         element.addEventListener('paste', this._paste);
         element.addEventListener('keydown', this._keydown);
         element.addEventListener('keypress', this._keypress);
-        element.addEventListener('input', ()=>{
-            console.log('fff')
-        });
     },
 
     _click: function(event) {
@@ -87,10 +85,12 @@ const CoCreateText = {
     },
 
     _keydown: function(event) {
+        if(event.stopCCText) return;
         let element = event.target;
         CoCreateText.sendPosition(element);
         const { start, end } = CoCreateText.getSelections(element);
         if(event.key == "Backspace" || event.key == "Tab" || event.key == "Enter") {
+            eventObj = event;
             if(start != end) {
                 CoCreateText.deleteText(element, start, end);
             }
@@ -104,7 +104,6 @@ const CoCreateText = {
                 CoCreateText.insertText(element, "\n", start);
             }
             event.preventDefault();
-
         }
     },
 
@@ -130,19 +129,34 @@ const CoCreateText = {
         element.removeEventListener('keypress', this._keypress);
     },
 
-    getSelections: function(el) {
+    getSelections: function(element) {
+        if (element.hasAttribute('contenteditable')){
+    		let document = element.ownerDocument;
+    		var selection = document.getSelection();
+    		if (!selection.rangeCount) return null;
+    
+    		var _range = selection.getRangeAt(0);
+    		var selected = _range.toString().length;
+    		var range = _range.cloneRange();
+    		range.selectNodeContents(element);
+    		range.setEnd(_range.endContainer, _range.endOffset);
+    	
+    		var end = range.toString().length;
+    		var start = selected ? end - selected : end;
+    
+    		return { start: start, end: end };
+        }
+        else
         return {
-            start: el.selectionStart,
-            end: el.selectionEnd
+            start: element.selectionStart,
+            end: element.selectionEnd
         };
     },
 
-    sendPosition: function(el) {
-        if (!el) return;
-        const { start, end } = this.getSelections(el);
-        const { collection, document_id, name } = crud.getAttr(el);
-        // let start = el.selectionStart;
-        // let end = el.selectionEnd;
+    sendPosition: function(element) {
+        if (!element) return;
+        const { start, end } = this.getSelections(element);
+        const { collection, document_id, name } = crud.getAttr(element);
         crdt.sendPosition({ collection, document_id, name, start, end });
     },
 
@@ -166,6 +180,7 @@ const CoCreateText = {
             let document_id = info['document_id'];
             let name = info['name'];
             let selectors = `[collection='${collection}'][document_id='${document_id}'][name='${name}']`;
+            // let elements = document.querySelectorAll(`input${selectors}, textarea${selectors}, [contenteditable]${selectors}`);
             let elements = document.querySelectorAll(`input${selectors}, textarea${selectors}`);
 
             elements.forEach((element) => {
@@ -192,14 +207,23 @@ const CoCreateText = {
             if(item.insert || item.delete) {
                 if(flag == false) pos = 0;
                 flag = false;
-
-                if(item.insert) {
-                    this._updateElementText(element, item.insert, pos, pos);
+                
+                if (element.hasAttribute('contenteditable')){
+    				if (item.insert) {
+    					this._insertElementText(element, item.insert, pos);
+    				}
+    				else if (item.delete) {
+    					this._deleteElementText(element, pos, pos + item.delete);
+    				}
                 }
-                else if(item.delete) {
-                    this._updateElementText(element, "", pos, pos + item.delete);
+                else {
+                    if(item.insert) {
+                        this._updateElementText(element, item.insert, pos, pos);
+                    }
+                    else if(item.delete) {
+                        this._updateElementText(element, "", pos, pos + item.delete);
+                    }
                 }
-
             }
         });
     },
@@ -268,7 +292,6 @@ observer.init({
     attributeName: ['collection', 'document_id', 'name'],
     target: 'input[collection][document_id][name], textarea[collection][document_id][name]',
     callback: function(mutation) {
-        CoCreateText._removeEventListeners(mutation.target);
         CoCreateText.initElement(mutation.target);
     }
 });
