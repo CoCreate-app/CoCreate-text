@@ -18,7 +18,7 @@ const CoCreateText = {
             this.initElement(element);
     },
 
-    initElement: function(element, data) {
+    initElement: function(element) {
         const { collection, document_id, name, isRealtime, isCrdt } = crud.getAttr(element);
         if(isCrdt == "false" || isRealtime == "false") return;
         if(!crud.checkAttrValue(collection) && !crud.checkAttrValue(document_id)) return;
