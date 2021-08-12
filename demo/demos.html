@@ -14,13 +14,11 @@
     </head>
     
     <body class="padding:20px">
-        <form > 
-            <!--<input name="name" document_id="6037167de683ae2d6ea00695" class="floating-label" placeholder="Input" style="width: 100%">-->
+        <form collection="apples1" document_id=""> 
+            <input type="text" name="name"></textarea>            <!--<h1 name='name' contenteditable>I will be replaced by crdt</h1>-->
+            <textarea name="name2"></textarea>            <!--<h1 name='name' contenteditable>I will be replaced by crdt</h1>-->
+            <p name='name2' contenteditable>I will be replaced by crud</p>
             
-            <!--<textarea name="name" collection="apples" document_id="6037167de683ae2d6ea00695" class="floating-label" placeholder="Textarea"></textarea>-->
-        <input type="color" collection="apples1" document_id="60fc413875abfd001113fe92" name="name"></textarea>            <!--<h1 name='name' contenteditable>I will be replaced by crdt</h1>-->
-        <textarea collection="apples1" document_id="60fc413875abfd001113fe92" name="name"></textarea>            <!--<h1 name='name' contenteditable>I will be replaced by crdt</h1>-->
-            <!--<p name='name2' contenteditable>I will be replaced by crud</p>-->
 <div class="padding:20px">
   CoCreateCrdt.init({collection: "apples1",
   document_id: "60bea334b25613e8da1b4bdf",
@@ -38,19 +36,9 @@
 </div>
         </form>
         
-        <script>
-             var config = {                 
-                apiKey: '2061acef-0451-4545-f754-60cf8160',                 
-                organization_Id: '5ff747727005da1c272740ab',                 
-                host: 'general.cocreate.app'             
-            }         
-        </script>
         
-        
-        <!--<script src="https://cdn.cocreate.app/latest/CoCreate.min.js"></script>-->
-        <!--<script src="https://server.cocreate.app/CoCreate-components/CoCreate-text.rollup/dist/cocreate-text.js"></script>-->
-        <!--<script src="https://server.cocreate.app/CoCreate-components/CoCreate-text/dist/CoCreate-text.js"></script>-->
-        <!--<script src="https://server.cocreate.app/CoCreateJS/dist/CoCreate.js" ></script>-->
-        <script src="../dist/CoCreate-text.js" ></script>
+        <!--<script src="../dist/CoCreate-text.js" ></script>-->
+        <script src="../../../CoCreateJS/dist/CoCreate.js"></script>
+
     </body>
 </html>
