@@ -1,3 +1,16 @@
+# [1.4.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.3.0...v1.4.0) (2021-08-12)
+
+
+### Bug Fixes
+
+* add contenteditable demos ([6e1fd2d](https://github.com/CoCreate-app/CoCreate-text/commit/6e1fd2d30f1a11ba1ce67dc175fdfca911ebbae2))
+* update data-module_id to document_id ([e07afe2](https://github.com/CoCreate-app/CoCreate-text/commit/e07afe2f17dac6f85843dbf025b78275b22d8d2b))
+
+
+### Features
+
+* support for input, textarea and contenteditable ([c7c7e2b](https://github.com/CoCreate-app/CoCreate-text/commit/c7c7e2b486a4a07b2ddeb8eeadeb0854c47be0ab))
+
 # [1.3.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.2.1...v1.3.0) (2021-08-10)
 
 
