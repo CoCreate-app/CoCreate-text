@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.4.2...v1.5.0) (2021-08-18)
+
+
+### Features
+
+* getSelections supports any element ([0c7a4f5](https://github.com/CoCreate-app/CoCreate-text/commit/0c7a4f54fde1dae2316803a54164a4be123fbefd))
+
 ## [1.4.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.4.1...v1.4.2) (2021-08-15)
 
 
