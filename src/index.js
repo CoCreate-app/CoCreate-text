@@ -130,16 +130,22 @@ function _removeEventListeners (element) {
     element.removeEventListener('blur', _blur);
     element.removeEventListener('keyup', _keyup);
     element.removeEventListener('cut', _cut);
-    element.removeEventListener('paste', paste);
+    element.removeEventListener('paste', _paste);
     element.removeEventListener('keydown', _keydown);
     element.removeEventListener('keypress', _keypress);
 }
 
 function getSelections (element) {
-    if (element.hasAttribute('contenteditable')){
+    if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+        return {
+            start: element.selectionStart,
+            end: element.selectionEnd
+        };
+    } 
+    else {
 		let document = element.ownerDocument;
 		var selection = document.getSelection();
-		if (!selection.rangeCount) return null;
+		if (!selection.rangeCount) return { start: 0, end: 0 };
 
 		var _range = selection.getRangeAt(0);
 		var selected = _range.toString().length;
@@ -152,11 +158,7 @@ function getSelections (element) {
 
 		return { start: start, end: end };
     }
-    else
-    return {
-        start: element.selectionStart,
-        end: element.selectionEnd
-    };
+    
 }
 
 function sendPosition (element) {
