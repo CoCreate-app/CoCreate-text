@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.5.0...v1.5.1) (2021-08-18)
+
+
+### Bug Fixes
+
+* avoid reinit after dnd ([b45e1a0](https://github.com/CoCreate-app/CoCreate-text/commit/b45e1a05d65d009c85640d7cecfc21be1ce5cbd2))
+
 # [1.5.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.4.2...v1.5.0) (2021-08-18)
 
 
