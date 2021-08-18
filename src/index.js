@@ -409,6 +409,8 @@ observer.init({
     observe: ['addedNodes'],
     target: selectors,
     callback (mutation) {
+        let isCrdt = mutation.target.getAttribute('crdt')
+        if (isCrdt) return;
         initElement(mutation.target);
     }
 });
