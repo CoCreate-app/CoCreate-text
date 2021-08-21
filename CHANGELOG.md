@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.5.1...v1.5.2) (2021-08-21)
+
+
+### Bug Fixes
+
+* removed file contenteditable.js ([a0a7ee1](https://github.com/CoCreate-app/CoCreate-text/commit/a0a7ee1f2d3dba22844501151fdc2963ad237fe8))
+
 ## [1.5.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.5.0...v1.5.1) (2021-08-18)
 
 
