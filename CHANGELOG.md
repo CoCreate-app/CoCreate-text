@@ -1,3 +1,10 @@
+## [1.5.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.5.3...v1.5.4) (2021-08-22)
+
+
+### Bug Fixes
+
+* bump package versions ([a1c84e6](https://github.com/CoCreate-app/CoCreate-text/commit/a1c84e65ce80148d4c64d2042d043be3a36cd9f0))
+
 ## [1.5.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.5.2...v1.5.3) (2021-08-22)
 
 
