@@ -72,7 +72,17 @@ function _cut (event) {
     let element = event.target;
     const { start, end } = getSelections(element);
     const selection = document.getSelection();
-    event.clipboardData.setData('text/plain', selection.toString());
+    console.log(selection.toString())
+    if (event.clipboardData) {
+        event.clipboardData.setData('text/plain', selection.toString());
+    }
+    else {
+        navigator.clipboard.writeText(selection.toString()).then(function() {
+          /* clipboard successfully set */
+        }, function() {
+          /* clipboard write failed */
+        });
+    }
     if(start != end) {
         deleteText(element, start, end);
     }
@@ -159,6 +169,13 @@ function getSelections (element) {
 		return { start: start, end: end };
     }
     
+}
+
+export function hasSelection(el) {
+	let { start, end } = getSelections(el);
+	if(start != end) {
+		return true;
+	}
 }
 
 function sendPosition (element) {
@@ -279,6 +296,10 @@ function _dispatchInputEvent(element) {
         let inputEvent = new CustomEvent('input', { bubbles: true });
         Object.defineProperty(inputEvent, 'target', { writable: false, value: eventObj.target });
         element.dispatchEvent(inputEvent);
+        
+        let textChange = new CustomEvent('textChange', { bubbles: true });
+        Object.defineProperty(textChange, 'target', { writable: false, value: eventObj.target });
+        element.dispatchEvent(textChange);
         eventObj = null;
     }
 } 
@@ -425,4 +446,4 @@ observer.init({
     }
 });
 
-export default {initElements, initElement, getSelections};
+export default {initElements, initElement, getSelections, hasSelection, insertText, deleteText};
