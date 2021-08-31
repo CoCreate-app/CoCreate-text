@@ -1,3 +1,11 @@
+## [1.5.8](https://github.com/CoCreate-app/CoCreate-text/compare/v1.5.7...v1.5.8) (2021-08-31)
+
+
+### Bug Fixes
+
+* eventListener bug ([949fb24](https://github.com/CoCreate-app/CoCreate-text/commit/949fb24380920aa24ecb2797df497b05c305a584))
+* export insertText and deleteText ([bcace0b](https://github.com/CoCreate-app/CoCreate-text/commit/bcace0b79226e1451b51ce780e36b74041fd352d))
+
 ## [1.5.7](https://github.com/CoCreate-app/CoCreate-text/compare/v1.5.6...v1.5.7) (2021-08-27)
 
 
