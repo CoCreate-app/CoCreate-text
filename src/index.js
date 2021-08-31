@@ -1,3 +1,5 @@
+/*global CustomEvent, navigator, Node*/
+
 import observer from '@cocreate/observer';
 import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
@@ -60,7 +62,7 @@ function _blur (event) {
     const { collection, document_id, name } = crud.getAttr(element);
     let start = null;
     let end = null;
-    crdt.sendPosition({collection, document_id, name, start, end})
+    crdt.sendPosition({collection, document_id, name, start, end});
 }
 
 function _keyup (event) {
@@ -72,7 +74,7 @@ function _cut (event) {
     let element = event.target;
     const { start, end } = getSelections(element);
     const selection = document.getSelection();
-    console.log(selection.toString())
+    console.log(selection.toString());
     if (event.clipboardData) {
         event.clipboardData.setData('text/plain', selection.toString());
     }
@@ -430,7 +432,7 @@ observer.init({
     observe: ['addedNodes'],
     target: selectors,
     callback (mutation) {
-        let isCrdt = mutation.target.getAttribute('crdt')
+        let isCrdt = mutation.target.getAttribute('crdt');
         if (isCrdt) return;
         initElement(mutation.target);
     }
