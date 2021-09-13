@@ -190,7 +190,6 @@ function sendPosition (element) {
 
 function deleteText (element, start, end) {
     const { collection, document_id, name, isCrud, isSave } = crud.getAttr(element);
-    if(document_id == "pending") return;
     if(isSave == "false") return;
     let length = end - start;
     crdt.deleteText({ collection, document_id, name, position: start, length, crud: isCrud });
@@ -198,7 +197,6 @@ function deleteText (element, start, end) {
 
 function insertText (element, value, position) {
     const { collection, document_id, name, isCrud, isSave } = crud.getAttr(element);
-    if(document_id == "pending") return;
     if(isSave == "false") return;
     crdt.insertText({ collection, document_id, name, value, position, crud: isCrud });
 }
