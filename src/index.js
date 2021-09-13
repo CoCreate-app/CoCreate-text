@@ -22,6 +22,7 @@ function initElements (elements) {
 
 function initElement (element) {
     const { collection, document_id, name, isRealtime, isCrdt } = crud.getAttr(element);
+    if(document_id == "pending") return;
     if(isCrdt == "false" || isRealtime == "false") return;
     if(!crud.checkAttrValue(collection) && !crud.checkAttrValue(document_id)) return;
     if(element.tagName === "INPUT" && ["text", "email", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA" || element.hasAttribute('contenteditable')) {
@@ -188,13 +189,16 @@ function sendPosition (element) {
 }
 
 function deleteText (element, start, end) {
-    const { collection, document_id, name, isCrud } = crud.getAttr(element);
+    const { collection, document_id, name, isCrud, isSave } = crud.getAttr(element);
+    if(document_id == "pending") return;
+    if(isSave == "false") return;
     let length = end - start;
     crdt.deleteText({ collection, document_id, name, position: start, length, crud: isCrud });
 }
 
 function insertText (element, value, position) {
     const { collection, document_id, name, isCrud, isSave } = crud.getAttr(element);
+    if(document_id == "pending") return;
     if(isSave == "false") return;
     crdt.insertText({ collection, document_id, name, value, position, crud: isCrud });
 }
@@ -207,7 +211,6 @@ function _crdtUpdateListener () {
         let name = info['name'];
         let selectors = `[collection='${collection}'][document_id='${document_id}'][name='${name}']`;
         let elements = document.querySelectorAll(`input${selectors}, textarea${selectors}, [contenteditable]${selectors}`);
-        // let elements = document.querySelectorAll(`input${selectors}, textarea${selectors}`);
 
         elements.forEach((element) => {
             if(element === document.activeElement) {
