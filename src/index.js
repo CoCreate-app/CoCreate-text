@@ -174,6 +174,23 @@ function getSelections (element) {
     
 }
 
+function setSelection(element, start, end) {
+    if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+        element.selectionStart = start;
+        element.selectionEnd = end;
+    } 
+    else {
+    	if (document.activeElement !== element) return;
+    
+    	var selection = document.getSelection();
+    	var range = contenteditable._cloneRangeByPosition(element, start, end);
+    	selection.removeAllRanges();
+    	selection.addRange(range);
+    }
+    sendPosition(element);
+}
+
+
 export function hasSelection(el) {
 	let { start, end } = getSelections(el);
 	if(start != end) {
@@ -372,21 +389,22 @@ const contenteditable = {
 				prev_end = (prev_end >= end) ? prev_end - (end - start) : start;
 			}
 		}
-		this.setSelection(element, prev_start, prev_end);
+		setSelection(element, prev_start, prev_end);
+        _dispatchInputEvent(element);
 		return { start: prev_start, end: prev_end };
 	},
 	
-	setSelection: function(element, start, end) {
-		if (document.activeElement !== element) return;
+// 	setSelection: function(element, start, end) {
+// 		if (document.activeElement !== element) return;
 
-		var selection = document.getSelection();
-		var range = this._cloneRangeByPosition(element, start, end);
-		selection.removeAllRanges();
-		selection.addRange(range);
+// 		var selection = document.getSelection();
+// 		var range = this._cloneRangeByPosition(element, start, end);
+// 		selection.removeAllRanges();
+// 		selection.addRange(range);
 		
-		sendPosition(element);
-         _dispatchInputEvent(element);
-	},
+// 		sendPosition(element);
+//          _dispatchInputEvent(element);
+// 	},
 	
 	_cloneRangeByPosition: function(element, start, end, range) {
 		if (!range) {
