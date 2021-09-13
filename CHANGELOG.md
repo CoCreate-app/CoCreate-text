@@ -1,3 +1,16 @@
+# [1.6.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.5.16...v1.6.0) (2021-09-13)
+
+
+### Bug Fixes
+
+* document_id pending state ([d90fe83](https://github.com/CoCreate-app/CoCreate-text/commit/d90fe8311eb3b97a362673455a6a873dfaaca762))
+* removed document_id pending from insertText function ([140455e](https://github.com/CoCreate-app/CoCreate-text/commit/140455e700347338879276bcb5dd02781c90760b))
+
+
+### Features
+
+* setSelections function ([93e9e30](https://github.com/CoCreate-app/CoCreate-text/commit/93e9e30fddf5388c7c82d38d1b54327b789b88d3))
+
 ## [1.5.16](https://github.com/CoCreate-app/CoCreate-text/compare/v1.5.15...v1.5.16) (2021-09-12)
 
 
