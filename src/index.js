@@ -3,7 +3,6 @@
 import observer from '@cocreate/observer';
 import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
-// import contenteditable from './contenteditable';
 
 let eventObj;
 let selector = `[collection][document_id][name]`;
