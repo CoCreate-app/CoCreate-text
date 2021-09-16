@@ -39,6 +39,7 @@ function initElement (element) {
             element.value = "";
         }
         crdt.init({ collection, document_id, name });
+        // element.crdt = { collection, document_id, name };
     }
 }
 
