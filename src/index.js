@@ -109,6 +109,7 @@ function _keydown (event) {
     sendPosition(element);
     const { start, end } = getSelections(element);
     if(event.key == "Backspace" || event.key == "Tab" || event.key == "Enter") {
+        // eventObj = {event, detail: {value: event.key, start, end}};
         eventObj = event;
         if(start != end) {
             deleteText(element, start, end);
@@ -134,6 +135,7 @@ function _keypress (event) {
         deleteText(element, start, end);
     }
     eventObj = event;
+    // eventObj = {event, detail: {value: event.key, start, end}};
     insertText(element, event.key, start);
     event.preventDefault();
 }
@@ -231,12 +233,12 @@ function _crdtUpdateListener () {
             if(element === document.activeElement) {
                 sendPosition(element);
             }
-            _updateElement(element, info);
+            updateElement(element, info);
         });
     });
 }
 
-function _updateElement (element, info) {
+function updateElement (element, info) {
     element.crudSetted = true;
 
     var pos = 0;
@@ -303,22 +305,26 @@ function _updateElementText (element, content, start, end) {
         sendPosition(element);
     }
     
-    _dispatchInputEvent(element);
+    _dispatchInputEvent(element, content, start, end);
 }
 
-function _dispatchInputEvent(element) {
+function _dispatchInputEvent(element, content, start, end) {
     if(eventObj) {
+        let detail = {value: content, start, end};
         let event = new CustomEvent(eventObj.type, { bubbles: true });
         Object.defineProperty(event, 'stopCCText', { writable: false, value: true });
-        Object.defineProperty(event, 'target', { writable: false, value: eventObj.target });
+        Object.defineProperty(event, 'target', { writable: false, value: element });
+        Object.defineProperty(event, 'detail', { writable: false, value: detail });
         element.dispatchEvent(event);
        
         let inputEvent = new CustomEvent('input', { bubbles: true });
-        Object.defineProperty(inputEvent, 'target', { writable: false, value: eventObj.target });
+        Object.defineProperty(inputEvent, 'target', { writable: false, value: element });
+        Object.defineProperty(inputEvent, 'detail', { writable: false, value: detail });
         element.dispatchEvent(inputEvent);
         
         let textChange = new CustomEvent('textChange', { bubbles: true });
-        Object.defineProperty(textChange, 'target', { writable: false, value: eventObj.target });
+        Object.defineProperty(textChange, 'target', { writable: false, value: element });
+        Object.defineProperty(textChange, 'detail', { writable: false, value: detail });
         element.dispatchEvent(textChange);
         eventObj = null;
     }
@@ -390,22 +396,10 @@ const contenteditable = {
 			}
 		}
 		setSelection(element, prev_start, prev_end);
-        _dispatchInputEvent(element);
-		return { start: prev_start, end: prev_end };
+        _dispatchInputEvent(element, content, start, end);
 	},
 	
-// 	setSelection: function(element, start, end) {
-// 		if (document.activeElement !== element) return;
 
-// 		var selection = document.getSelection();
-// 		var range = this._cloneRangeByPosition(element, start, end);
-// 		selection.removeAllRanges();
-// 		selection.addRange(range);
-		
-// 		sendPosition(element);
-//          _dispatchInputEvent(element);
-// 	},
-	
 	_cloneRangeByPosition: function(element, start, end, range) {
 		if (!range) {
 			range = document.createRange();
@@ -467,4 +461,4 @@ observer.init({
     }
 });
 
-export default {initElements, initElement, getSelections, hasSelection, insertText, deleteText};
+export default {initElements, initElement, getSelections, hasSelection, insertText, deleteText, updateElement};
