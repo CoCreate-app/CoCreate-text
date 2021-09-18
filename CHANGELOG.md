@@ -1,3 +1,10 @@
+## [1.6.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.6.3...v1.6.4) (2021-09-18)
+
+
+### Bug Fixes
+
+* dispatch Event with  content, start, end ([3433e01](https://github.com/CoCreate-app/CoCreate-text/commit/3433e01f0c7011a2f94c0a3a129510617450b4fc))
+
 ## [1.6.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.6.2...v1.6.3) (2021-09-16)
 
 
