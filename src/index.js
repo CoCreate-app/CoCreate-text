@@ -31,13 +31,14 @@ function initElement (element) {
             _addEventListeners(element);
             
         element.setAttribute('crdt', 'true');
-        
-        if (element.hasAttribute('contenteditable')){
-            element.innerHTML = "";
-        }
-        else {
-            element.value = "";
-        }
+        element.crdt = {init: true};
+        // if (element.hasAttribute('contenteditable')){
+        //     if (!element.domText)
+        //         element.innerHTML = "";
+        // }
+        // else {
+        //     element.value = "";
+        // }
         crdt.init({ collection, document_id, name });
         // element.crdt = { collection, document_id, name };
     }
@@ -99,9 +100,53 @@ function _paste (event) {
     if(start != end) {
         deleteText(element, start, end);
     }
+    value = addElementId(value)
     insertText(element, value, start);
     event.preventDefault();
 }
+
+function addElementId(value) {
+    let dom, isOnlyChildren;
+	try{
+	    [dom, isOnlyChildren] = parseAll(value);
+	}
+	finally {
+    	if(dom){
+    	    if(!isOnlyChildren)
+    			dom.setAttribute('element_id', CoCreate.uuid.generate(6))
+    		dom.querySelectorAll('*').forEach(el => el.setAttribute('element_id', CoCreate.uuid.generate(6)));
+    		value = isOnlyChildren ? dom.innerHTML : dom.outerHTML;
+    		return value
+    	}
+    	else
+    		return value;
+	}
+}
+
+function parseAll(str) {
+	let mainTag = str.match(/\<(?<tag>[a-z0-9]+)(.*?)?\>/).groups.tag;
+	if(!mainTag)
+		throw new Error('find position: can not find the main tag');
+
+	let doc;
+	switch(mainTag) {
+		case 'html':
+			doc = new DOMParser().parseFromString(str, "text/html");
+			return [doc.documentElement, false];
+		case 'body':
+			doc = new DOMParser().parseFromString(str, "text/html");
+			return [doc.body, false];
+		case 'head':
+			doc = new DOMParser().parseFromString(str, "text/html");
+			return [doc.head, false];
+
+		default:
+			let con = document.createElement('div');
+			con.innerHTML = str;
+			return [con, true]
+	}
+}
+
 
 function _keydown (event) {
     if(event.stopCCText) return;
@@ -176,7 +221,7 @@ function getSelections (element) {
     
 }
 
-function setSelection(element, start, end) {
+function setSelections(element, start, end) {
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
         element.selectionStart = start;
         element.selectionEnd = end;
@@ -240,11 +285,20 @@ function _crdtUpdateListener () {
 
 function updateElement (element, info) {
     element.crudSetted = true;
-
+    if (element.crdt.init == true) {
+        element.crdt = {};
+        if (element.hasAttribute('contenteditable')){
+            element.innerHTML = "";
+        }
+        else {
+            element.value = "";
+        }
+    }
     var pos = 0;
     var flag = true;
     let items = info.eventDelta;
     items.forEach(item => {
+        
         if(item.retain) {
             flag = true;
             pos = item.retain;
@@ -253,10 +307,17 @@ function updateElement (element, info) {
         if(item.insert || item.delete) {
             if(flag == false) pos = 0;
             flag = false;
-            
+            // if (element.domText == true){
+            //     let end = pos;
+            //     if (item.delete)
+            //         end = pos + item.delete;
+            //     _dispatchInputEvent(element, item.insert, pos, end);
+            //     return;
+            // }
             if (element.hasAttribute('contenteditable')){
 				if (item.insert) {
-					contenteditable._insertElementText(element, item.insert, pos);
+				    if (element.innerHTML != item.insert)
+					    contenteditable._insertElementText(element, item.insert, pos);
 				}
 				else if (item.delete) {
 					contenteditable._deleteElementText(element, pos, pos + item.delete);
@@ -264,7 +325,8 @@ function updateElement (element, info) {
             }
             else {
                 if(item.insert) {
-                    _updateElementText(element, item.insert, pos, pos);
+                    if (element.value != item.insert)
+                        _updateElementText(element, item.insert, pos, pos);
                 }
                 else if(item.delete) {
                     _updateElementText(element, "", pos, pos + item.delete);
@@ -308,9 +370,9 @@ function _updateElementText (element, content, start, end) {
     _dispatchInputEvent(element, content, start, end);
 }
 
-function _dispatchInputEvent(element, content, start, end) {
+function _dispatchInputEvent(element, content, start, end, prev_start, prev_end) {
     if(eventObj) {
-        let detail = {value: content, start, end};
+        let detail = {value: content, start, end, prev_start, prev_end};
         let event = new CustomEvent(eventObj.type, { bubbles: true });
         Object.defineProperty(event, 'stopCCText', { writable: false, value: true });
         Object.defineProperty(event, 'target', { writable: false, value: element });
@@ -334,21 +396,23 @@ function _dispatchInputEvent(element, content, start, end) {
 const contenteditable = {	
 	_insertElementText: function(element, content, position) {
 		if (!content || content === '') return;
-
-		var selection = window.getSelection();
 		var curCaret = getSelections(element);
+		
+        // if (!element.domText){
+		    var selection = window.getSelection();
+    		var range = this._cloneRangeByPosition(element, position, position);
+    		var tmp = document.createElement("div");
+    		var frag = document.createDocumentFragment(),
+    			node;
+    
+    		tmp.innerHTML = content;
+    
+    		while ((node = tmp.firstChild)) {
+    			frag.appendChild(node);
+    		}
+    		range.insertNode(frag);
+        // }
 
-		var range = this._cloneRangeByPosition(element, position, position);
-		var tmp = document.createElement("div");
-		var frag = document.createDocumentFragment(),
-			node;
-
-		tmp.innerHTML = content;
-
-		while ((node = tmp.firstChild)) {
-			frag.appendChild(node);
-		}
-		range.insertNode(frag);
 
 		if (!curCaret) {
 			// let curCaret = {start: 0, end: 0}
@@ -366,10 +430,11 @@ const contenteditable = {
 		if (!content_length) return;
 	
 		var curCaret = getSelections(element);
-		var selection = window.getSelection();
-		var range = this._cloneRangeByPosition(element, start, end);
-		if (range) range.deleteContents();
-
+// 		if (!element.domText){
+    		var selection = window.getSelection();
+    		var range = this._cloneRangeByPosition(element, start, end);
+    		if (range) range.deleteContents();
+// 		}
 
 		if (!curCaret) {
 			selection.removeRange(range);
@@ -395,8 +460,8 @@ const contenteditable = {
 				prev_end = (prev_end >= end) ? prev_end - (end - start) : start;
 			}
 		}
-		setSelection(element, prev_start, prev_end);
-        _dispatchInputEvent(element, content, start, end);
+		setSelections(element, prev_start, prev_end);
+        _dispatchInputEvent(element, content, start, end, prev_start, prev_end);
 	},
 	
 
@@ -461,4 +526,4 @@ observer.init({
     }
 });
 
-export default {initElements, initElement, getSelections, hasSelection, insertText, deleteText, updateElement};
+export default {initElements, initElement, getSelections, setSelections, hasSelection, insertText, deleteText, updateElement};
