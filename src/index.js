@@ -315,12 +315,23 @@ function updateElement (element, info) {
             //     return;
             // }
             if (element.hasAttribute('contenteditable')){
+                const { collection, document_id, name } = crud.getAttr(element);
+                let html = crdt.getText({collection, document_id, name});
+				let domTextEditor = element;
 				if (item.insert) {
-				    if (element.innerHTML != item.insert)
-					    contenteditable._insertElementText(element, item.insert, pos);
+				    if (element.innerHTML != item.insert) {
+					   // contenteditable._insertElementText(element, item.insert, pos);
+						domTextEditor.htmlString = html;
+						CoCreate.domText.addToDom({ domTextEditor, pos, changeStr: item.insert });
+						_dispatchInputEvent(element, item.insert, pos, pos + item.insert.length - 1);
+				    }
 				}
 				else if (item.delete) {
-					contenteditable._deleteElementText(element, pos, pos + item.delete);
+				// 	contenteditable._deleteElementText(element, pos, pos + item.delete);
+					domTextEditor.htmlString = html;
+					let removeLength = pos + item.delete;
+					CoCreate.domText.removeFromDom({ domTextEditor, pos, removeLength });
+					_dispatchInputEvent(element, item.insert, pos, removeLength);
 				}
             }
             else {
