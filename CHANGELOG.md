@@ -1,3 +1,13 @@
+# [1.7.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.6.4...v1.7.0) (2021-09-27)
+
+
+### Features
+
+* add element_id if an html element is pasted ([343d5cb](https://github.com/CoCreate-app/CoCreate-text/commit/343d5cbd131e62d88c345bff999f65d5d5307dfa))
+* selection and range now supply the element start and the element end. contenteditable and builder canvas are one. text and dom have synced abilities ([7da1a10](https://github.com/CoCreate-app/CoCreate-text/commit/7da1a104b45304c024f1a49d7ecc98244419e8b9))
+* send and display shared cursor position between text and dom ([dd5f83c](https://github.com/CoCreate-app/CoCreate-text/commit/dd5f83c842c65b7e57f2a55816999baee2b9ad57))
+* updateing text will update contenteditable dom elements.  dispatch event when removing characters ([851e804](https://github.com/CoCreate-app/CoCreate-text/commit/851e804e19d2149d520f106dc8287b5247c49f9c))
+
 ## [1.6.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.6.3...v1.6.4) (2021-09-18)
 
 
