@@ -1,10 +1,8 @@
-/*global CoCreate, DOMParser, CustomEvent, navigator, Node*/
+/*global CustomEvent, navigator, Node*/
 
 import observer from '@cocreate/observer';
 import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
-import {setInnerText, changeDom, replaceInnerText, getDomPosition} from './domText';
-import {contenteditable} from './contenteditable';
 
 let eventObj;
 let selector = `[collection][document_id][name]`;
@@ -14,13 +12,6 @@ function init() {
     let elements = document.querySelectorAll(selectors);
     initElements(elements);
     _crdtUpdateListener();
-    // document.addEventListener('click', function(){
-    //     let element = event.target;
-    //     element.focus();
-    //     let el = document.activeElement;
-    //     let { start, end } = getSelections(el);
-    //     console.log('selctions: ', el, start, end);
-    // });
 }
 
 function initElements (elements) {
@@ -41,12 +32,19 @@ function initElement (element) {
             
         element.setAttribute('crdt', 'true');
         element.crdt = {init: true};
+        // if (element.hasAttribute('contenteditable')){
+        //     if (!element.domText)
+        //         element.innerHTML = "";
+        // }
+        // else {
+        //     element.value = "";
+        // }
         crdt.init({ collection, document_id, name });
         // element.crdt = { collection, document_id, name };
     }
 }
 
-export function _addEventListeners (element) {
+function _addEventListeners (element) {
     element.addEventListener('click', _click);
     element.addEventListener('blur', _blur);
     element.addEventListener('keyup', _keyup);
@@ -57,12 +55,12 @@ export function _addEventListeners (element) {
 }
 
 function _click (event) {
-    let element = event.currentTarget;
+    let element = event.target;
     sendPosition(element);
 }
 
 function _blur (event) {
-    let element = event.currentTarget;
+    let element = event.target;
     const { collection, document_id, name } = crud.getAttr(element);
     let start = null;
     let end = null;
@@ -70,13 +68,13 @@ function _blur (event) {
 }
 
 function _keyup (event) {
-    let element = event.currentTarget;
+    let element = event.target;
     sendPosition(element);
 }
 
 function _cut (event) {
-    let element = event.currentTarget;
-    const { start, end, range } = getSelections(element);
+    let element = event.target;
+    const { start, end } = getSelections(element);
     const selection = document.getSelection();
     console.log(selection.toString());
     if (event.clipboardData) {
@@ -90,20 +88,20 @@ function _cut (event) {
         });
     }
     if(start != end) {
-        deleteText(element, start, end, range);
+        deleteText(element, start, end);
     }
     event.preventDefault();
 }
 
 function _paste (event) {
-    let element = event.currentTarget;
+    let element = event.target;
     let value = event.clipboardData.getData('Text');
-    const { start, end, range } = getSelections(element);
+    const { start, end } = getSelections(element);
     if(start != end) {
-        deleteText(element, start, end, range);
+        deleteText(element, start, end);
     }
     value = addElementId(value)
-    insertText(element, value, start, range);
+    insertText(element, value, start);
     event.preventDefault();
 }
 
@@ -115,10 +113,10 @@ function addElementId(value) {
 	finally {
     	if(dom){
     	    if(!isOnlyChildren)
-    			dom.setAttribute('element_id', CoCreate.uuid.generate(6));
+    			dom.setAttribute('element_id', CoCreate.uuid.generate(6))
     		dom.querySelectorAll('*').forEach(el => el.setAttribute('element_id', CoCreate.uuid.generate(6)));
     		value = isOnlyChildren ? dom.innerHTML : dom.outerHTML;
-    		return value;
+    		return value
     	}
     	else
     		return value;
@@ -145,28 +143,30 @@ function parseAll(str) {
 		default:
 			let con = document.createElement('div');
 			con.innerHTML = str;
-			return [con, true];
+			return [con, true]
 	}
 }
 
 
 function _keydown (event) {
     if(event.stopCCText) return;
-    let element = event.currentTarget;
-    const { start, end, range } = getSelections(element);
+    let element = event.target;
+    sendPosition(element);
+    const { start, end } = getSelections(element);
     if(event.key == "Backspace" || event.key == "Tab" || event.key == "Enter") {
+        // eventObj = {event, detail: {value: event.key, start, end}};
         eventObj = event;
         if(start != end) {
-            deleteText(element, start, end, range);
+            deleteText(element, start, end);
         }
         if(event.key == "Backspace" && start == end) {
-            deleteText(element, start - 1, end, range);
+            deleteText(element, start - 1, end);
         }
         if(event.key == 'Tab') {
-            insertText(element, "\t", start, range);
+            insertText(element, "\t", start);
         }
         if(event.key == "Enter") {
-            insertText(element, "\n", start, range);
+            insertText(element, "\n", start);
         }
         event.preventDefault();
     }
@@ -174,13 +174,14 @@ function _keydown (event) {
 
 function _keypress (event) {
     if(event.stopCCText) return;
-    let element = event.currentTarget;
-    let { start, end, range } = getSelections(element);
+    let element = event.target;
+    let { start, end } = getSelections(element);
     if(start != end) {
-        deleteText(element, start, end, range);
+        deleteText(element, start, end);
     }
     eventObj = event;
-    insertText(element, event.key, start, range);
+    // eventObj = {event, detail: {value: event.key, start, end}};
+    insertText(element, event.key, start);
     event.preventDefault();
 }
 
@@ -194,7 +195,7 @@ function _removeEventListeners (element) {
     element.removeEventListener('keypress', _keypress);
 }
 
-export function getSelections (element) {
+function getSelections (element) {
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
         return {
             start: element.selectionStart,
@@ -206,62 +207,32 @@ export function getSelections (element) {
 		var selection = document.getSelection();
 		if (!selection.rangeCount) return { start: 0, end: 0 };
 
-		var range = selection.getRangeAt(0);
-        var start = range.startOffset;
-        var end = range.endOffset;
-		if(range.startContainer != range.endContainer) {
-    // 		toDo: replace common ancestor value
-		}
-// 		let domTextEditor = element.domTextEditor || element;
-//         let nodePos = getDomPosition({ domTextEditor, target: range.startContainer.parentElement, start, end });
-//         if (nodePos){
-//             start = nodePos.start;
-//             end = nodePos.end;
-//         }
-		return { start, end, range };
+		var _range = selection.getRangeAt(0);
+		var selected = _range.toString().length;
+		var range = _range.cloneRange();
+		range.selectNodeContents(element);
+		range.setEnd(_range.endContainer, _range.endOffset);
+	
+		var end = range.toString().length;
+		var start = selected ? end - selected : end;
+
+		return { start: start, end: end };
     }
     
 }
 
-export function processSelections(element, value = "", prev_start, prev_end, start, end, range) {
-	if (prev_start >= start) {
-		if (value == "") {
-			prev_start -= end - start;
-			prev_end -= end - start;
-			prev_start = prev_start < start ? start : prev_start;
-		}
-		else {
-			prev_start += value.length;
-			prev_end += value.length;
-		}
-	} {
-		if (value == "" && prev_end >= start) {
-			prev_end = (prev_end >= end) ? prev_end - (end - start) : start;
-		}
-	}
-	setSelections(element, prev_start, prev_end, range);
-    _dispatchInputEvent(element, value, start, end, prev_start, prev_end);
-}
-
-export function setSelections(element, start, end, range) {
+function setSelections(element, start, end) {
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
         element.selectionStart = start;
         element.selectionEnd = end;
     } 
     else {
-    // 	if (document.activeElement !== element) return;
-    	if (range.commonAncestorContainer) {
-    	    let prevElement = range.commonAncestorContainer;
-    	    if (prevElement.nodeName == '#text')
-    	        prevElement = range.commonAncestorContainer.parentElement;
-    	    if (prevElement !== element) return;
-    	}
-    	let document = element.ownerDocument;
+    	if (document.activeElement !== element) return;
+    
     	var selection = document.getSelection();
     	var range = contenteditable._cloneRangeByPosition(element, start, end);
     	selection.removeAllRanges();
     	selection.addRange(range);
-    	console.log('setSelection', selection);
     }
     sendPosition(element);
 }
@@ -278,52 +249,20 @@ function sendPosition (element) {
     if (!element) return;
     const { start, end } = getSelections(element);
     const { collection, document_id, name } = crud.getAttr(element);
-    if(element.domText != true)
-        crdt.sendPosition({ collection, document_id, name, start, end });
+    crdt.sendPosition({ collection, document_id, name, start, end });
 }
 
-function deleteText (element, start, end, range) {
+function deleteText (element, start, end) {
     const { collection, document_id, name, isCrud, isSave } = crud.getAttr(element);
     if(isSave == "false") return;
     let length = end - start;
-    if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-        crdt.deleteText({ collection, document_id, name, position: start, length, crud: isCrud });
-    } else {
-        let domTextEditor = element.domTextEditor || element;
-        let startEl =  range.startContainer.parentElement;
-        let endEl =  range.endContainer.parentElement;
-        let target = startEl;
-        // if (startEl != endEl) {
-        //     target = range.commonAncestorContainer;
-        //     // value = target.innerHTML;
-        //     // replaceInnerText(domTextEditor, target, value)
-        // }
-        start = range.startOffset;
-        let end = range.endOffset;
-        if (start == end)
-            start = start -1;
-        setInnerText({ domTextEditor, target, start, end});
-    }
+    crdt.deleteText({ collection, document_id, name, position: start, length, crud: isCrud });
 }
 
-function insertText (element, value, start, range) {
+function insertText (element, value, position) {
     const { collection, document_id, name, isCrud, isSave } = crud.getAttr(element);
     if(isSave == "false") return;
-    if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-        crdt.insertText({ collection, document_id, name, value, position: start, crud: isCrud });
-    } else {
-        let domTextEditor = element.domTextEditor || element;
-        let startEl =  range.startContainer.parentElement;
-        let endEl =  range.endContainer.parentElement;
-        let target = startEl;
-        if (startEl != endEl) {
-            target = range.commonAncestorContainer;
-            // value = target.innerHTML;
-            // replaceInnerText(domTextEditor, target, value)
-        }
-        let end = start;
-        setInnerText({ domTextEditor, target, value, start, end});
-    }
+    crdt.insertText({ collection, document_id, name, value, position, crud: isCrud });
 }
 
 function _crdtUpdateListener () {
@@ -337,7 +276,7 @@ function _crdtUpdateListener () {
 
         elements.forEach((element) => {
             if (element.tagName == 'IFRAME')
-                element = element.contentDocument.documentElement;
+                element = element.contentDocument.documentElement
             if(element === document.activeElement) {
                 sendPosition(element);
             }
@@ -347,7 +286,7 @@ function _crdtUpdateListener () {
 }
 
 function updateElement (element, info) {
-    // element.crudSetted = true;
+    element.crudSetted = true;
     if (!element.crdt) {
         element.crdt = {init: false};
     }
@@ -362,22 +301,21 @@ function updateElement (element, info) {
         }
     }
     var start = 0;
+    var flag = true;
     let items = info.eventDelta;
     items.forEach(item => {
         
         if(item.retain) {
+            flag = true;
             start = item.retain;
         }
         if(item.insert || item.delete) {
-            if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-                if(item.insert) {
-                    if (element.value != item.insert)
-                        _updateElementText(element, item.insert, start, start);
-                }
-                else if(item.delete) {
-                    _updateElementText(element, "", start, start + item.delete);
-                }
-            } else {
+           
+            if(flag == false) start = 0;
+            flag = false;
+
+            if (element.hasAttribute('contenteditable') || element.domTextEditor == true){
+                // const { collection, document_id, name } = crud.getAttr(element);
                 let collection = info['collection'];
                 let document_id = info['document_id'];
                 let name = info['name'];
@@ -389,32 +327,80 @@ function updateElement (element, info) {
 				if (item.insert) {
                     let end = start + item.insert.length - 1;
 				    if (element.innerHTML != item.insert) {
-				        // contenteditable._insertElementText(element, value, start);
-						domTextEditor.htmlString = html;
-						changeDom({ domTextEditor, value, start, end });
+					   // contenteditable._insertElementText(element, item.insert, start);
+					    if (element.domText == true) {
+					       // let id = element.getAttribute('element_id');
+		                    CoCreate.domText.setInnerText({ domTextEditor: element.domTextEditor, target, value, start, end});
+					    }
+					    else {
+    						domTextEditor.htmlString = html;
+    						CoCreate.domText.changeDom({ domTextEditor, start, value });
+					    }
+						_dispatchInputEvent(element, item.insert, start, end);
 				    }
 				}
 				else if (item.delete) {
+				// 	contenteditable._deleteElementText(element, start, start + item.delete);
                     let end = start + item.delete;
-				// 	contenteditable._deleteElementText(element, start, end);
-					domTextEditor.htmlString = html;
-					changeDom({ domTextEditor, start, end });
+                    if (element.domText == true) {
+				        // let id = element.getAttribute('element_id');
+	                    CoCreate.domText.setInnerText({ domTextEditor: element.domTextEditor, target, value, start, end});
+				    }
+				    else {
+    					domTextEditor.htmlString = html;
+    					CoCreate.domText.changeDom({ domTextEditor, start });
+					}
+					_dispatchInputEvent(element, item.insert, start, end);
 				}
+            }
+            else {
+                if(item.insert) {
+                    if (element.value != item.insert)
+                        _updateElementText(element, item.insert, start, start);
+                }
+                else if(item.delete) {
+                    _updateElementText(element, "", start, start + item.delete);
+                }
             }
         }
     });
 }
 
-function _updateElementText (element, value, start, end) {
-    if (element.tagName == 'HTML') return;
+function _updateElementText (element, content, start, end) {
+
     let prev_start = element.selectionStart;
     let prev_end = element.selectionEnd;
-    element.setRangeText(value, start, end, "end");
-	processSelections(element, value, prev_start, prev_end, start, end);
-    // _dispatchInputEvent(element, value, start, end);
+    element.setRangeText(content, start, end, "end");
+
+    if(prev_start >= start) {
+        if(content == "") {
+            prev_start -= end - start;
+            prev_end -= end - start;
+            prev_start = prev_start < start ? start : prev_start;
+        }
+        else {
+            prev_start += content.length;
+            prev_end += content.length;
+        }
+        if(content == "" && prev_end >= start) {
+            prev_end = (prev_end >= end) ? prev_end - (end - start) : start;
+        }
+        element.selectionStart = prev_start;
+    }
+    else {
+
+        element.selectionStart = prev_start;
+        element.selectionEnd = prev_end;
+    }
+
+    if(element === document.activeElement) {
+        sendPosition(element);
+    }
+    
+    _dispatchInputEvent(element, content, start, end);
 }
 
-export function _dispatchInputEvent(element, content, start, end, prev_start, prev_end) {
+function _dispatchInputEvent(element, content, start, end, prev_start, prev_end) {
     if(eventObj) {
         let detail = {value: content, start, end, prev_start, prev_end};
         let event = new CustomEvent(eventObj.type, { bubbles: true });
@@ -435,6 +421,117 @@ export function _dispatchInputEvent(element, content, start, end, prev_start, pr
         eventObj = null;
     }
 } 
+
+// Contenteditable Functions
+const contenteditable = {	
+	_insertElementText: function(element, content, position) {
+		if (!content || content === '') return;
+		var curCaret = getSelections(element);
+		
+        // if (!element.domText){
+		    var selection = window.getSelection();
+    		var range = this._cloneRangeByPosition(element, position, position);
+    		var tmp = document.createElement("div");
+    		var frag = document.createDocumentFragment(),
+    			node;
+    
+    		tmp.innerHTML = content;
+    
+    		while ((node = tmp.firstChild)) {
+    			frag.appendChild(node);
+    		}
+    		range.insertNode(frag);
+        // }
+
+
+		if (!curCaret) {
+			// let curCaret = {start: 0, end: 0}
+			
+			selection.addRange(range);
+			selection.removeRange(range);
+			return;
+		}
+
+		this._selectionProcessing(element, content, curCaret.start, curCaret.end, position, position);
+	},
+
+	_deleteElementText: function(element, start, end) {
+		var content_length = end - start;
+		if (!content_length) return;
+	
+		var curCaret = getSelections(element);
+// 		if (!element.domText){
+    		var selection = window.getSelection();
+    		var range = this._cloneRangeByPosition(element, start, end);
+    		if (range) range.deleteContents();
+// 		}
+
+		if (!curCaret) {
+			selection.removeRange(range);
+			return;
+		}
+
+		this._selectionProcessing(element, "", curCaret.start, curCaret.end, start, end);
+	},
+	
+	_selectionProcessing: function(element, content, prev_start, prev_end, start, end) {
+		if (prev_start >= start) {
+			if (content == "") {
+				prev_start -= end - start;
+				prev_end -= end - start;
+				prev_start = prev_start < start ? start : prev_start;
+			}
+			else {
+				prev_start += content.length;
+				prev_end += content.length;
+			}
+		} {
+			if (content == "" && prev_end >= start) {
+				prev_end = (prev_end >= end) ? prev_end - (end - start) : start;
+			}
+		}
+		setSelections(element, prev_start, prev_end);
+        _dispatchInputEvent(element, content, start, end, prev_start, prev_end);
+	},
+	
+
+	_cloneRangeByPosition: function(element, start, end, range) {
+		if (!range) {
+			range = document.createRange();
+			range.selectNode(element);
+			range.setStart(element, 0);
+			this.start = start;
+			this.end = end;
+		}
+
+		if (element && (this.start > 0 || this.end > 0)) {
+			if (element.nodeType === Node.TEXT_NODE) {
+
+				if (element.textContent.length < this.start) this.start -= element.textContent.length;
+				else if (this.start > 0) {
+					range.setStart(element, this.start);
+					this.start = 0;
+				}
+
+				if (element.textContent.length < this.end) this.end -= element.textContent.length;
+				else if (this.end > 0) {
+					range.setEnd(element, this.end);
+					this.end = 0;
+				}
+			}
+			else {
+				for (var lp = 0; lp < element.childNodes.length; lp++) {
+					range = this._cloneRangeByPosition(element.childNodes[lp], this.start, this.end, range);
+					if (this.start === 0 && this.end === 0) break;
+				}
+			}
+		}
+
+		return range;
+	},
+
+};
+
 
 init();
 
@@ -459,4 +556,4 @@ observer.init({
     }
 });
 
-export default {initElements, initElement, getSelections, setSelections, hasSelection, insertText, deleteText, updateElement, _addEventListeners};
+export default {initElements, initElement, getSelections, setSelections, hasSelection, insertText, deleteText, updateElement};
