@@ -1,10 +1,12 @@
-/*global CoCreate, DOMParser, CustomEvent, navigator, Node*/
+/*global CoCreate, DOMParser, CustomEvent, navigator*/
 
 import observer from '@cocreate/observer';
 import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
-import {setInnerText, changeDom, replaceInnerText, getDomPosition} from './domText';
-import {contenteditable} from './contenteditable';
+import {updateDom} from './updateDom';
+import {insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, setClassStyle, replaceInnerText} from './updateText';
+import {findElByPos} from './textPosition';
+import {getSelections, processSelections, hasSelection} from './selections';
 
 let eventObj;
 let selector = `[collection][document_id][name]`;
@@ -14,13 +16,6 @@ function init() {
     let elements = document.querySelectorAll(selectors);
     initElements(elements);
     _crdtUpdateListener();
-    // document.addEventListener('click', function(){
-    //     let element = event.target;
-    //     element.focus();
-    //     let el = document.activeElement;
-    //     let { start, end } = getSelections(el);
-    //     console.log('selctions: ', el, start, end);
-    // });
 }
 
 function initElements (elements) {
@@ -102,7 +97,7 @@ function _paste (event) {
     if(start != end) {
         deleteText(element, start, end, range);
     }
-    value = addElementId(value)
+    value = addElementId(value);
     insertText(element, value, start, range);
     event.preventDefault();
 }
@@ -194,135 +189,52 @@ function _removeEventListeners (element) {
     element.removeEventListener('keypress', _keypress);
 }
 
-export function getSelections (element) {
-    if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-        return {
-            start: element.selectionStart,
-            end: element.selectionEnd
-        };
-    } 
-    else {
-		let document = element.ownerDocument;
-		var selection = document.getSelection();
-		if (!selection.rangeCount) return { start: 0, end: 0 };
 
-		var range = selection.getRangeAt(0);
-        var start = range.startOffset;
-        var end = range.endOffset;
-		if(range.startContainer != range.endContainer) {
-    // 		toDo: replace common ancestor value
-		}
-// 		let domTextEditor = element.domTextEditor || element;
-//         let nodePos = getDomPosition({ domTextEditor, target: range.startContainer.parentElement, start, end });
-//         if (nodePos){
-//             start = nodePos.start;
-//             end = nodePos.end;
-//         }
-		return { start, end, range };
-    }
-    
-}
-
-export function processSelections(element, value = "", prev_start, prev_end, start, end, range) {
-	if (prev_start >= start) {
-		if (value == "") {
-			prev_start -= end - start;
-			prev_end -= end - start;
-			prev_start = prev_start < start ? start : prev_start;
-		}
-		else {
-			prev_start += value.length;
-			prev_end += value.length;
-		}
-	} {
-		if (value == "" && prev_end >= start) {
-			prev_end = (prev_end >= end) ? prev_end - (end - start) : start;
-		}
-	}
-	setSelections(element, prev_start, prev_end, range);
-    _dispatchInputEvent(element, value, start, end, prev_start, prev_end);
-}
-
-export function setSelections(element, start, end, range) {
-    if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-        element.selectionStart = start;
-        element.selectionEnd = end;
-    } 
-    else {
-    // 	if (document.activeElement !== element) return;
-    	if (range.commonAncestorContainer) {
-    	    let prevElement = range.commonAncestorContainer;
-    	    if (prevElement.nodeName == '#text')
-    	        prevElement = range.commonAncestorContainer.parentElement;
-    	    if (prevElement !== element) return;
-    	}
-    	let document = element.ownerDocument;
-    	var selection = document.getSelection();
-    	var range = contenteditable._cloneRangeByPosition(element, start, end);
-    	selection.removeAllRanges();
-    	selection.addRange(range);
-    	console.log('setSelection', selection);
-    }
-    sendPosition(element);
-}
-
-
-export function hasSelection(el) {
-	let { start, end } = getSelections(el);
-	if(start != end) {
-		return true;
-	}
-}
-
-function sendPosition (element) {
+export function sendPosition (element) {
     if (!element) return;
     const { start, end } = getSelections(element);
+    if (element.tagName == 'HTML' && !element.hasAttribute('collection') || !element.hasAttribute('collection')) 
+        element = element.ownerDocument.defaultView.frameElement;
     const { collection, document_id, name } = crud.getAttr(element);
-    if(element.domText != true)
-        crdt.sendPosition({ collection, document_id, name, start, end });
+    crdt.sendPosition({ collection, document_id, name, start, end });
 }
 
 function deleteText (element, start, end, range) {
+    if (element.tagName == 'HTML' && !element.hasAttribute('collection')) 
+        element = element.ownerDocument.defaultView.frameElement;
     const { collection, document_id, name, isCrud, isSave } = crud.getAttr(element);
     if(isSave == "false") return;
     let length = end - start;
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
         crdt.deleteText({ collection, document_id, name, position: start, length, crud: isCrud });
     } else {
-        let domTextEditor = element.domTextEditor || element;
         let startEl =  range.startContainer.parentElement;
         let endEl =  range.endContainer.parentElement;
-        let target = startEl;
-        // if (startEl != endEl) {
+        if (startEl != endEl) {
         //     target = range.commonAncestorContainer;
         //     // value = target.innerHTML;
         //     // replaceInnerText(domTextEditor, target, value)
-        // }
-        start = range.startOffset;
-        let end = range.endOffset;
-        if (start == end)
-            start = start -1;
-        setInnerText({ domTextEditor, target, start, end});
+        }
+        crdt.deleteText({ collection, document_id, name, position: start, length, crud: isCrud });
     }
 }
 
 function insertText (element, value, start, range) {
+    if (element.tagName == 'HTML' && !element.hasAttribute('collection')) 
+        element = element.ownerDocument.defaultView.frameElement;
     const { collection, document_id, name, isCrud, isSave } = crud.getAttr(element);
     if(isSave == "false") return;
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
         crdt.insertText({ collection, document_id, name, value, position: start, crud: isCrud });
     } else {
-        let domTextEditor = element.domTextEditor || element;
         let startEl =  range.startContainer.parentElement;
         let endEl =  range.endContainer.parentElement;
-        let target = startEl;
         if (startEl != endEl) {
-            target = range.commonAncestorContainer;
+            // target = range.commonAncestorContainer;
             // value = target.innerHTML;
             // replaceInnerText(domTextEditor, target, value)
         }
-        let end = start;
-        setInnerText({ domTextEditor, target, value, start, end});
+        crdt.insertText({ collection, document_id, name, value, position: start, crud: isCrud });
     }
 }
 
@@ -347,7 +259,6 @@ function _crdtUpdateListener () {
 }
 
 function updateElement (element, info) {
-    // element.crudSetted = true;
     if (!element.crdt) {
         element.crdt = {init: false};
     }
@@ -384,21 +295,18 @@ function updateElement (element, info) {
                 let html = crdt.getText({collection, document_id, name});
 				let domTextEditor = element;
 				let value = item.insert;
-				let target = element;
-				
+
 				if (item.insert) {
                     let end = start + item.insert.length - 1;
 				    if (element.innerHTML != item.insert) {
-				        // contenteditable._insertElementText(element, value, start);
 						domTextEditor.htmlString = html;
-						changeDom({ domTextEditor, value, start, end });
+						updateDom({ domTextEditor, value, start, end });
 				    }
 				}
 				else if (item.delete) {
                     let end = start + item.delete;
-				// 	contenteditable._deleteElementText(element, start, end);
 					domTextEditor.htmlString = html;
-					changeDom({ domTextEditor, start, end });
+					updateDom({ domTextEditor, start, end });
 				}
             }
         }
@@ -411,7 +319,6 @@ function _updateElementText (element, value, start, end) {
     let prev_end = element.selectionEnd;
     element.setRangeText(value, start, end, "end");
 	processSelections(element, value, prev_start, prev_end, start, end);
-    // _dispatchInputEvent(element, value, start, end);
 }
 
 export function _dispatchInputEvent(element, content, start, end, prev_start, prev_end) {
@@ -459,4 +366,4 @@ observer.init({
     }
 });
 
-export default {initElements, initElement, getSelections, setSelections, hasSelection, insertText, deleteText, updateElement, _addEventListeners};
+export default {initElements, initElement, insertText, deleteText, updateElement, _addEventListeners, getSelections, hasSelection, findElByPos, insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, setClassStyle, replaceInnerText};
