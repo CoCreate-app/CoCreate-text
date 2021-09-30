@@ -31,9 +31,12 @@ function initElement (element) {
     if(element.tagName === "INPUT" && ["text", "email", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA" || element.hasAttribute('contenteditable')) {
         if(!collection || !document_id || !name) return;
 
-        if (!isCrdt)
+        if (!isCrdt) {
+            if (element.tagName == 'IFRAME')
+                _addEventListeners(element.contentDocument.documentElement);
+            else 
             _addEventListeners(element);
-            
+        }   
         element.setAttribute('crdt', 'true');
         element.crdt = {init: true};
         crdt.init({ collection, document_id, name });
@@ -101,49 +104,6 @@ function _paste (event) {
     insertText(element, value, start, range);
     event.preventDefault();
 }
-
-function addElementId(value) {
-    let dom, isOnlyChildren;
-	try{
-	    [dom, isOnlyChildren] = parseAll(value);
-	}
-	finally {
-    	if(dom){
-    	    if(!isOnlyChildren)
-    			dom.setAttribute('element_id', CoCreate.uuid.generate(6));
-    		dom.querySelectorAll('*').forEach(el => el.setAttribute('element_id', CoCreate.uuid.generate(6)));
-    		value = isOnlyChildren ? dom.innerHTML : dom.outerHTML;
-    		return value;
-    	}
-    	else
-    		return value;
-	}
-}
-
-function parseAll(str) {
-	let mainTag = str.match(/\<(?<tag>[a-z0-9]+)(.*?)?\>/).groups.tag;
-	if(!mainTag)
-		throw new Error('find position: can not find the main tag');
-
-	let doc;
-	switch(mainTag) {
-		case 'html':
-			doc = new DOMParser().parseFromString(str, "text/html");
-			return [doc.documentElement, false];
-		case 'body':
-			doc = new DOMParser().parseFromString(str, "text/html");
-			return [doc.body, false];
-		case 'head':
-			doc = new DOMParser().parseFromString(str, "text/html");
-			return [doc.head, false];
-
-		default:
-			let con = document.createElement('div');
-			con.innerHTML = str;
-			return [con, true];
-	}
-}
-
 
 function _keydown (event) {
     if(event.stopCCText) return;
@@ -260,11 +220,14 @@ function _crdtUpdateListener () {
 
 function updateElement (element, info) {
     if (!element.crdt) {
-        element.crdt = {init: false};
+        if (element.tagName == 'HTML')
+            element.crdt = {init: 'editor'};
+        else
+            element.crdt = {init: false};
     }
     
     if (element.crdt.init == true && element.domText != true) {
-        element.crdt = {};
+        element.crdt = {init: false};
         if (element.hasAttribute('contenteditable')){
             element.innerHTML = "";
         }
@@ -295,6 +258,9 @@ function updateElement (element, info) {
                 let html = crdt.getText({collection, document_id, name});
 				let domTextEditor = element;
 				let value = item.insert;
+				if(element.tagName == 'HTML' && element.crdt.init == 'editor') {
+                    initDocumentElement(element, collection, document_id, name, value);
+                }
 
 				if (item.insert) {
                     let end = start + item.insert.length - 1;
@@ -341,7 +307,87 @@ export function _dispatchInputEvent(element, content, start, end, prev_start, pr
         element.dispatchEvent(textChange);
         eventObj = null;
     }
-} 
+}
+
+	function initDocumentElement(element, collection, document_id, name, value) {
+		try {
+			let eid = elementId(element, collection, document_id, name, value);
+			if(eid == false) return;
+			element.crdt = {init: false};
+			element.contentEditable = true;
+		}
+		catch(err) {
+			console.log('canvas init: ' + err);
+		}
+	}
+
+	function elementId(element, collection, document_id, name, value) {
+		try {
+			var parser = new DOMParser();
+			var dom = parser.parseFromString(value, "text/html");
+
+			let elements = dom.querySelectorAll('*:not(html, [element_id])');
+
+			for(let el of elements) {
+				if(el.getAttribute('element_id') == null) {
+					el.setAttribute('element_id', CoCreate.uuid.generate(6));
+				}
+			}
+
+			let html = dom.documentElement.outerHTML;
+
+			if(elements.length > 0) {
+				crdt.replaceText({ crud: false, collection, document_id, name, value: html });
+				elementId = function() {};
+				return false;
+			}
+		}
+		catch(err) {
+			console.log('canvas init: ' + err);
+		}
+	}
+
+function addElementId(value) {
+    let dom, isOnlyChildren;
+	try{
+	    [dom, isOnlyChildren] = parseAll(value);
+	}
+	finally {
+    	if(dom){
+    	    if(!isOnlyChildren)
+    			dom.setAttribute('element_id', CoCreate.uuid.generate(6));
+    		dom.querySelectorAll('*').forEach(el => el.setAttribute('element_id', CoCreate.uuid.generate(6)));
+    		value = isOnlyChildren ? dom.innerHTML : dom.outerHTML;
+    		return value;
+    	}
+    	else
+    		return value;
+	}
+}
+
+function parseAll(str) {
+	let mainTag = str.match(/\<(?<tag>[a-z0-9]+)(.*?)?\>/).groups.tag;
+	if(!mainTag)
+		throw new Error('find position: can not find the main tag');
+
+	let doc;
+	switch(mainTag) {
+		case 'html':
+			doc = new DOMParser().parseFromString(str, "text/html");
+			return [doc.documentElement, false];
+		case 'body':
+			doc = new DOMParser().parseFromString(str, "text/html");
+			return [doc.body, false];
+		case 'head':
+			doc = new DOMParser().parseFromString(str, "text/html");
+			return [doc.head, false];
+
+		default:
+			let con = document.createElement('div');
+			con.innerHTML = str;
+			return [con, true];
+	}
+}
 
 init();
 
