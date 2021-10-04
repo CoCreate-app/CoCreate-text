@@ -1,6 +1,6 @@
 /*globals CustomEvent*/
 import action from '@cocreate/action';
-import crud from '@cocreate/crud';
+import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
 
 function save(btn){
