@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.8.2...v1.9.0) (2021-10-04)
+
+
+### Features
+
+* action to save domText ([1315853](https://github.com/CoCreate-app/CoCreate-text/commit/1315853a9a44cb978b09484f1ecddc87967ae18d))
+
 ## [1.8.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.8.1...v1.8.2) (2021-10-01)
 
 
