@@ -7,6 +7,7 @@ import {updateDom} from './updateDom';
 import {insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, setClassStyle, replaceInnerText} from './updateText';
 import {findElByPos} from './textPosition';
 import {getSelections, processSelections, hasSelection} from './selections';
+import './saveDomText';
 
 let eventObj;
 let selector = `[collection][document_id][name]`;

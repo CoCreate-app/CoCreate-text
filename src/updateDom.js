@@ -249,7 +249,8 @@ function elIndexOf(id, elList) {
 
 function renameTagName(newEl, domEl) {
 	let newDomEl = document.createElement(newEl.tagName);
-	assignAttributes(newEl, newDomEl, newDomEl);
+	newDomEl.attributes = newEl.attributes;
+	// assignAttributes(newEl, newDomEl, newDomEl);
 	newDomEl.replaceChildren(...newEl.childNodes);
 	domEl.replaceWith(newDomEl);
 }
