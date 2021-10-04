@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.9.0...v1.9.1) (2021-10-04)
+
+
+### Bug Fixes
+
+* cant resove [@cocreate-crud](https://github.com/cocreate-crud) ([e0ec1d1](https://github.com/CoCreate-app/CoCreate-text/commit/e0ec1d1d9f3a2a34e3c2e7a28ef6b0cdc9f86fbf))
+
 # [1.9.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.8.2...v1.9.0) (2021-10-04)
 
 
