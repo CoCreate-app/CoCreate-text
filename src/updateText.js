@@ -87,11 +87,9 @@ export function insertAdjacentElement({ domTextEditor, target, position, element
 			insertPos = tagStClAfPos;
 			break;
 		case "beforeend":
-// 			findClosingTag(domTextEditor, target);
 			insertPos = tagEnPos;
 			break;
 		case "afterend":
-// 			findClosingTag(domTextEditor, target);
 			insertPos = tagEnClAfPos;
 			break;
 	}
@@ -107,8 +105,6 @@ export function removeElement({ domTextEditor, target }) {
 	let pos = getWholeElement(domTextEditor, target);
 	if(!pos)
 		throw new Error('removeElement: element not found');
-
-// 	findStartTagById(domTextEditor, target);
 
 	let insertPos;
 	if(pos) {
