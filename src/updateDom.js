@@ -1,6 +1,6 @@
 /* globals DOMParser */
-import {getSelections, processSelections} from './selections';
-import {findElByPos} from './textPosition';
+import {sendPosition, _dispatchInputEvent} from './index';
+import {getSelection, processSelection, findElByPos} from '@cocreate/selection';
 
 export function updateDom({ domTextEditor, value, start, end}) {
 	if(start < 0 || start > domTextEditor.htmlString.length)
@@ -70,7 +70,7 @@ function parseAll(domTextEditor) {
 }
 
 function rebuildDom({domTextEditor, domEl, newEl, oldEl, value, start, end}) {
-    let curCaret = getSelections(domEl);
+    let curCaret = getSelection(domEl);
     // try{
 		if(domEl.tagName && newEl.nodeType == 1) {
 			if(newEl.tagName !== domEl.tagName) {
@@ -173,15 +173,18 @@ function rebuildDom({domTextEditor, domEl, newEl, oldEl, value, start, end}) {
 							}
 						}
 						else {
-						  //  processSelections(domEl, value, curCaret.start, curCaret.end, start, end);
+						  //  processSelection(domEl, value, curCaret.start, curCaret.end, start, end);
 							rebuildDom({ domTextEditor, domEl: domChild, newEl: textChild });
 						}
 					}
 				}
 			}
 		}
-		if(start && end)
-	    	processSelections(domEl, value, curCaret.start, curCaret.end, start, end, curCaret.range);
+		if(start && end) {
+	    	let p = processSelection(domEl, value, curCaret.start, curCaret.end, start, end, curCaret.range);
+	    	sendPosition(element);
+			_dispatchInputEvent(p.element, p.value, p.start, p.end, p.prev_start, p.prev_end);
+		}
 		// remove rest of the child in the element
 		while(domElChildren[index]) {
 			domElChildren[index].remove();

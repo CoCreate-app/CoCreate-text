@@ -1,6 +1,6 @@
 import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
-import {findStartTagById, findClosingTag, getWholeElement} from './textPosition';
+import {findStartTagById, findClosingTag, getWholeElement} from '@cocreate/selection';
 
 let space = "\u{0020}|\u{0009}";
 let allAttributeName = `[a-z0-9-_]+?`;

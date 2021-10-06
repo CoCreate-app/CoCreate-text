@@ -5,8 +5,7 @@ import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
 import {updateDom} from './updateDom';
 import {insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, setClassStyle, replaceInnerText} from './updateText';
-import {findElByPos} from './textPosition';
-import {getSelections, processSelections, hasSelection} from './selections';
+import {getSelection, processSelection} from '@cocreate/selection';
 import './saveDomText';
 
 let eventObj;
@@ -75,7 +74,7 @@ function _keyup (event) {
 
 function _cut (event) {
     let element = event.currentTarget;
-    const { start, end, range } = getSelections(element);
+    const { start, end, range } = getSelection(element);
     const selection = document.getSelection();
     console.log(selection.toString());
     if (event.clipboardData) {
@@ -97,7 +96,7 @@ function _cut (event) {
 function _paste (event) {
     let element = event.currentTarget;
     let value = event.clipboardData.getData('Text');
-    const { start, end, range } = getSelections(element);
+    const { start, end, range } = getSelection(element);
     if(start != end) {
         deleteText(element, start, end, range);
     }
@@ -109,7 +108,7 @@ function _paste (event) {
 function _keydown (event) {
     if(event.stopCCText) return;
     let element = event.currentTarget;
-    const { start, end, range } = getSelections(element);
+    const { start, end, range } = getSelection(element);
     if(event.key == "Backspace" || event.key == "Tab" || event.key == "Enter") {
         eventObj = event;
         if(start != end) {
@@ -131,7 +130,7 @@ function _keydown (event) {
 function _keypress (event) {
     if(event.stopCCText) return;
     let element = event.currentTarget;
-    let { start, end, range } = getSelections(element);
+    let { start, end, range } = getSelection(element);
     if(start != end) {
         deleteText(element, start, end, range);
     }
@@ -153,7 +152,7 @@ function _removeEventListeners (element) {
 
 export function sendPosition (element) {
     if (!element) return;
-    const { start, end } = getSelections(element);
+    const { start, end } = getSelection(element);
     if (element.tagName == 'HTML' && !element.hasAttribute('collection') || !element.hasAttribute('collection')) 
         element = element.ownerDocument.defaultView.frameElement;
     const { collection, document_id, name } = crud.getAttr(element);
@@ -285,7 +284,9 @@ function _updateElementText (element, value, start, end) {
     let prev_start = element.selectionStart;
     let prev_end = element.selectionEnd;
     element.setRangeText(value, start, end, "end");
-	processSelections(element, value, prev_start, prev_end, start, end);
+	let p = processSelection(element, value, prev_start, prev_end, start, end);
+	sendPosition(element);
+	_dispatchInputEvent(element, p.value, p.start, p.end, p.prev_start, p.prev_end)
 }
 
 export function _dispatchInputEvent(element, content, start, end, prev_start, prev_end) {
@@ -413,4 +414,4 @@ observer.init({
     }
 });
 
-export default {initElements, initElement, insertText, deleteText, updateElement, _addEventListeners, getSelections, hasSelection, findElByPos, insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, setClassStyle, replaceInnerText};
+export default {initElements, initElement, insertText, deleteText, updateElement, _addEventListeners, insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, setClassStyle, replaceInnerText};
