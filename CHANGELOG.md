@@ -1,3 +1,10 @@
+## [1.9.5](https://github.com/CoCreate-app/CoCreate-text/compare/v1.9.4...v1.9.5) (2021-10-06)
+
+
+### Bug Fixes
+
+* relocated selection to @cocreate/selection ([607ced8](https://github.com/CoCreate-app/CoCreate-text/commit/607ced8670a47034c9abaa847adb6b2652b87fef))
+
 ## [1.9.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.9.3...v1.9.4) (2021-10-06)
 
 
