@@ -1,3 +1,10 @@
+## [1.9.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.9.3...v1.9.4) (2021-10-06)
+
+
+### Bug Fixes
+
+* update crdt dependency ([6a24d8f](https://github.com/CoCreate-app/CoCreate-text/commit/6a24d8f2afd0ac616b21e740e280de0683cabf05))
+
 ## [1.9.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.9.2...v1.9.3) (2021-10-05)
 
 
