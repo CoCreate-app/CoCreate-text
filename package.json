@@ -1,7 +1,7 @@
 {
   "name": "@cocreate/text",
   "version": "1.9.7",
-  "description": "A simple text component in vanilla javascript. Easily configured using HTML5 data-attributes and/or JavaScript API.",
+  "description": "A simple text component in vanilla javascript. Easily configured using HTML5 attributes and/or JavaScript API.",
   "keywords": [
     "text",
     "cocreate",
