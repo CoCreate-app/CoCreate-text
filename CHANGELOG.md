@@ -1,3 +1,10 @@
+## [1.9.10](https://github.com/CoCreate-app/CoCreate-text/compare/v1.9.9...v1.9.10) (2021-10-15)
+
+
+### Bug Fixes
+
+* update packages ([05cc273](https://github.com/CoCreate-app/CoCreate-text/commit/05cc273eab598e4e513ea4cf3b563e4867c369d4))
+
 ## [1.9.9](https://github.com/CoCreate-app/CoCreate-text/compare/v1.9.8...v1.9.9) (2021-10-15)
 
 
