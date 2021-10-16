@@ -1,3 +1,10 @@
+## [1.9.12](https://github.com/CoCreate-app/CoCreate-text/compare/v1.9.11...v1.9.12) (2021-10-16)
+
+
+### Bug Fixes
+
+* update socket package to fix bug in docs ([37e8bd7](https://github.com/CoCreate-app/CoCreate-text/commit/37e8bd7eb3568684f67055448941022cc9e52e44))
+
 ## [1.9.11](https://github.com/CoCreate-app/CoCreate-text/compare/v1.9.10...v1.9.11) (2021-10-15)
 
 
