@@ -158,6 +158,25 @@ export function sendPosition (element) {
     crdt.sendPosition({ collection, document_id, name, start, end });
 }
 
+function insertText (element, value, start, range) {
+    if (element.tagName == 'HTML' && !element.hasAttribute('collection')) 
+        element = element.ownerDocument.defaultView.frameElement;
+    const { collection, document_id, name, isCrud, isSave } = crud.getAttr(element);
+    if(isSave == "false") return;
+    if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+        crdt.insertText({ collection, document_id, name, value, start, crud: isCrud });
+    } else {
+        let startEl =  range.startContainer.parentElement;
+        let endEl =  range.endContainer.parentElement;
+        if (startEl != endEl) {
+            // target = range.commonAncestorContainer;
+            // value = target.innerHTML;
+            // replaceInnerText(domTextEditor, target, value)
+        }
+        crdt.insertText({ collection, document_id, name, value, start, crud: isCrud });
+    }
+}
+
 function deleteText (element, start, end, range) {
     if (element.tagName == 'HTML' && !element.hasAttribute('collection')) 
         element = element.ownerDocument.defaultView.frameElement;
@@ -175,25 +194,6 @@ function deleteText (element, start, end, range) {
         //     // replaceInnerText(domTextEditor, target, value)
         }
         crdt.deleteText({ collection, document_id, name, start, length, crud: isCrud });
-    }
-}
-
-function insertText (element, value, start, range) {
-    if (element.tagName == 'HTML' && !element.hasAttribute('collection')) 
-        element = element.ownerDocument.defaultView.frameElement;
-    const { collection, document_id, name, isCrud, isSave } = crud.getAttr(element);
-    if(isSave == "false") return;
-    if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-        crdt.insertText({ collection, document_id, name, value, start, crud: isCrud });
-    } else {
-        let startEl =  range.startContainer.parentElement;
-        let endEl =  range.endContainer.parentElement;
-        if (startEl != endEl) {
-            // target = range.commonAncestorContainer;
-            // value = target.innerHTML;
-            // replaceInnerText(domTextEditor, target, value)
-        }
-        crdt.insertText({ collection, document_id, name, value, start, crud: isCrud });
     }
 }
 
