@@ -182,7 +182,7 @@ function rebuildDom({domTextEditor, domEl, newEl, oldEl, value, start, end}) {
 		}
 		if(start && end) {
 	    	let p = processSelection(domEl, value, curCaret.start, curCaret.end, start, end, curCaret.range);
-	    	sendPosition(element);
+	    	sendPosition(domEl);
 			_dispatchInputEvent(p.element, p.value, p.start, p.end, p.prev_start, p.prev_end);
 		}
 		// remove rest of the child in the element

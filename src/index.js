@@ -166,7 +166,7 @@ function deleteText (element, start, end, range) {
     if(isSave == "false") return;
     let length = end - start;
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-        crdt.deleteText({ collection, document_id, name, position: start, length, crud: isCrud });
+        crdt.deleteText({ collection, document_id, name, start, length, crud: isCrud });
     } else {
         let startEl =  range.startContainer.parentElement;
         let endEl =  range.endContainer.parentElement;
@@ -175,7 +175,7 @@ function deleteText (element, start, end, range) {
         //     // value = target.innerHTML;
         //     // replaceInnerText(domTextEditor, target, value)
         }
-        crdt.deleteText({ collection, document_id, name, position: start, length, crud: isCrud });
+        crdt.deleteText({ collection, document_id, name, start, length, crud: isCrud });
     }
 }
 
@@ -185,7 +185,7 @@ function insertText (element, value, start, range) {
     const { collection, document_id, name, isCrud, isSave } = crud.getAttr(element);
     if(isSave == "false") return;
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-        crdt.insertText({ collection, document_id, name, value, position: start, crud: isCrud });
+        crdt.insertText({ collection, document_id, name, value, start, crud: isCrud });
     } else {
         let startEl =  range.startContainer.parentElement;
         let endEl =  range.endContainer.parentElement;
@@ -194,7 +194,7 @@ function insertText (element, value, start, range) {
             // value = target.innerHTML;
             // replaceInnerText(domTextEditor, target, value)
         }
-        crdt.insertText({ collection, document_id, name, value, position: start, crud: isCrud });
+        crdt.insertText({ collection, document_id, name, value, start, crud: isCrud });
     }
 }
 

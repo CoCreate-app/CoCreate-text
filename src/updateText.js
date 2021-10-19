@@ -40,7 +40,7 @@ function removeCallback(param) {
 		document_id,
 		name,
 		crud: isCrud,
-		position: param.start,
+		start: param.start,
 		length: param.end - param.start,
 	});
 
