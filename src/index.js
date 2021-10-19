@@ -40,7 +40,6 @@ function initElement (element) {
         element.setAttribute('crdt', 'true');
         element.crdt = {init: true};
         crdt.init({ collection, document_id, name });
-        // element.crdt = { collection, document_id, name };
     }
 }
 
