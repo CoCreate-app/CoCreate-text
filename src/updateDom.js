@@ -1,44 +1,78 @@
 /* globals DOMParser */
 import {sendPosition, _dispatchInputEvent} from './index';
-import {getSelection, processSelection, findElByPos} from '@cocreate/selection';
+import {getSelection, processSelection} from '@cocreate/selection';
+import {findPosFromString, domParser} from './findElement';
 
 export function updateDom({ domTextEditor, value, start, end}) {
 	if(start < 0 || start > domTextEditor.htmlString.length)
 		throw new Error('position is out of range');
-    let {target, tagStClAfPos} = findElByPos(domTextEditor, start);
-    if (!target || !tagStClAfPos) {
-        rebuildByDocument(domTextEditor);
-    } else {
-        let elStart = start - tagStClAfPos;
-    	let elEnd = end - tagStClAfPos;
-        rebuildByElement(domTextEditor, target, value, elStart, elEnd);
-    }
-}
-
-
-function rebuildByElement(domTextEditor, target, value, start, end) {
-	parseHtml(domTextEditor);
-	let domEl = domTextEditor.querySelector(`[element_id="${target}"]`);
-	let newEl = domTextEditor.newHtml.querySelector(`[element_id="${target}"]`);
-	let oldEl = domTextEditor.oldHtml.querySelector(`[element_id="${target}"]`);
-	rebuildDom({domTextEditor, domEl, newEl, oldEl, value, start, end});
-}
-
-function rebuildByDocument(domTextEditor) {
-	parseHtml(domTextEditor);
-	let domEl = domTextEditor;
-	let newEl = domTextEditor.newHtml.documentElement || domTextEditor.newHtml.childNodes;
-	let oldEl = domTextEditor.oldHtml.documentElement || domTextEditor.oldHtml.childNodes;
-	
-	if (domTextEditor.newHtml.documentElement) {
-		rebuildDom({domTextEditor, domEl, newEl, oldEl});
+    
+    let {element, path, position, type} = findPosFromString(domTextEditor.htmlString, start);
+	if (element) {
+		parseHtml(domTextEditor);
+		
+		let domEl, oldEl;
+		if(path) {
+			domTextEditor.querySelector(path);
+			oldEl = domTextEditor.oldHtml.querySelector(path);
+		}
+		else
+			domEl = domTextEditor;
+			oldEl = domTextEditor.oldHtml;
+		
+		let newEl = element;
+		let curCaret = getSelection(domEl);
+		
+		if (newEl.tagName == 'HTML'){
+            domTextEditor.ownerDocument.documentElement.innerHTML = newEl.outerHTML;
+		}
+		else{
+			if (type == 'isStartTag')
+				assignAttributes(newEl, oldEl, domEl);
+			if (type == 'insertAdjacent')
+				element.insertAdjacentHTML(position, value);
+			if (type == 'textNode')
+				domEl.innerHTML = newEl.innerHTML;
+			if (type == 'innerHTML')
+				domEl.innerHTML = newEl.innerHTML;
+			if (type == 'isEndTag')
+				renameTagName(newEl, domEl);
+		}
+		if(start && end) {
+	    	let p = processSelection(domEl, value, curCaret.start, curCaret.end, start, end, curCaret.range);
+	    	sendPosition(domEl);
+			_dispatchInputEvent(p.element, p.value, p.start, p.end, p.prev_start, p.prev_end);
+		}
+		
+		if (newEl.tagName == 'HTML' || 'HEAD' || 'BODY' || 'SCRIPT'){
+			let scripts;
+			if (newEl.tagName == 'SCRIPT'){
+				scripts = [newEl]
+			}
+			else{
+				scripts = domEl.querySelectorAll('script');
+			}
+			for (let script of scripts) {
+				let newScript = domEl.ownerDocument.createElement('script');
+				// newScript.attributes = script.attributes;
+				
+				for(let newElAtt of newScript.attributes) {
+					try {
+						newScript.setAttribute(newElAtt.name, newElAtt.value);
+					}
+					catch(err) {
+						throw new Error("assignAttributes: " + err.message, err.name);
+					}
+				}
+				newScript.innerHTML = script.innerHTML;
+				script.replaceWith(newScript);
+			}	
+		}
 	}
-	else
-		rebuildDom({domTextEditor, domEl, newEl, oldEl});
 }
 
 function parseHtml(domTextEditor) {
-	var dom = parseAll(domTextEditor);
+	var dom = domParser(domTextEditor.htmlString);
 	if (domTextEditor.newHtml) {
 		domTextEditor.oldHtml = domTextEditor.newHtml;
 	} else {
@@ -47,153 +81,6 @@ function parseHtml(domTextEditor) {
 	domTextEditor.newHtml = dom;
 }
 
-function parseAll(domTextEditor) {
-    let str = domTextEditor.htmlString;
-	let mainTag;
-	try {
-		mainTag = str.match(/\<(?<tag>[a-z0-9]+)(.*?)?\>/).groups.tag;
-	} 
-	finally {
-		let doc = new DOMParser().parseFromString(str, "text/html");
-		switch(mainTag) {
-			case 'html':
-				return doc.documentElement;
-			case 'head':
-				return doc.head;
-			case 'body':
-				return doc.body;
-			default:
-				if(doc.head.children.length) return doc.head.children;
-				else return doc.body;
-		}
-	}
-}
-
-function rebuildDom({domTextEditor, domEl, newEl, oldEl, value, start, end}) {
-    let curCaret = getSelection(domEl);
-    // try{
-		if(domEl.tagName && newEl.nodeType == 1) {
-			if(newEl.tagName !== domEl.tagName) {
-				renameTagName(newEl, domEl);
-				return;
-			}	
-			if(domEl.tagName === "SCRIPT" && newEl.src !== domEl.src) {
-				domEl.replaceWith(cloneByCreate(newEl));
-				return;
-			}
-			if(oldEl) {
-				assignAttributes(newEl, oldEl, domEl);
-			}
-		}
-	
-		const domElChildren = domEl.childNodes;
-		let newElChildren;
-		if(newEl.nodeType == 1) {
-			newElChildren = Array.from(newEl.childNodes);
-		} else {newElChildren = newEl;}
-	
-		if(newEl.tagName === "HEAD" && !newElChildren.length) return;
-	
-		let index = 0, len = newElChildren.length;
-		for(; index < len; index++) {
-			let textChild = newElChildren[index],
-				domChild = domElChildren[index];
-			
-			// if (domChild.nodeName === '#comment') continue;
-			let newElIsText = isTextOrEl(textChild);
-	
-			if(!domChild) {
-				if(newElIsText === true)
-					domEl.insertAdjacentText('beforeend', textChild.data);
-				else if(newElIsText === false)
-					insertAdajcentClone(domEl, textChild, 'beforeend');
-				else continue;
-			}
-			else {
-				let domElIsText = isTextOrEl(domChild);
-				if(domElIsText === undefined) continue;
-				// if (domEl.domText == true) continue;
-	
-				if(newElIsText) {
-					if(domElIsText) {
-						if(textChild.data.trim() !== domChild.data.trim())
-							// if (domEl.domText == true) continue;
-							domChild.data = textChild.data;
-					}
-					else {
-						domChild.before(document.createTextNode(textChild.data));
-						let domElId = domChild.getAttribute('element_id');
-	
-						if(domElId) {
-							let elIndex = elIndexOf(domElId, domEl.childNodes);
-							if(elIndex === -1) {
-								domChild.remove();
-	
-								mergeTextNode(domElChildren[index], domElChildren[index - 1]);
-								index--;
-								continue;
-							}
-							else if(domElChildren[elIndex] && domElChildren[elIndex] !== domChild)
-								domElChildren[elIndex].before(domChild);
-						}
-					}
-				}
-				else {
-					if(domElIsText) {
-						textInsertAdajcentClone(domChild, textChild, 'beforebegin');
-						domChild.remove();
-					}
-					else {
-						if (domChild.nodeName === '#comment') continue;
-						let domElId = domChild.getAttribute('element_id');
-						let newElId = textChild.getAttribute('element_id');
-	
-						if(newElId && domElId !== newElId) {
-							let elIndex = elIndexOf(newElId, domEl.childNodes);
-							if (!elIndex) continue;
-							if(elIndex === -1)
-								insertAdajcentClone(domChild, textChild, 'beforebegin');
-							else
-								domChild.insertAdjacentElement('beforebegin', domEl.childNodes[elIndex]);
-	
-							// new element has been added we should process the new element again at index
-							domChild = domElChildren[index];
-							domElId = domChild.getAttribute('element_id');
-							if(domElId) {
-								elIndex = elIndexOf(domElId, domEl.childNodes);
-	
-								if(elIndex === -1) {
-									domChild.remove();
-									mergeTextNode(domElChildren[index], domElChildren[index - 1]);
-									index--;
-									continue;
-								}
-								else if(domElChildren[elIndex] && domElChildren[elIndex] !== domChild)
-									domElChildren[elIndex].before(domChild);
-							}
-						}
-						else {
-						  //  processSelection(domEl, value, curCaret.start, curCaret.end, start, end);
-							rebuildDom({ domTextEditor, domEl: domChild, newEl: textChild });
-						}
-					}
-				}
-			}
-		}
-		if(start && end) {
-	    	let p = processSelection(domEl, value, curCaret.start, curCaret.end, start, end, curCaret.range);
-	    	sendPosition(domEl);
-			_dispatchInputEvent(p.element, p.value, p.start, p.end, p.prev_start, p.prev_end);
-		}
-		// remove rest of the child in the element
-		while(domElChildren[index]) {
-			domElChildren[index].remove();
-		}
-	// }
-	// catch(err) {
-	// 	throw new Error("domText failed to apply the change " + err.message, err.name);
-	// }
-}
 
 function cloneByCreate(el) {
 	let newEl = document.createElement(el.tagName);
@@ -201,54 +88,6 @@ function cloneByCreate(el) {
 	assignAttributes(el, newEl, newEl);
 	return newEl;
 }
-
-function insertAdajcentClone(target, element, position) {
-	let cloned = element.cloneNode(true);
-	if(cloned.tagName === "SCRIPT")
-		cloned = cloneByCreate(cloned);
-	cloned.querySelectorAll('script').forEach(el => {
-		el.replaceWith(cloneByCreate(el));
-	});
-
-	target.insertAdjacentElement(position, cloned);
-}
-
-function textInsertAdajcentClone(target, element, position) {
-	if (element.nodeName === '#comment') return;
-	let func = position === "beforebegin" ? target.before : target.after;
-	let cloned = element.cloneNode(true);
-	if(cloned.tagName === "SCRIPT")
-		cloned = cloneByCreate(cloned);
-	if (cloned.nodeName === '#comment') return;
-	cloned.querySelectorAll('script').forEach(el => {
-		el.replaceWith(cloneByCreate(el));
-	});
-	func.call(target, cloned);
-}
-
-function mergeTextNode(textNode1, textNode2) {
-	if(isTextOrEl(textNode1) === true && textNode2 && isTextOrEl(textNode2) === true) {
-		textNode2.data += textNode1.data;
-		textNode1.remove();
-	}
-}
-
-function isTextOrEl(el) {
-	if(el.constructor.name === 'Text')
-		return true;
-	else if(el.constructor.name.indexOf('Element'));
-		return false;
-}
-
-function elIndexOf(id, elList) {
-	for(let i = 0; i < elList.length; i++) {
-		if (elList[i].nodeName === '#comment') return;
-		if(isTextOrEl(elList[i]) === false && elList[i].getAttribute('element_id') == id)
-			return i;
-	}
-	return -1;
-}
-
 
 function renameTagName(newEl, domEl) {
 	let newDomEl = document.createElement(newEl.tagName);
@@ -277,8 +116,6 @@ function assignAttributes(newEl, oldEl, domEl) {
 				domEl.removeAttribute(oldElAtt.name);
 				i--, len--;
 			}
-
 		}
-
 	}
 }

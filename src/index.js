@@ -219,8 +219,9 @@ function _crdtUpdateListener () {
 
 function updateElement (element, info) {
     if (!element.crdt) {
-        if (element.tagName == 'HTML')
+        if (element.tagName == 'HTML'){
             element.crdt = {init: 'editor'};
+        }    
         else
             element.crdt = {init: false};
     }
