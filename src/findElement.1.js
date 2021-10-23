@@ -26,11 +26,11 @@ export function findPosFromString(str, start, end) {
                 position = insert.position;
                 type = 'insertAdjacent';
                 if(!position)
-                    type = 'textNode';
+                    type = 'textNode'
                 if (type == 'textNode' || type == 'afterbegin');
                     nodeStart = start - angleEnd - 1;
             }
-            findEl.remove();
+            findEl.remove()
         }
         else {
             let node = str.slice(angleStart, startString.length + endStringAngleEnd + 1);
@@ -69,7 +69,7 @@ export function findPosFromString(str, start, end) {
                     position = insert.position;
                     if(position == 'afterend')
                         element = element.parentElement;
-                    type = 'innerHTML';
+                    type = 'innerHTML'
                 }
                 if (!element) {
                     console.log('Could not find element');
@@ -125,84 +125,91 @@ function getInsertPosition(element){
     return {target, position};
 }
 
-export function getPosFromDom({string, target, position, attribute, property, value}) {
+export function getPosFromDom({string, element, target, position, attribute, property, value, remove}) {
     try {
-        let selector = cssPath(target, '[contenteditable]');
+        let selector = cssPath(element, '[contenteditable]');
         let dom = domParser(string);
         let element = dom.querySelector(selector);
         let findEl = document.createElement('findelement');
-        let start = 0, end;
+        let findElString = dom.innerHTML;
+        let start, hasAttr;
         
         if (position) {
             element.insertAdjacentElement(position, findEl);
-            start = dom.innerHTML.indexOf("<findelement></findelement>");
+            start = findElString.indexOf("<findelement></findelement>");
         }
         else if (attribute) {
             if (!element.hasAttribute(attribute)){
                 element.setAttribute('findelement', '');
-                start = dom.innerHTML.indexOf("findelement");
+                start = findElString.indexOf("findelement");
             }
             else {
-                let elString = element.outerHTML;
-                let attrValue = element.getAttribute(attribute);
-                let attrStart = elString.indexOf(` ${attribute}=`) + 1;
-                start = attrStart;
-                end = start + attrValue.length + 2;
-                if (attribute == 'style') {
-                    element.style[property] = value;
-                    value = element.getAttribute(attribute);
-                }
-                else if (attribute == 'class') {
-                    let {prop, val} = value.split(':');
-                    if (prop && val){
-                        if (attrValue.includes(`${prop}:`)){
-                            let propStart = attrValue.indexOf(`${prop}:`);
-                            let propString = attrValue.substr(propStart)
-                            let propEnd = propString.indexOf(" ");
-                            if (propEnd > 0)
-                                propString = propString.slice(0, propEnd);
-                            element.classList.remove(propString)
-                        }
+                if (attribute == 'class'){
+                    element.classList.add("findelement");
+                    start = findElString.indexOf("findelement");
+                    if (remove) {
+                        remove.start = '';
+                        remove.end = '';
                     }
-                    element.classList.add(value);
-                    value = element.getAttribute(attribute); 
+                }   
+                else if (attribute == 'style'){
+                    let styles = element.getAttribute('style')
+                    if (styles.includes(` ${property}:`)){
+                        let propStart = styles.indexOf(`${property}:`);
+                        let propString = styles.substr(propStart)
+                        let propEnd = propString.indexOf(";");
+                        if (propEnd > 0)
+                            propString = propString.slice(0, propEnd);
+
+                        let elString = element.outerHTML;
+                        let styleStart = elString.indexOf(" style=") + 1;
+                        remove.start = elstart + styleStart + propStart;
+                        remove.end = remove.start + propString.length;
+                    }
+                    element.style.counterReset = "findelement";
+                    start = findElString.indexOf(" counter-reset: findelement 0;");
+                    remove.start = '';
+                    remove.end = '';
+                }
+                else {
+                    let attrValue = element.getAttribute(attribute)
+                    let elString = element.outerHTML;
+                    let attrStart = elString.indexOf(` ${attribute}=`) + 1;
+                    start = elstart + attrStart;
+                    end = start + attrValue.length + 2;
                 }
             }
         }
-        else if (value) {
+        if (value) {
             element.insertAdjacentElement('afterbegin', findEl);
             let length = element.innerHTML.length;
-            start = dom.innerHTML.indexOf("<findelement></findelement>");
+            start = findElString.indexOf("<findelement></findelement>");
             end = start + length;
         }
-        else {
-            element.setAttribute('findelement', '');
-            start = dom.innerHTML.indexOf("findelement");
-            end = element.outerHTML.length;
-        }
     
-        let newString = dom.innerHTML.substr(0, start);
-        let elements = elList(newString, element.tagName);
+        // let newString = findElString.substr(0, pos);
+        // let elements = elList(newString, element.tagName)
     
-        for (let el of elements) {
-            let index = string.indexOf(el.tagName.toLowerCase());
-            if (index)
-                start += index;
-        }
-        start = start -1;
-        console.log('findindom', start);
-        return {start, end, value};
+        // let start = 0;
+        // for (let el of elements) {
+        //     let index = string.indexOf(el.tagName.toLowerCase());
+        //     if (index)
+        //         start += index;
+        // }
+        let end = start + value.length;
+        console.log('findindom', start - 1)
+        return {start, end}
     }
     catch (e){
-        console.log(e);
+        console.log(e)
     }
 }
 
-function elList(str, tagName) {
-    let dom = domParser(str);
-    let elList = dom.getElementsByTagName(tagName);
-    return elList;
-}
+// function elList(str, tagName) {
+//     let dom = domParser(str);
+//     let elList = dom.getElementsByTagName(tagName);
+//     return elList;
+// }
 
 
 function cssPath(node, container = 'HTML') {
@@ -256,12 +263,3 @@ export function domParser(str) {
     }
 }
 
-getPosFromDom({
-    string, 
-    element, 
-    target, 
-    position, 
-    attribute, 
-    property, 
-    value, 
-})

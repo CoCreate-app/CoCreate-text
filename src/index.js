@@ -1,4 +1,4 @@
-/*global CoCreate, DOMParser, CustomEvent, navigator*/
+/*global CustomEvent, navigator*/
 
 import observer from '@cocreate/observer';
 import crud from '@cocreate/crud-client';
@@ -99,7 +99,6 @@ function _paste (event) {
     if(start != end) {
         deleteText(element, start, end, range);
     }
-    value = addElementId(value);
     insertText(element, value, start, range);
     event.preventDefault();
 }
@@ -220,7 +219,8 @@ function _crdtUpdateListener () {
 function updateElement (element, info) {
     if (!element.crdt) {
         if (element.tagName == 'HTML'){
-            element.crdt = {init: 'editor'};
+			element.crdt = {init: false};
+			element.contentEditable = true;
         }    
         else
             element.crdt = {init: false};
@@ -258,9 +258,6 @@ function updateElement (element, info) {
                 let html = crdt.getText({collection, document_id, name});
 				let domTextEditor = element;
 				let value = item.insert;
-				if(element.tagName == 'HTML' && element.crdt.init == 'editor') {
-                    initDocumentElement(element, collection, document_id, name, value);
-                }
 
 				if (item.insert) {
                     let end = start + item.insert.length - 1;
@@ -313,8 +310,6 @@ export function _dispatchInputEvent(element, content, start, end, prev_start, pr
 
 	function initDocumentElement(element, collection, document_id, name, value) {
 		try {
-			let eid = elementId(element, collection, document_id, name, value);
-			if(eid == false) return;
 			element.crdt = {init: false};
 			element.contentEditable = true;
 		}
@@ -322,74 +317,6 @@ export function _dispatchInputEvent(element, content, start, end, prev_start, pr
 			console.log('canvas init: ' + err);
 		}
 	}
-
-	function elementId(element, collection, document_id, name, value) {
-		try {
-			var parser = new DOMParser();
-			var dom = parser.parseFromString(value, "text/html");
-
-			let elements = dom.querySelectorAll('*:not(html, [element_id])');
-
-			for(let el of elements) {
-				if(el.getAttribute('element_id') == null) {
-					el.setAttribute('element_id', CoCreate.uuid.generate(6));
-				}
-			}
-
-			let html = dom.documentElement.outerHTML;
-
-			if(elements.length > 0) {
-				crdt.replaceText({ crud: false, collection, document_id, name, value: html });
-				elementId = function() {};
-				return false;
-			}
-		}
-		catch(err) {
-			console.log('canvas init: ' + err);
-		}
-	}
-
-function addElementId(value) {
-    let dom, isOnlyChildren;
-	try{
-	    [dom, isOnlyChildren] = parseAll(value);
-	}
-	finally {
-    	if(dom){
-    	    if(!isOnlyChildren)
-    			dom.setAttribute('element_id', CoCreate.uuid.generate(6));
-    		dom.querySelectorAll('*').forEach(el => el.setAttribute('element_id', CoCreate.uuid.generate(6)));
-    		value = isOnlyChildren ? dom.innerHTML : dom.outerHTML;
-    		return value;
-    	}
-    	else
-    		return value;
-	}
-}
-
-function parseAll(str) {
-	let mainTag = str.match(/\<(?<tag>[a-z0-9]+)(.*?)?\>/).groups.tag;
-	if(!mainTag)
-		throw new Error('find position: can not find the main tag');
-
-	let doc;
-	switch(mainTag) {
-		case 'html':
-			doc = new DOMParser().parseFromString(str, "text/html");
-			return [doc.documentElement, false];
-		case 'body':
-			doc = new DOMParser().parseFromString(str, "text/html");
-			return [doc.body, false];
-		case 'head':
-			doc = new DOMParser().parseFromString(str, "text/html");
-			return [doc.head, false];
-
-		default:
-			let con = document.createElement('div');
-			con.innerHTML = str;
-			return [con, true];
-	}
-}
 
 init();
 

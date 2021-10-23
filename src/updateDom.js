@@ -1,42 +1,39 @@
-/* globals DOMParser */
 import {sendPosition, _dispatchInputEvent} from './index';
 import {getSelection, processSelection} from '@cocreate/selection';
 import {findPosFromString, domParser} from './findElement';
 
-export function updateDom({ domTextEditor, value, start, end}) {
+export function updateDom({domTextEditor, value, start, end}) {
 	if(start < 0 || start > domTextEditor.htmlString.length)
 		throw new Error('position is out of range');
     
     let {element, path, position, type} = findPosFromString(domTextEditor.htmlString, start);
 	if (element) {
 		parseHtml(domTextEditor);
+		let domEl, newEl = element, oldEl, curCaret;
 		
-		let domEl, oldEl;
 		if(path) {
-			domTextEditor.querySelector(path);
+			domEl = domTextEditor.querySelector(path);
 			oldEl = domTextEditor.oldHtml.querySelector(path);
-		}
-		else
+			curCaret = getSelection(domEl);
+		}		
+		else if(element.tagName == 'HTML') {
 			domEl = domTextEditor;
-			oldEl = domTextEditor.oldHtml;
-		
-		let newEl = element;
-		let curCaret = getSelection(domEl);
-		
-		if (newEl.tagName == 'HTML'){
-            domTextEditor.ownerDocument.documentElement.innerHTML = newEl.outerHTML;
+			curCaret = getSelection(domEl);
+			type = 'innerHTML';
 		}
-		else{
+		if (!value && type != 'isStartTag'){
+			type = 'innerHTML';
+		}
+		
+		if(domEl && newEl) {
 			if (type == 'isStartTag')
 				assignAttributes(newEl, oldEl, domEl);
-			if (type == 'insertAdjacent')
-				element.insertAdjacentHTML(position, value);
-			if (type == 'textNode')
+			else if (type == 'insertAdjacent')
+				domEl.insertAdjacentHTML(position, value);
+			else if (type == 'textNode')
 				domEl.innerHTML = newEl.innerHTML;
-			if (type == 'innerHTML')
-				domEl.innerHTML = newEl.innerHTML;
-			if (type == 'isEndTag')
-				renameTagName(newEl, domEl);
+			else if (type == 'innerHTML')
+				domEl.replaceChildren(...newEl.childNodes);
 		}
 		if(start && end) {
 	    	let p = processSelection(domEl, value, curCaret.start, curCaret.end, start, end, curCaret.range);
@@ -55,14 +52,8 @@ export function updateDom({ domTextEditor, value, start, end}) {
 			for (let script of scripts) {
 				let newScript = domEl.ownerDocument.createElement('script');
 				// newScript.attributes = script.attributes;
-				
-				for(let newElAtt of newScript.attributes) {
-					try {
-						newScript.setAttribute(newElAtt.name, newElAtt.value);
-					}
-					catch(err) {
-						throw new Error("assignAttributes: " + err.message, err.name);
-					}
+				for(let attribute of script.attributes) {
+					newScript.setAttribute(attribute.name, attribute.value);
 				}
 				newScript.innerHTML = script.innerHTML;
 				script.replaceWith(newScript);
@@ -81,23 +72,6 @@ function parseHtml(domTextEditor) {
 	domTextEditor.newHtml = dom;
 }
 
-
-function cloneByCreate(el) {
-	let newEl = document.createElement(el.tagName);
-	newEl.innerHTML = el.innerHTML;
-	assignAttributes(el, newEl, newEl);
-	return newEl;
-}
-
-function renameTagName(newEl, domEl) {
-	let newDomEl = document.createElement(newEl.tagName);
-	newDomEl.attributes = newEl.attributes;
-	// assignAttributes(newEl, newDomEl, newDomEl);
-	newDomEl.replaceChildren(...newEl.childNodes);
-	domEl.replaceWith(newDomEl);
-}
-
-// overwrite except element_id
 function assignAttributes(newEl, oldEl, domEl) {
 	for(let newElAtt of newEl.attributes) {
 		if(!oldEl.attributes[newElAtt.name] || oldEl.attributes[newElAtt.name].value !== newElAtt.value)
