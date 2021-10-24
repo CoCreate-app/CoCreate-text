@@ -125,84 +125,84 @@ function getInsertPosition(element){
     return {target, position};
 }
 
-export function getPosFromDom({string, target, position, attribute, property, value}) {
-    try {
-        let selector = cssPath(target, '[contenteditable]');
-        let dom = domParser(string);
-        let element = dom.querySelector(selector);
-        let findEl = document.createElement('findelement');
-        let start = 0, end;
+// export function getPosFromDom({string, target, position, attribute, property, value}) {
+//     try {
+//         let selector = cssPath(target, '[contenteditable]');
+//         let dom = domParser(string);
+//         let element = dom.querySelector(selector);
+//         let findEl = document.createElement('findelement');
+//         let start = 0, end;
         
-        if (position) {
-            element.insertAdjacentElement(position, findEl);
-            start = dom.innerHTML.indexOf("<findelement></findelement>");
-        }
-        else if (attribute) {
-            if (!element.hasAttribute(attribute)){
-                element.setAttribute('findelement', '');
-                start = dom.innerHTML.indexOf("findelement");
-            }
-            else {
-                let elString = element.outerHTML;
-                let attrValue = element.getAttribute(attribute);
-                let attrStart = elString.indexOf(` ${attribute}=`) + 1;
-                start = attrStart;
-                end = start + attrValue.length + 2;
-                if (attribute == 'style') {
-                    element.style[property] = value;
-                    value = element.getAttribute(attribute);
-                }
-                else if (attribute == 'class') {
-                    let {prop, val} = value.split(':');
-                    if (prop && val){
-                        if (attrValue.includes(`${prop}:`)){
-                            let propStart = attrValue.indexOf(`${prop}:`);
-                            let propString = attrValue.substr(propStart)
-                            let propEnd = propString.indexOf(" ");
-                            if (propEnd > 0)
-                                propString = propString.slice(0, propEnd);
-                            element.classList.remove(propString)
-                        }
-                    }
-                    element.classList.add(value);
-                    value = element.getAttribute(attribute); 
-                }
-            }
-        }
-        else if (value) {
-            element.insertAdjacentElement('afterbegin', findEl);
-            let length = element.innerHTML.length;
-            start = dom.innerHTML.indexOf("<findelement></findelement>");
-            end = start + length;
-        }
-        else {
-            element.setAttribute('findelement', '');
-            start = dom.innerHTML.indexOf("findelement");
-            end = element.outerHTML.length;
-        }
+//         if (position) {
+//             element.insertAdjacentElement(position, findEl);
+//             start = dom.innerHTML.indexOf("<findelement></findelement>");
+//         }
+//         else if (attribute) {
+//             if (!element.hasAttribute(attribute)){
+//                 element.setAttribute('findelement', '');
+//                 start = dom.innerHTML.indexOf("findelement");
+//             }
+//             else {
+//                 let elString = element.outerHTML;
+//                 let attrValue = element.getAttribute(attribute);
+//                 let attrStart = elString.indexOf(` ${attribute}=`) + 1;
+//                 start = attrStart;
+//                 end = start + attrValue.length + 2;
+//                 if (attribute == 'style') {
+//                     element.style[property] = value;
+//                     value = element.getAttribute(attribute);
+//                 }
+//                 else if (attribute == 'class') {
+//                     let {prop, val} = value.split(':');
+//                     if (prop && val){
+//                         if (attrValue.includes(`${prop}:`)){
+//                             let propStart = attrValue.indexOf(`${prop}:`);
+//                             let propString = attrValue.substr(propStart)
+//                             let propEnd = propString.indexOf(" ");
+//                             if (propEnd > 0)
+//                                 propString = propString.slice(0, propEnd);
+//                             element.classList.remove(propString)
+//                         }
+//                     }
+//                     element.classList.add(value);
+//                     value = element.getAttribute(attribute); 
+//                 }
+//             }
+//         }
+//         else if (value) {
+//             element.insertAdjacentElement('afterbegin', findEl);
+//             let length = element.innerHTML.length;
+//             start = dom.innerHTML.indexOf("<findelement></findelement>");
+//             end = start + length;
+//         }
+//         else {
+//             element.setAttribute('findelement', '');
+//             start = dom.innerHTML.indexOf("findelement");
+//             end = element.outerHTML.length;
+//         }
     
-        let newString = dom.innerHTML.substr(0, start);
-        let elements = elList(newString, element.tagName);
+//         let newString = dom.innerHTML.substr(0, start);
+//         let elements = elList(newString, element.tagName);
     
-        for (let el of elements) {
-            let index = string.indexOf(el.tagName.toLowerCase());
-            if (index)
-                start += index;
-        }
-        start = start -1;
-        console.log('findindom', start);
-        return {start, end, value};
-    }
-    catch (e){
-        console.log(e);
-    }
-}
+//         for (let el of elements) {
+//             let index = string.indexOf(el.tagName.toLowerCase());
+//             if (index)
+//                 start += index;
+//         }
+//         start = start -1;
+//         console.log('findindom', start);
+//         return {start, end, value};
+//     }
+//     catch (e){
+//         console.log(e);
+//     }
+// }
 
-function elList(str, tagName) {
-    let dom = domParser(str);
-    let elList = dom.getElementsByTagName(tagName);
-    return elList;
-}
+// function elList(str, tagName) {
+//     let dom = domParser(str);
+//     let elList = dom.getElementsByTagName(tagName);
+//     return elList;
+// }
 
 
 function cssPath(node, container = 'HTML') {
@@ -256,12 +256,3 @@ export function domParser(str) {
     }
 }
 
-getPosFromDom({
-    string, 
-    element, 
-    target, 
-    position, 
-    attribute, 
-    property, 
-    value, 
-})

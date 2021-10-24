@@ -1,25 +1,28 @@
 import {sendPosition, _dispatchInputEvent} from './index';
-import {getSelection, processSelection} from '@cocreate/selection';
-import {findPosFromString, domParser} from './findElement';
+import {getSelection, processSelection, getStringPosition, domParser} from '@cocreate/selection';
+// import {domParser} from './findElement';
 
 export function updateDom({domTextEditor, value, start, end}) {
 	if(start < 0 || start > domTextEditor.htmlString.length)
 		throw new Error('position is out of range');
     
-    let {element, path, position, type} = findPosFromString(domTextEditor.htmlString, start);
+    let {element, path, position, type} = getStringPosition(domTextEditor.htmlString, start);
 	if (element) {
 		parseHtml(domTextEditor);
 		let domEl, newEl = element, oldEl, curCaret;
 		
-		if(path) {
-			domEl = domTextEditor.querySelector(path);
-			oldEl = domTextEditor.oldHtml.querySelector(path);
-			curCaret = getSelection(domEl);
-		}		
-		else if(element.tagName == 'HTML') {
+		if(element.tagName == 'HTML') {
 			domEl = domTextEditor;
 			curCaret = getSelection(domEl);
 			type = 'innerHTML';
+		}
+		else if(path) {
+			domEl = domTextEditor.querySelector(path);
+			oldEl = domTextEditor.oldHtml.querySelector(path);
+			curCaret = getSelection(domEl);
+		}
+		else {
+			curCaret = getSelection(domEl);
 		}
 		if (!value && type != 'isStartTag'){
 			type = 'innerHTML';
