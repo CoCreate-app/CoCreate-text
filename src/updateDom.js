@@ -1,12 +1,12 @@
 import {sendPosition, _dispatchInputEvent} from './index';
-import {getSelection, processSelection, getStringPosition, domParser} from '@cocreate/selection';
-// import {domParser} from './findElement';
+import {getSelection, processSelection, getElementPosition} from '@cocreate/selection';
+import {domParser} from '@cocreate/utils';
 
 export function updateDom({domTextEditor, value, start, end}) {
 	if(start < 0 || start > domTextEditor.htmlString.length)
 		throw new Error('position is out of range');
     
-    let {element, path, position, type} = getStringPosition(domTextEditor.htmlString, start);
+    let {element, path, position, type} = getElementPosition(domTextEditor.htmlString, start);
 	if (element) {
 		parseHtml(domTextEditor);
 		let domEl, newEl = element, oldEl, curCaret;
@@ -29,14 +29,24 @@ export function updateDom({domTextEditor, value, start, end}) {
 		}
 		
 		if(domEl && newEl) {
-			if (type == 'isStartTag')
+			if(start != end) {
+				if (start != end && domEl.tagName != 'HTML')
+					domEl.parentElement.replaceChildren(...newEl.parentElement.childNodes);
+				else
+					domEl.replaceChildren(...newEl.childNodes);	
+			}
+			else if (type == 'isStartTag')
 				assignAttributes(newEl, oldEl, domEl);
 			else if (type == 'insertAdjacent')
 				domEl.insertAdjacentHTML(position, value);
 			else if (type == 'textNode')
 				domEl.innerHTML = newEl.innerHTML;
-			else if (type == 'innerHTML')
-				domEl.replaceChildren(...newEl.childNodes);
+			else if (type == 'innerHTML') {
+				if (start != end && domEl.tagName != 'HTML')
+					domEl.parentElement.replaceChildren(...newEl.parentElement.childNodes);
+				else
+					domEl.replaceChildren(...newEl.childNodes);
+			}
 		}
 		if(start && end) {
 	    	let p = processSelection(domEl, value, curCaret.start, curCaret.end, start, end, curCaret.range);

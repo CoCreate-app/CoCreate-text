@@ -308,16 +308,6 @@ export function _dispatchInputEvent(element, content, start, end, prev_start, pr
     }
 }
 
-	function initDocumentElement(element, collection, document_id, name, value) {
-		try {
-			element.crdt = {init: false};
-			element.contentEditable = true;
-		}
-		catch(err) {
-			console.log('canvas init: ' + err);
-		}
-	}
-
 init();
 
 observer.init({

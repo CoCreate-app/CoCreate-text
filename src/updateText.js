@@ -1,6 +1,6 @@
 import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
-import {getDomPosition} from '@cocreate/selection';
+import {getStringPosition} from '@cocreate/selection';
 
 function removeCallback(param) {
 	if(!param) return;
@@ -37,16 +37,16 @@ function addCallback(param) {
 
 export function insertAdjacentElement({ domTextEditor, target, position, element, elementValue }) {
 	let remove
-	if (element) {
-		remove = getDomPosition({ string: domTextEditor.htmlString, target: element });
+	if (element && !elementValue) {
+		remove = getStringPosition({ string: domTextEditor.htmlString, target: element });
 	}
-	
-	let	{start, end} = getDomPosition({ string: domTextEditor.htmlString, target, position, value: elementValue });
 	if(!elementValue) {
-		if(!start && !end)
+		if(!remove.start && !remove.end)
 			throw new Error('insertAdjacentElement: element not found');
-		elementValue = domTextEditor.htmlString.substring(start, end);
+		elementValue = domTextEditor.htmlString.substring(remove.start, remove.end);
+		// elementValue = remove.newValue;
 	}
+	let	{start} = getStringPosition({ string: domTextEditor.htmlString, target, position, value: elementValue });
 	if (remove){
 		removeCallback({domTextEditor, start: remove.start, end: remove.end});
 		if (remove.start < start){
@@ -61,60 +61,72 @@ export function insertAdjacentElement({ domTextEditor, target, position, element
 }
 
 export function removeElement({ domTextEditor, target }) {
-	let	{start, end} = getDomPosition({ string: domTextEditor.htmlString, target});
+	let	{start, end} = getStringPosition({ string: domTextEditor.htmlString, target});
 	if(!start && !end)
 		throw new Error('removeElement: element not found');
 		
 	removeCallback({domTextEditor, start, end});
 }
 
-export function setClass({ domTextEditor, target, classname }) {
-	let	{start, end, value} = getDomPosition({ string: domTextEditor.htmlString, target, value: classname });
-	if(end)
-		removeCallback({domTextEditor, start, end});
-	addCallback({ domTextEditor, start, value: ` class="${value}"` });
-}
-
-export function setClassStyle({ domTextEditor, target, classname, value, unit }) {
-	value = `${classname}:${value}${unit}`
-	let	{start, end, val} = getDomPosition({ string: domTextEditor.htmlString, target, value: classname });
-	if(end)
-		removeCallback({domTextEditor, start, end});
-	addCallback({ domTextEditor, start, value: ` class="${val}"` });
-}
-
-export function setStyle({ domTextEditor, target, styleName }) {
-	let	{start, end, value} = getDomPosition({ string: domTextEditor.htmlString, target, attribute: 'style', value: styleName });
-	if(end)
-		removeCallback({domTextEditor, start, end});
-	addCallback({ domTextEditor, start, value: ` style="${value}"` });
-}
-
-export function setAttribute({ domTextEditor, target, name, value }) {
-	let	{start, end, val} = getDomPosition({ string: domTextEditor.htmlString, target, attribute: name, value: value });
-	if(end)
-		removeCallback({domTextEditor, start, end});
-	addCallback({ domTextEditor, start, value: ` ${name}="${val}"` });
-}
-
 export function removeAttribute({ domTextEditor, target, name }) {
-	let	{start, end, val} = getDomPosition({ string: domTextEditor.htmlString, target, attribute: name });
+	let	{start, end} = getStringPosition({ string: domTextEditor.htmlString, target, attribute: name });
 	if(end)
 		removeCallback({domTextEditor, start, end});
 }
 
 export function setInnerText({ domTextEditor, target, value, start, end }) {
-	let	element = getDomPosition({ string: domTextEditor.htmlString, target });
+	let	element = getStringPosition({ string: domTextEditor.htmlString, target });
 	if(start != end)
 		removeCallback({ domTextEditor, start: start + element.start, end: end + element.end });
 	if(value)
 		addCallback({ domTextEditor, start: start + element.start, value });
 }
 
-export function replaceInnerText({ domTextEditor, target, value }) {
-	let	{start, end} = getDomPosition({ string: domTextEditor.htmlString, target });
+			export function setClass({ domTextEditor, target, classname }) {
+				let	{start, end, value} = getStringPosition({ string: domTextEditor.htmlString, target, value: classname });
+				if(end)
+					removeCallback({domTextEditor, start, end});
+				addCallback({ domTextEditor, start, value: ` class="${value}"` });
+			}
+			
+			export function setClassStyle({ domTextEditor, target, classname, value, unit }) {
+				value = `${classname}:${value}${unit}`;
+				let	{start, end, newValue} = getStringPosition({ string: domTextEditor.htmlString, target, attribute: 'class', value });
+				if(end)
+					removeCallback({domTextEditor, start, end});
+				addCallback({ domTextEditor, start, value: ` class="${newValue}"` });
+			}
+			
+			export function setStyle({ domTextEditor, target, styleName }) {
+				let	{start, end, value} = getStringPosition({ string: domTextEditor.htmlString, target, attribute: 'style', value: styleName });
+				if(end)
+					removeCallback({domTextEditor, start, end});
+				addCallback({ domTextEditor, start, value: ` style="${value}"` });
+			}
+			
+			export function setAttribute({ domTextEditor, target, name, value }) {
+				let	{start, end, newValue} = getStringPosition({ string: domTextEditor.htmlString, target, attribute: name, value: value });
+				if(end)
+					removeCallback({domTextEditor, start, end});
+				addCallback({ domTextEditor, start, value: ` ${name}="${newValue}"` });
+			}
+
+
+
+			export function replaceInnerText({ domTextEditor, target, value }) {
+				let	{start, end} = getStringPosition({ string: domTextEditor.htmlString, target });
+				if(start != end)
+					removeCallback({ domTextEditor, start, end });
+				if(value)
+					addCallback({ domTextEditor, start, value });
+			}
+
+export function updateDomText({ domTextEditor, target, position, element, elementValue, attribute, value }) {
+	let	{start, end, newValue} = getStringPosition({ string: domTextEditor.htmlString, target, attribute, value });
 	if(start != end)
-		removeCallback({ domTextEditor, start, end });
-	if(value)
+		removeCallback({domTextEditor, start, end});
+	if(attribute)
+		addCallback({ domTextEditor, start, value: ` ${attribute}="${newValue}"` });
+	else if(value)
 		addCallback({ domTextEditor, start, value });
 }
