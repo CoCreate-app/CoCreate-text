@@ -30,10 +30,13 @@ export function updateDom({domTextEditor, value, start, end}) {
 		
 		if(domEl && newEl) {
 			if(start != end) {
-				if (start != end && domEl.tagName != 'HTML')
+				if (domEl.tagName != 'HTML')
 					domEl.parentElement.replaceChildren(...newEl.parentElement.childNodes);
 				else
 					domEl.replaceChildren(...newEl.childNodes);	
+				domEl = newEl;
+				curCaret.range.startContainer = domEl;
+				curCaret.range.endContainer = domEl;
 			}
 			else if (type == 'isStartTag')
 				assignAttributes(newEl, oldEl, domEl);
@@ -42,10 +45,7 @@ export function updateDom({domTextEditor, value, start, end}) {
 			else if (type == 'textNode')
 				domEl.innerHTML = newEl.innerHTML;
 			else if (type == 'innerHTML') {
-				if (start != end && domEl.tagName != 'HTML')
-					domEl.parentElement.replaceChildren(...newEl.parentElement.childNodes);
-				else
-					domEl.replaceChildren(...newEl.childNodes);
+				domEl.replaceChildren(...newEl.childNodes);
 			}
 		}
 		if(start && end) {
@@ -64,7 +64,6 @@ export function updateDom({domTextEditor, value, start, end}) {
 			}
 			for (let script of scripts) {
 				let newScript = domEl.ownerDocument.createElement('script');
-				// newScript.attributes = script.attributes;
 				for(let attribute of script.attributes) {
 					newScript.setAttribute(attribute.name, attribute.value);
 				}

@@ -216,7 +216,7 @@ function _crdtUpdateListener () {
     });
 }
 
-function updateElement (element, info) {
+async function updateElement (element, info) {
     if (!element.crdt) {
         if (element.tagName == 'HTML'){
 			element.crdt = {init: false};
@@ -235,45 +235,40 @@ function updateElement (element, info) {
             element.value = "";
         }
     }
-    var start = 0;
-    let items = info.eventDelta;
-    items.forEach(item => {
-        
-        if(item.retain) {
-            start = item.retain;
-        }
-        if(item.insert || item.delete) {
-            if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-                if(item.insert) {
-                    if (element.value != item.insert)
-                        _updateElementText(element, item.insert, start, start);
-                }
-                else if(item.delete) {
-                    _updateElementText(element, "", start, start + item.delete);
-                }
-            } else {
-                let collection = info['collection'];
-                let document_id = info['document_id'];
-                let name = info['name'];
-                let html = crdt.getText({collection, document_id, name});
-				let domTextEditor = element;
-				let value = item.insert;
-
-				if (item.insert) {
-                    let end = start + item.insert.length - 1;
-				    if (element.innerHTML != item.insert) {
-						domTextEditor.htmlString = html;
-						updateDom({ domTextEditor, value, start, end });
-				    }
-				}
-				else if (item.delete) {
-                    let end = start + item.delete;
-					domTextEditor.htmlString = html;
-					updateDom({ domTextEditor, start, end });
-				}
+    let start = info.start;
+    let value = info.value
+    let length = info.length
+    if(value || length) {
+        if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+            if(value) {
+                if (element.value != value)
+                    _updateElementText(element, value, start, start);
             }
+            else if(length) {
+                _updateElementText(element, "", start, start + length);
+            }
+        } 
+        else {
+            let collection = info['collection'];
+            let document_id = info['document_id'];
+            let name = info['name'];
+            let html = await crdt.getText({collection, document_id, name});
+			let domTextEditor = element;
+
+			if (value) {
+                // let end = start + length - 1;
+			    if (element.innerHTML != value) {
+					domTextEditor.htmlString = html;
+					updateDom({ domTextEditor, value, start, end: start });
+			    }
+			}
+			else if (length) {
+                let end = start + length;
+				domTextEditor.htmlString = html;
+				updateDom({ domTextEditor, start, end });
+			}
         }
-    });
+    }
 }
 
 function _updateElementText (element, value, start, end) {
