@@ -1,3 +1,20 @@
+# [1.10.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.9.13...v1.10.0) (2021-10-29)
+
+
+### Bug Fixes
+
+* issue with cssPath sometimes not resolving ([3474f9b](https://github.com/CoCreate-app/CoCreate-text/commit/3474f9b99fb1f453275b80456fa4ff6a7dc28137))
+* relocated selection and get position function to @cocreate/selection ([d484e49](https://github.com/CoCreate-app/CoCreate-text/commit/d484e49beec2b03cc8f642880e43cafb71b00699))
+* reordered insertText and deleteText ([9dc82ee](https://github.com/CoCreate-app/CoCreate-text/commit/9dc82eea9ef5aece02bd63f5816acadd7e512242))
+* updated crdt position to start ([22b3e86](https://github.com/CoCreate-app/CoCreate-text/commit/22b3e86d22e4b5a67c209ac6ebaa4a648998d4ef))
+
+
+### Features
+
+* edit html documents with out the need of an element_id ([23add16](https://github.com/CoCreate-app/CoCreate-text/commit/23add16f471660c2f99674cf8423490557ae525c))
+* first version of updateText that does not require element_id ([cb6100b](https://github.com/CoCreate-app/CoCreate-text/commit/cb6100bba89eeb62f38935886dc590decc1b2485))
+* removed eventDelta and send correct domEl for readding selections ([42b96eb](https://github.com/CoCreate-app/CoCreate-text/commit/42b96ebadf3ba62b9e014765b7224373f59a7706))
+
 ## [1.9.13](https://github.com/CoCreate-app/CoCreate-text/compare/v1.9.12...v1.9.13) (2021-10-17)
 
 
