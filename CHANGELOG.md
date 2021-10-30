@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.10.1...v1.11.0) (2021-10-30)
+
+
+### Features
+
+* text will set previous value after crdt initializes ([4e6ad7e](https://github.com/CoCreate-app/CoCreate-text/commit/4e6ad7e0ec057f06070f1b9142a56936d0dcc754))
+
 ## [1.10.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.10.0...v1.10.1) (2021-10-29)
 
 
