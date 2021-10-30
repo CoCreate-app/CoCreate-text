@@ -2,11 +2,11 @@ import {sendPosition, _dispatchInputEvent} from './index';
 import {getSelection, processSelection, getElementPosition} from '@cocreate/selection';
 import {domParser} from '@cocreate/utils';
 
-export function updateDom({domTextEditor, value, start, end}) {
+export function updateDom({domTextEditor, value, start, end, html}) {
 	if(start < 0 || start > domTextEditor.htmlString.length)
 		throw new Error('position is out of range');
     
-    let {element, path, position, type} = getElementPosition(domTextEditor.htmlString, start);
+    let {element, path, position, type} = getElementPosition(domTextEditor.htmlString, start, end);
 	if (element) {
 		parseHtml(domTextEditor);
 		let domEl, newEl = element, oldEl, curCaret;
@@ -30,13 +30,16 @@ export function updateDom({domTextEditor, value, start, end}) {
 		
 		if(domEl && newEl) {
 			if(start != end) {
+				domTextEditor.htmlString = html;
 				if (domEl.tagName != 'HTML')
 					domEl.parentElement.replaceChildren(...newEl.parentElement.childNodes);
 				else
 					domEl.replaceChildren(...newEl.childNodes);	
 				domEl = newEl;
-				curCaret.range.startContainer = domEl;
-				curCaret.range.endContainer = domEl;
+				if (curCaret.range) {
+					curCaret.range.startContainer = domEl;
+					curCaret.range.endContainer = domEl;
+				}
 			}
 			else if (type == 'isStartTag')
 				assignAttributes(newEl, oldEl, domEl);

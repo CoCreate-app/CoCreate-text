@@ -24,7 +24,7 @@ function initElements (elements) {
 }
 
 function initElement (element) {
-    const { collection, document_id, name, isRealtime, isCrdt } = crud.getAttr(element);
+    const { collection, document_id, name, isRealtime, isCrdt, isCrud, isSave, isRead } = crud.getAttr(element);
     if(document_id == "pending") return;
     if(isCrdt == "false" || isRealtime == "false") return;
     if(!crud.checkAttrValue(collection) && !crud.checkAttrValue(document_id)) return;
@@ -39,7 +39,21 @@ function initElement (element) {
         }   
         element.setAttribute('crdt', 'true');
         element.crdt = {init: true};
-        crdt.init({ collection, document_id, name });
+        crdt.getText({ collection, document_id, name }).then(response => {
+            if (!response){
+                let value;
+                if (element.hasAttribute('contenteditable')){
+                   value = element.innerHTML;
+                }
+                else {
+                    value = element.value;
+                }
+                if (value)
+                    crdt.replaceText({ collection, document_id, name, value, crud: isCrud, save: isSave });
+            }
+            else 
+                updateElement({ element, collection, document_id, name, value: response, start: 0 })
+        });
     }
 }
 
@@ -87,7 +101,7 @@ function _cut (event) {
         });
     }
     if(start != end) {
-        deleteText(element, start, end, range);
+        updateText({element, start, end, range});
     }
     event.preventDefault();
 }
@@ -97,9 +111,9 @@ function _paste (event) {
     let value = event.clipboardData.getData('Text');
     const { start, end, range } = getSelection(element);
     if(start != end) {
-        deleteText(element, start, end, range);
+        updateText({element, start, end, range});
     }
-    insertText(element, value, start, range);
+    updateText({element, value, start, range});
     event.preventDefault();
 }
 
@@ -109,17 +123,18 @@ function _keydown (event) {
     const { start, end, range } = getSelection(element);
     if(event.key == "Backspace" || event.key == "Tab" || event.key == "Enter") {
         eventObj = event;
+        //ToDO switch case
         if(start != end) {
-            deleteText(element, start, end, range);
+            updateText({element, start, end, range});
         }
         if(event.key == "Backspace" && start == end) {
-            deleteText(element, start - 1, end, range);
+            updateText({element, start: start - 1, end, range});
         }
         if(event.key == 'Tab') {
-            insertText(element, "\t", start, range);
+            updateText({element, value: "\t", start, range});
         }
         if(event.key == "Enter") {
-            insertText(element, "\n", start, range);
+            updateText({element, value: "\n", start, range});
         }
         event.preventDefault();
     }
@@ -130,10 +145,10 @@ function _keypress (event) {
     let element = event.currentTarget;
     let { start, end, range } = getSelection(element);
     if(start != end) {
-        deleteText(element, start, end, range);
+        updateText({element, start, end, range});
     }
     eventObj = event;
-    insertText(element, event.key, start, range);
+    updateText({element, value: event.key, start, range});
     event.preventDefault();
 }
 
@@ -157,33 +172,14 @@ export function sendPosition (element) {
     crdt.sendPosition({ collection, document_id, name, start, end });
 }
 
-function insertText (element, value, start, range) {
+function updateText ({element, value, start, end, range}) {
     if (element.tagName == 'HTML' && !element.hasAttribute('collection')) 
         element = element.ownerDocument.defaultView.frameElement;
     const { collection, document_id, name, isCrud, isSave } = crud.getAttr(element);
-    if(isSave == "false") return;
-    if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-        crdt.insertText({ collection, document_id, name, value, start, crud: isCrud });
-    } else {
-        let startEl =  range.startContainer.parentElement;
-        let endEl =  range.endContainer.parentElement;
-        if (startEl != endEl) {
-            // target = range.commonAncestorContainer;
-            // value = target.innerHTML;
-            // replaceInnerText(domTextEditor, target, value)
-        }
-        crdt.insertText({ collection, document_id, name, value, start, crud: isCrud });
-    }
-}
-
-function deleteText (element, start, end, range) {
-    if (element.tagName == 'HTML' && !element.hasAttribute('collection')) 
-        element = element.ownerDocument.defaultView.frameElement;
-    const { collection, document_id, name, isCrud, isSave } = crud.getAttr(element);
-    if(isSave == "false") return;
+    // if(isSave == "false") return;
     let length = end - start;
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-        crdt.deleteText({ collection, document_id, name, start, length, crud: isCrud });
+        crdt.updateText({ collection, document_id, name, value, start, length, crud: isCrud });
     } else {
         let startEl =  range.startContainer.parentElement;
         let endEl =  range.endContainer.parentElement;
@@ -192,52 +188,36 @@ function deleteText (element, start, end, range) {
         //     // value = target.innerHTML;
         //     // replaceInnerText(domTextEditor, target, value)
         }
-        crdt.deleteText({ collection, document_id, name, start, length, crud: isCrud });
+        crdt.updateText({ collection, document_id, value, name, start, length, crud: isCrud, save: isSave });
     }
 }
 
 function _crdtUpdateListener () {
     window.addEventListener('cocreate-crdt-update', function(event) {
-        var info = event.detail;
-        let collection = info['collection'];
-        let document_id = info['document_id'];
-        let name = info['name'];
-        let selectors = `[collection='${collection}'][document_id='${document_id}'][name='${name}']`;
-        let elements = document.querySelectorAll(`input${selectors}, textarea${selectors}, [contenteditable]${selectors}, [editor='dom']${selectors}`);
-
-        elements.forEach((element) => {
-            if (element.tagName == 'IFRAME')
-                element = element.contentDocument.documentElement;
-            if(element === document.activeElement) {
-                sendPosition(element);
-            }
-            updateElement(element, info);
-        });
+        updateElements({...event.detail});
     });
 }
 
-async function updateElement (element, info) {
-    if (!element.crdt) {
-        if (element.tagName == 'HTML'){
-			element.crdt = {init: false};
-			element.contentEditable = true;
-        }    
-        else
-            element.crdt = {init: false};
+function updateElements({elements, collection, document_id, name, value, start, length}){
+    if(!elements){
+        let selectors = `[collection='${collection}'][document_id='${document_id}'][name='${name}']`;
+        elements = document.querySelectorAll(`input${selectors}, textarea${selectors}, [contenteditable]${selectors}, [editor='dom']${selectors}`);
     }
     
-    if (element.crdt.init == true && element.domText != true) {
-        element.crdt = {init: false};
-        if (element.hasAttribute('contenteditable')){
-            element.innerHTML = "";
-        }
-        else {
-            element.value = "";
-        }
+    elements.forEach((element) => {
+        updateElement({element, collection, document_id, name, value, start, length});
+    });
+}
+
+async function updateElement ({element, collection, document_id, name, value, start, length }) {
+    if (element.tagName == 'IFRAME') {
+        element = element.contentDocument.documentElement;
+        if (element.contenteditable != 'false')
+            element.contentEditable = true;
     }
-    let start = info.start;
-    let value = info.value
-    let length = info.length
+    if(element === document.activeElement) {
+        sendPosition(element);
+    }
     if(value || length) {
         if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
             if(value) {
@@ -249,14 +229,9 @@ async function updateElement (element, info) {
             }
         } 
         else {
-            let collection = info['collection'];
-            let document_id = info['document_id'];
-            let name = info['name'];
-            let html = await crdt.getText({collection, document_id, name});
 			let domTextEditor = element;
-
+            let html = await crdt.getText({collection, document_id, name});
 			if (value) {
-                // let end = start + length - 1;
 			    if (element.innerHTML != value) {
 					domTextEditor.htmlString = html;
 					updateDom({ domTextEditor, value, start, end: start });
@@ -264,8 +239,7 @@ async function updateElement (element, info) {
 			}
 			else if (length) {
                 let end = start + length;
-				domTextEditor.htmlString = html;
-				updateDom({ domTextEditor, start, end });
+				updateDom({ domTextEditor, start, end, html });
 			}
         }
     }
@@ -326,4 +300,4 @@ observer.init({
     }
 });
 
-export default {initElements, initElement, insertText, deleteText, updateElement, _addEventListeners, insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, setClassStyle, replaceInnerText};
+export default {initElements, initElement, updateText, updateElement, _addEventListeners, insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, setClassStyle, replaceInnerText};
