@@ -24,12 +24,12 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 		else {
 			curCaret = getSelection(domEl);
 		}
-		if (!value && type != 'isStartTag'){
+		if (!value && type != 'isStartTag' && type != 'textNode'){
 			type = 'innerHTML';
 		}
 		
 		if(domEl && newEl) {
-			if(start != end) {
+			if(start != end && type == 'innerHTML') {
 				domTextEditor.htmlString = html;
 				if (domEl.tagName != 'HTML')
 					domEl.parentElement.replaceChildren(...newEl.parentElement.childNodes);
@@ -45,8 +45,11 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 				assignAttributes(newEl, oldEl, domEl);
 			else if (type == 'insertAdjacent')
 				domEl.insertAdjacentHTML(position, value);
-			else if (type == 'textNode')
+			else if (type == 'textNode'){
+				if(start != end)
+					domTextEditor.htmlString = html;
 				domEl.innerHTML = newEl.innerHTML;
+			}
 			else if (type == 'innerHTML') {
 				domEl.replaceChildren(...newEl.childNodes);
 			}
