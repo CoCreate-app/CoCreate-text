@@ -1,3 +1,11 @@
+## [1.11.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.11.0...v1.11.1) (2021-11-01)
+
+
+### Bug Fixes
+
+* innerText was replacing outer element. updated to replace innerHtml of element being edited ([6dd1f86](https://github.com/CoCreate-app/CoCreate-text/commit/6dd1f868ec48c3a9800d4c5121667edbbc6f41e9))
+* update package dependencies ([5f29867](https://github.com/CoCreate-app/CoCreate-text/commit/5f2986760de7ad09ce566ec97ad57109c10d6428))
+
 # [1.11.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.10.1...v1.11.0) (2021-10-30)
 
 
