@@ -77,7 +77,7 @@ function _blur (event) {
     const { collection, document_id, name } = crud.getAttr(element);
     let start = null;
     let end = null;
-    crdt.sendPosition({collection, document_id, name, start, end});
+    cursors.sendPosition({collection, document_id, name, start, end});
 }
 
 function _keyup (event) {
