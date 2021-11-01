@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.11.1...v1.12.0) (2021-11-01)
+
+
+### Features
+
+* added @cocreate/cursor share and display positions ([123370d](https://github.com/CoCreate-app/CoCreate-text/commit/123370d09d74a6630c818eadb6a8e62679283c58))
+
 ## [1.11.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.11.0...v1.11.1) (2021-11-01)
 
 
