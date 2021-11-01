@@ -1,8 +1,8 @@
 /*global CustomEvent, navigator*/
-
 import observer from '@cocreate/observer';
 import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
+import cursors from '@cocreate/cursors';
 import {updateDom} from './updateDom';
 import {insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, setClassStyle, replaceInnerText} from './updateText';
 import {getSelection, processSelection} from '@cocreate/selection';
@@ -169,7 +169,7 @@ export function sendPosition (element) {
     if (element.tagName == 'HTML' && !element.hasAttribute('collection') || !element.hasAttribute('collection')) 
         element = element.ownerDocument.defaultView.frameElement;
     const { collection, document_id, name } = crud.getAttr(element);
-    crdt.sendPosition({ collection, document_id, name, start, end });
+    cursors.sendPosition({ collection, document_id, name, start, end });
 }
 
 function updateText ({element, value, start, end, range}) {
