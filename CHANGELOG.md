@@ -1,3 +1,10 @@
+## [1.12.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.0...v1.12.1) (2021-11-01)
+
+
+### Bug Fixes
+
+* add cdrt.sendPosition on blur event ([6429b44](https://github.com/CoCreate-app/CoCreate-text/commit/6429b440f35032da4e6f4f2daed56228c839aa5f))
+
 # [1.12.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.11.1...v1.12.0) (2021-11-01)
 
 
