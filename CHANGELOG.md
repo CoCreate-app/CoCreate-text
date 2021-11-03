@@ -1,3 +1,10 @@
+## [1.12.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.1...v1.12.2) (2021-11-03)
+
+
+### Bug Fixes
+
+* allow contenteditable elements to use update element even if crdt is false ([3d18875](https://github.com/CoCreate-app/CoCreate-text/commit/3d1887533cfa162701daa8a689ea988c81ea0858))
+
 ## [1.12.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.0...v1.12.1) (2021-11-01)
 
 
