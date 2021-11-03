@@ -165,18 +165,19 @@ function _removeEventListeners (element) {
 
 export function sendPosition (element) {
     if (!element) return;
+    const { collection, document_id, name, isCrdt } = crud.getAttr(element);
+    if (isCrdt == 'false') return;
     const { start, end } = getSelection(element);
     if (element.tagName == 'HTML' && !element.hasAttribute('collection') || !element.hasAttribute('collection')) 
         element = element.ownerDocument.defaultView.frameElement;
-    const { collection, document_id, name } = crud.getAttr(element);
     cursors.sendPosition({ collection, document_id, name, start, end });
 }
 
 function updateText ({element, value, start, end, range}) {
     if (element.tagName == 'HTML' && !element.hasAttribute('collection')) 
         element = element.ownerDocument.defaultView.frameElement;
-    const { collection, document_id, name, isCrud, isSave } = crud.getAttr(element);
-    // if(isSave == "false") return;
+    const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(element);
+    if(isCrdt == "false") return;
     let length = end - start;
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
         crdt.updateText({ collection, document_id, name, value, start, length, crud: isCrud });
@@ -205,6 +206,12 @@ function updateElements({elements, collection, document_id, name, value, start, 
     }
     
     elements.forEach((element) => {
+        let isCrdt = element.getAttribute('crdt');
+        // if(isCrdt == 'false' && !element.hasAttribute('crdt') && !element.contentEditable) return;
+        // if(element.hasAttribute('contenteditable')){
+            let isEditable = element.getAttribute('contenteditable');
+            if (!element.hasAttribute('contenteditable') && isCrdt == 'false') return;
+
         updateElement({element, collection, document_id, name, value, start, length});
     });
 }
@@ -220,26 +227,26 @@ async function updateElement ({element, collection, document_id, name, value, st
     }
     if(value || length) {
         if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+            if(length) {
+                _updateElementText(element, "", start, start + length);
+            }
             if(value) {
                 if (element.value != value)
                     _updateElementText(element, value, start, start);
-            }
-            else if(length) {
-                _updateElementText(element, "", start, start + length);
             }
         } 
         else {
 			let domTextEditor = element;
             let html = await crdt.getText({collection, document_id, name});
+			if (length) {
+                let end = start + length;
+				updateDom({ domTextEditor, start, end, html });
+			}
 			if (value) {
 			    if (element.innerHTML != value) {
 					domTextEditor.htmlString = html;
 					updateDom({ domTextEditor, value, start, end: start });
 			    }
-			}
-			else if (length) {
-                let end = start + length;
-				updateDom({ domTextEditor, start, end, html });
 			}
         }
     }
@@ -257,7 +264,7 @@ function _updateElementText (element, value, start, end) {
 
 export function _dispatchInputEvent(element, content, start, end, prev_start, prev_end) {
     if(eventObj) {
-        let detail = {value: content, start, end, prev_start, prev_end};
+        let detail = {value: content, start, end, prev_start, prev_end, skip: true};
         let event = new CustomEvent(eventObj.type, { bubbles: true });
         Object.defineProperty(event, 'stopCCText', { writable: false, value: true });
         Object.defineProperty(event, 'target', { writable: false, value: element });
@@ -269,11 +276,11 @@ export function _dispatchInputEvent(element, content, start, end, prev_start, pr
         Object.defineProperty(inputEvent, 'detail', { writable: false, value: detail });
         element.dispatchEvent(inputEvent);
         
-        let textChange = new CustomEvent('textChange', { bubbles: true });
-        Object.defineProperty(textChange, 'target', { writable: false, value: element });
-        Object.defineProperty(textChange, 'detail', { writable: false, value: detail });
-        element.dispatchEvent(textChange);
-        eventObj = null;
+        // let textChange = new CustomEvent('textChange', { bubbles: true });
+        // Object.defineProperty(textChange, 'target', { writable: false, value: element });
+        // Object.defineProperty(textChange, 'detail', { writable: false, value: detail });
+        // element.dispatchEvent(textChange);
+        // eventObj = null;
     }
 }
 
