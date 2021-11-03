@@ -39,7 +39,7 @@ function initElement (element) {
         }   
         element.setAttribute('crdt', 'true');
         element.crdt = {init: true};
-        crdt.getText({ collection, document_id, name }).then(response => {
+        crdt.getText({ collection, document_id, name, crud: isCrud, save: isSave, read: isRead }).then(response => {
             if (!response){
                 let value;
                 if (element.hasAttribute('contenteditable')){
@@ -49,7 +49,7 @@ function initElement (element) {
                     value = element.value;
                 }
                 if (value)
-                    crdt.replaceText({ collection, document_id, name, value, crud: isCrud, save: isSave });
+                    crdt.replaceText({ collection, document_id, name, value, crud: isCrud, save: isSave, read: isRead });
             }
             else 
                 updateElement({ element, collection, document_id, name, value: response, start: 0 })
