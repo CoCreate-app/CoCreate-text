@@ -1,3 +1,10 @@
+## [1.12.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.3...v1.12.4) (2021-11-03)
+
+
+### Bug Fixes
+
+* added isSavae, isRead, isCrud to replaceText and getText so it can get attributes from element and passs them to CRDT ([efd9598](https://github.com/CoCreate-app/CoCreate-text/commit/efd95982e46cc0207ca9889bd08685ddaa1f56ee))
+
 ## [1.12.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.2...v1.12.3) (2021-11-03)
 
 
