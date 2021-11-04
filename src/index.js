@@ -165,11 +165,11 @@ function _removeEventListeners (element) {
 
 export function sendPosition (element) {
     if (!element) return;
-    const { collection, document_id, name, isCrdt } = crud.getAttr(element);
-    if (isCrdt == 'false') return;
     const { start, end } = getSelection(element);
     if (element.tagName == 'HTML' && !element.hasAttribute('collection') || !element.hasAttribute('collection')) 
         element = element.ownerDocument.defaultView.frameElement;
+    const { collection, document_id, name, isCrdt } = crud.getAttr(element);
+    if (isCrdt == 'false') return;
     cursors.sendPosition({ collection, document_id, name, start, end });
 }
 
