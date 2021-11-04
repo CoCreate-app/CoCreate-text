@@ -1,3 +1,10 @@
+## [1.12.5](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.4...v1.12.5) (2021-11-04)
+
+
+### Bug Fixes
+
+* sendPosition was not doing getSelection with the correct element when the element is an iframe/htmltag ([ba84d97](https://github.com/CoCreate-app/CoCreate-text/commit/ba84d97e2e4c10a6dc0bba713cf36de80c03eed9))
+
 ## [1.12.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.3...v1.12.4) (2021-11-03)
 
 
