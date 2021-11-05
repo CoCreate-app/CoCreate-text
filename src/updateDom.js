@@ -91,6 +91,7 @@ function parseHtml(domTextEditor) {
 }
 
 function assignAttributes(newEl, oldEl, domEl) {
+	if (!oldEl) return;
 	for(let newElAtt of newEl.attributes) {
 		if(!oldEl.attributes[newElAtt.name] || oldEl.attributes[newElAtt.name].value !== newElAtt.value)
 			try {
