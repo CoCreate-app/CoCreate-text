@@ -1,3 +1,10 @@
+## [1.12.8](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.7...v1.12.8) (2021-11-05)
+
+
+### Bug Fixes
+
+* assignAttributes will return if there is no oldEl ([d3f74f0](https://github.com/CoCreate-app/CoCreate-text/commit/d3f74f02379bb706017aca0966a1c1e0dca9dba2))
+
 ## [1.12.7](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.6...v1.12.7) (2021-11-04)
 
 
