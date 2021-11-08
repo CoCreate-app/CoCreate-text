@@ -1,3 +1,10 @@
+## [1.12.10](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.9...v1.12.10) (2021-11-08)
+
+
+### Bug Fixes
+
+* dispatch input event after value is set ([1b73cff](https://github.com/CoCreate-app/CoCreate-text/commit/1b73cff39803cd534685ad77d3ac75fb38710b10))
+
 ## [1.12.9](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.8...v1.12.9) (2021-11-06)
 
 
