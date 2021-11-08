@@ -259,32 +259,23 @@ function _updateElementText (element, value, start, end) {
     element.setRangeText(value, start, end, "end");
 	let p = processSelection(element, value, prev_start, prev_end, start, end);
 	sendPosition(element);
-	_dispatchInputEvent(element, p.value, p.start, p.end, p.prev_start, p.prev_end)
+	_dispatchInputEvent(element, p.value, p.start, p.end, p.prev_start, p.prev_end);
 }
 
 export function _dispatchInputEvent(element, content, start, end, prev_start, prev_end) {
+    let detail = {value: content, start, end, prev_start, prev_end, skip: true};
     if(eventObj) {
-        let detail = {value: content, start, end, prev_start, prev_end, skip: true};
         let event = new CustomEvent(eventObj.type, { bubbles: true });
         Object.defineProperty(event, 'stopCCText', { writable: false, value: true });
         Object.defineProperty(event, 'target', { writable: false, value: element });
         Object.defineProperty(event, 'detail', { writable: false, value: detail });
         element.dispatchEvent(event);
-       
-        let inputEvent = new CustomEvent('input', { bubbles: true });
-        Object.defineProperty(inputEvent, 'target', { writable: false, value: element });
-        Object.defineProperty(inputEvent, 'detail', { writable: false, value: detail });
-        element.dispatchEvent(inputEvent);
-        
-        // let textChange = new CustomEvent('textChange', { bubbles: true });
-        // Object.defineProperty(textChange, 'target', { writable: false, value: element });
-        // Object.defineProperty(textChange, 'detail', { writable: false, value: detail });
-        // element.dispatchEvent(textChange);
-        // eventObj = null;
-    }
+    }   
+    let inputEvent = new CustomEvent('input', { bubbles: true });
+    Object.defineProperty(inputEvent, 'target', { writable: false, value: element });
+    Object.defineProperty(inputEvent, 'detail', { writable: false, value: detail });
+    element.dispatchEvent(inputEvent);
 }
-
-init();
 
 observer.init({
     name: 'CoCreateTextAddedNodes',
@@ -306,5 +297,7 @@ observer.init({
         initElement(mutation.target);
     }
 });
+
+init();
 
 export default {initElements, initElement, updateText, updateElement, _addEventListeners, insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, setClassStyle, replaceInnerText};
