@@ -1,3 +1,10 @@
+## [1.12.11](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.10...v1.12.11) (2021-11-11)
+
+
+### Bug Fixes
+
+* licensing information ([12a8220](https://github.com/CoCreate-app/CoCreate-text/commit/12a82209ae0f14caf791d9c5704d4c8acbc35bfc))
+
 ## [1.12.10](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.9...v1.12.10) (2021-11-08)
 
 
