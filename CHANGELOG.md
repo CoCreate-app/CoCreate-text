@@ -1,3 +1,10 @@
+## [1.12.13](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.12...v1.12.13) (2021-11-15)
+
+
+### Bug Fixes
+
+* sendPosition only if element is equal to activeElement ([6959086](https://github.com/CoCreate-app/CoCreate-text/commit/6959086c30f524f8d9f7478ce2508491c6f11cd3))
+
 ## [1.12.12](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.11...v1.12.12) (2021-11-11)
 
 
