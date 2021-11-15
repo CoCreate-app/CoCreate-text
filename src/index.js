@@ -256,9 +256,11 @@ function _updateElementText (element, value, start, end) {
     if (element.tagName == 'HTML') return;
     let prev_start = element.selectionStart;
     let prev_end = element.selectionEnd;
+    let activeElement = element.ownerDocument.activeElement;
     element.setRangeText(value, start, end, "end");
 	let p = processSelection(element, value, prev_start, prev_end, start, end);
-	sendPosition(element);
+	if(activeElement == element)
+	    sendPosition(element);
 	_dispatchInputEvent(element, p.value, p.start, p.end, p.prev_start, p.prev_end);
 }
 
