@@ -1,3 +1,10 @@
+## [1.12.16](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.15...v1.12.16) (2021-11-16)
+
+
+### Bug Fixes
+
+* updateDom if element not found fallback to domTextEditor element ([d223438](https://github.com/CoCreate-app/CoCreate-text/commit/d223438cb4dbfd3d4a94f6a91d1f522f3accd4c8))
+
 ## [1.12.15](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.14...v1.12.15) (2021-11-16)
 
 
