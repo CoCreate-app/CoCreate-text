@@ -222,9 +222,6 @@ async function updateElement ({element, collection, document_id, name, value, st
         if (element.contenteditable != 'false')
             element.contentEditable = true;
     }
-    if(element === document.activeElement) {
-        sendPosition(element);
-    }
     if(value || length) {
         if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
             if(length) {

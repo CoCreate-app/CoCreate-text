@@ -7,6 +7,7 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 		throw new Error('position is out of range');
     
     let {element, path, position, type} = getElementPosition(domTextEditor.htmlString, start, end);
+	
 	if (element) {
 		parseHtml(domTextEditor);
 		let domEl, newEl = element, oldEl, curCaret;
@@ -77,6 +78,10 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 				script.replaceWith(newScript);
 			}	
 		}
+	}
+	else {
+		element = domTextEditor;
+		element.innerHTML = value;
 	}
 }
 
