@@ -26,7 +26,7 @@ function initElements (elements) {
 function initElement (element) {
     const { collection, document_id, name, isRealtime, isCrdt, isCrud, isSave, isRead } = crud.getAttr(element);
     if(document_id == "pending") return;
-    if(isCrdt == "false" || isRealtime == "false") return;
+    if(isCrdt == "false" || isRealtime == "false" || element.type == 'number') return;
     if(!crud.checkAttrValue(collection) && !crud.checkAttrValue(document_id)) return;
     if(element.tagName === "INPUT" && ["text", "email", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA" || element.hasAttribute('contenteditable')) {
         if(!collection || !document_id || !name) return;
@@ -250,7 +250,7 @@ async function updateElement ({element, collection, document_id, name, value, st
 }
 
 function _updateElementText (element, value, start, end) {
-    if (element.tagName == 'HTML') return;
+    if (element.tagName == 'HTML' || element.type == 'number') return;
     let prev_start = element.selectionStart;
     let prev_end = element.selectionEnd;
     let activeElement = element.ownerDocument.activeElement;
