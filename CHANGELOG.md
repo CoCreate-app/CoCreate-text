@@ -1,3 +1,10 @@
+## [1.12.18](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.17...v1.12.18) (2021-11-17)
+
+
+### Bug Fixes
+
+* return if input.type == number... number does not support range text ([6b8a00f](https://github.com/CoCreate-app/CoCreate-text/commit/6b8a00fd1bca5bf9082b3a1c6e25440e79ace5e8))
+
 ## [1.12.17](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.16...v1.12.17) (2021-11-16)
 
 
