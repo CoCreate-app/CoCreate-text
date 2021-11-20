@@ -1,3 +1,10 @@
+## [1.12.21](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.20...v1.12.21) (2021-11-20)
+
+
+### Bug Fixes
+
+* updated script tags and link tags ([41f079d](https://github.com/CoCreate-app/CoCreate-text/commit/41f079df5ff8262f032c665a38c9e7682f54385b))
+
 ## [1.12.20](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.19...v1.12.20) (2021-11-20)
 
 
