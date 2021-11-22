@@ -51,7 +51,13 @@ function initElement (element) {
                 if (value)
                     crdt.replaceText({ collection, document_id, name, value, crud: isCrud, save: isSave, read: isRead });
             }
-            else 
+            else
+                if (element.hasAttribute('contenteditable')){
+                   element.innerHTML = '';
+                }
+                else {
+                    element.value = '';
+                }
                 updateElement({ element, collection, document_id, name, value: response, start: 0 })
         });
     }
@@ -180,7 +186,7 @@ function updateText ({element, value, start, end, range}) {
     if(isCrdt == "false") return;
     let length = end - start;
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-        crdt.updateText({ collection, document_id, name, value, start, length, crud: isCrud });
+        crdt.updateText({ collection, document_id, name, value, start, length, crud: isCrud, save: isSave });
     } else {
         let startEl =  range.startContainer.parentElement;
         let endEl =  range.endContainer.parentElement;
@@ -209,8 +215,8 @@ function updateElements({elements, collection, document_id, name, value, start, 
         let isCrdt = element.getAttribute('crdt');
         // if(isCrdt == 'false' && !element.hasAttribute('crdt') && !element.contentEditable) return;
         // if(element.hasAttribute('contenteditable')){
-            let isEditable = element.getAttribute('contenteditable');
-            if (!element.hasAttribute('contenteditable') && isCrdt == 'false') return;
+            // let isEditable = element.getAttribute('contenteditable');
+        if (!element.hasAttribute('contenteditable') && isCrdt == 'false') return;
 
         updateElement({element, collection, document_id, name, value, start, length});
     });
