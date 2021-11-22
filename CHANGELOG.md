@@ -1,3 +1,10 @@
+## [1.12.22](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.21...v1.12.22) (2021-11-22)
+
+
+### Bug Fixes
+
+* isSave for textarea and inputs... remove value before texts sets value on intialization ([e8fb19b](https://github.com/CoCreate-app/CoCreate-text/commit/e8fb19bc370769f2bffd937fb92b2e0ace886508))
+
 ## [1.12.21](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.20...v1.12.21) (2021-11-20)
 
 
