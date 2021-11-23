@@ -51,7 +51,7 @@ function initElement (element) {
                 if (value)
                     crdt.replaceText({ collection, document_id, name, value, crud: isCrud, save: isSave, read: isRead });
             }
-            else
+            else {
                 if (element.hasAttribute('contenteditable')){
                    element.innerHTML = '';
                 }
@@ -59,6 +59,7 @@ function initElement (element) {
                     element.value = '';
                 }
                 updateElement({ element, collection, document_id, name, value: response, start: 0 })
+            }
         });
     }
 }
