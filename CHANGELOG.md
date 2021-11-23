@@ -1,3 +1,10 @@
+## [1.12.23](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.22...v1.12.23) (2021-11-23)
+
+
+### Bug Fixes
+
+* handleing textNode and activeElement for curCaret ([a73b1d9](https://github.com/CoCreate-app/CoCreate-text/commit/a73b1d9ad0b32819779b9aaaebec13176e5cab1c))
+
 ## [1.12.22](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.21...v1.12.22) (2021-11-22)
 
 
