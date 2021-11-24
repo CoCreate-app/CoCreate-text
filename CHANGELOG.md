@@ -1,3 +1,10 @@
+## [1.12.27](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.26...v1.12.27) (2021-11-24)
+
+
+### Bug Fixes
+
+* updated selection dependency ([9c85e4d](https://github.com/CoCreate-app/CoCreate-text/commit/9c85e4db523349309070f24a4f34b9994f25df22))
+
 ## [1.12.26](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.25...v1.12.26) (2021-11-24)
 
 
