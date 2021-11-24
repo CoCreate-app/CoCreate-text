@@ -12,7 +12,10 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 	let domEl, newEl = element, oldEl, curCaret;
 	if(!newEl){
 		newEl = domTextEditor.cloneNode(true);
-		newEl.innerHTML = html || domTextEditor.htmlString;
+		if (html != undefined)
+			newEl.innerHTML = html;
+		else
+			newEl.innerHTML = domTextEditor.htmlString;
 		domEl = domTextEditor;
 		type = 'innerHTML';
 	}
@@ -65,10 +68,12 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 			domEl.replaceChildren(...newEl.childNodes);
 		}
 	}
-	if(curCaret && start && end) {
-    	let p = processSelection(domEl, value, curCaret.start, curCaret.end, start, end, curCaret.range);
-    	sendPosition(domEl);
-		_dispatchInputEvent(p.element, p.value, p.start, p.end, p.prev_start, p.prev_end);
+	if(curCaret && start >= 0 && end >= 0) {
+		if (curCaret.range && curCaret.start >= curCaret.range.startOffset) {
+	    	let p = processSelection(domEl, value, curCaret.start, curCaret.end, start, end, curCaret.range);
+	    	sendPosition(domEl);
+			_dispatchInputEvent(p.element, p.value, p.start, p.end, p.prev_start, p.prev_end);
+		}
 	}
 	
 	if (newEl.tagName == 'HTML' || 'HEAD' || 'BODY' || 'SCRIPT'){
