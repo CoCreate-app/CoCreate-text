@@ -1,3 +1,10 @@
+## [1.12.26](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.25...v1.12.26) (2021-11-24)
+
+
+### Bug Fixes
+
+* improved on logical conditons on when to processSelection ([53f8ad4](https://github.com/CoCreate-app/CoCreate-text/commit/53f8ad4e075c77b89ade24e56b6512431ac17b35))
+
 ## [1.12.25](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.24...v1.12.25) (2021-11-23)
 
 
