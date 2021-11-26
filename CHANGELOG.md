@@ -1,3 +1,11 @@
+## [1.12.29](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.28...v1.12.29) (2021-11-26)
+
+
+### Bug Fixes
+
+* add nav and sidenav to docs ([2134b51](https://github.com/CoCreate-app/CoCreate-text/commit/2134b5106addf251ff3c00edaf39f5844eb8b4cd))
+* updated action dependency to actions ([12ee922](https://github.com/CoCreate-app/CoCreate-text/commit/12ee922408a263df866452fd81dc953ba8268b84))
+
 ## [1.12.28](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.27...v1.12.28) (2021-11-26)
 
 
