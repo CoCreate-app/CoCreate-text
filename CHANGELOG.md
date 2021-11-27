@@ -1,3 +1,10 @@
+## [1.12.30](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.29...v1.12.30) (2021-11-27)
+
+
+### Bug Fixes
+
+* update docs api and cocreateJS script ([72f5228](https://github.com/CoCreate-app/CoCreate-text/commit/72f5228220f977e56bb6e50a7faaf12bb99795c0))
+
 ## [1.12.29](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.28...v1.12.29) (2021-11-26)
 
 
