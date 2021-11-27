@@ -1,3 +1,11 @@
+## [1.12.32](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.31...v1.12.32) (2021-11-27)
+
+
+### Bug Fixes
+
+* actions import typo ([66f914e](https://github.com/CoCreate-app/CoCreate-text/commit/66f914e725a5862d99c2cdb1d462da461f9f46d7))
+* update dependencies ([de6cd6a](https://github.com/CoCreate-app/CoCreate-text/commit/de6cd6a4f9ca77d52588b633b8dd96bf4de4043a))
+
 ## [1.12.31](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.30...v1.12.31) (2021-11-27)
 
 
