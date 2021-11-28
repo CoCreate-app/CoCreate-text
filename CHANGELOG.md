@@ -1,3 +1,10 @@
+## [1.13.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.13.1...v1.13.2) (2021-11-28)
+
+
+### Bug Fixes
+
+* removed console.log ([81a07d4](https://github.com/CoCreate-app/CoCreate-text/commit/81a07d4be95acd507fa4047de38847069fd53d5c))
+
 ## [1.13.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.13.0...v1.13.1) (2021-11-28)
 
 
