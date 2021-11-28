@@ -146,6 +146,12 @@ function _keydown (event) {
         }
         event.preventDefault();
     }
+    else if (event.ctrlKey) {
+        if (event.keyCode == 90) 
+            console.log('Undo');
+        else if (event.keyCode == 89) 
+            console.log('Redo');
+    }
 }
 
 function _beforeinput (event) {
