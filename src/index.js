@@ -16,6 +16,11 @@ function init() {
     let elements = document.querySelectorAll(selectors);
     initElements(elements);
     _crdtUpdateListener();
+    document.addEventListener('selectionchange', (e) => {
+        let element = document.activeElement;
+        sendPosition(element)
+        console.log(element)
+    });
 }
 
 function initElements (elements) {
@@ -32,10 +37,16 @@ function initElement (element) {
         if(!collection || !document_id || !name) return;
 
         if (!isCrdt) {
-            if (element.tagName == 'IFRAME')
+            if (element.tagName == 'IFRAME'){
                 _addEventListeners(element.contentDocument.documentElement);
-            else 
-            _addEventListeners(element);
+                let Document = element.contentDocument
+                Document.addEventListener('selectionchange', (e) => {
+                    let element = Document.activeElement;
+                    sendPosition(element)
+                });            }  
+            else{ 
+                _addEventListeners(element);
+            }
         }   
         element.setAttribute('crdt', 'true');
         element.crdt = {init: true};
@@ -65,19 +76,12 @@ function initElement (element) {
 }
 
 export function _addEventListeners (element) {
-    element.addEventListener('click', _click);
     element.addEventListener('blur', _blur);
-    element.addEventListener('keyup', _keyup);
     element.addEventListener('cut', _cut);
     element.addEventListener('paste', _paste);
     element.addEventListener('keydown', _keydown);
     element.addEventListener('beforeinput', _beforeinput);
     element.addEventListener('input', _input);
-}
-
-function _click (event) {
-    let element = event.currentTarget;
-    sendPosition(element);
 }
 
 function _blur (event) {
@@ -86,11 +90,6 @@ function _blur (event) {
     let start = null;
     let end = null;
     cursors.sendPosition({collection, document_id, name, start, end});
-}
-
-function _keyup (event) {
-    let element = event.currentTarget;
-    sendPosition(element);
 }
 
 function _cut (event) {
@@ -167,6 +166,7 @@ function _beforeinput (event) {
         event.preventDefault();
     }
 }
+
 function _input (event) {
     if(event.stopCCText) return;
     if (event.data) {
@@ -175,9 +175,7 @@ function _input (event) {
 }
 
 function _removeEventListeners (element) {
-    element.removeEventListener('click', _click);
     element.removeEventListener('blur', _blur);
-    element.removeEventListener('keyup', _keyup);
     element.removeEventListener('cut', _cut);
     element.removeEventListener('paste', _paste);
     element.removeEventListener('keydown', _keydown);
