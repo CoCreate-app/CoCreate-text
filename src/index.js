@@ -71,7 +71,8 @@ export function _addEventListeners (element) {
     element.addEventListener('cut', _cut);
     element.addEventListener('paste', _paste);
     element.addEventListener('keydown', _keydown);
-    element.addEventListener('keypress', _keypress);
+    element.addEventListener('beforeinput', _beforeinput);
+    element.addEventListener('input', _input);
 }
 
 function _click (event) {
@@ -130,33 +131,41 @@ function _keydown (event) {
     const { start, end, range } = getSelection(element);
     if(event.key == "Backspace" || event.key == "Tab" || event.key == "Enter") {
         eventObj = event;
-        //ToDO switch case
         if(start != end) {
             updateText({element, start, end, range});
         }
+        
         if(event.key == "Backspace" && start == end) {
             updateText({element, start: start - 1, end, range});
         }
-        if(event.key == 'Tab') {
+        else if(event.key == 'Tab') {
             updateText({element, value: "\t", start, range});
         }
-        if(event.key == "Enter") {
+        else if(event.key == "Enter") {
             updateText({element, value: "\n", start, range});
         }
         event.preventDefault();
     }
 }
 
-function _keypress (event) {
+function _beforeinput (event) {
     if(event.stopCCText) return;
     let element = event.currentTarget;
     let { start, end, range } = getSelection(element);
-    if(start != end) {
-        updateText({element, start, end, range});
+    if (event.data) {
+        if(start != end) {
+            updateText({element, start, end, range});
+        }
+        eventObj = event;
+        updateText({element, value: event.data, start, range});
+        event.preventDefault();
     }
-    eventObj = event;
-    updateText({element, value: event.key, start, range});
-    event.preventDefault();
+}
+function _input (event) {
+    if(event.stopCCText) return;
+    if (event.data) {
+        eventObj = event;
+    }
 }
 
 function _removeEventListeners (element) {
@@ -166,9 +175,8 @@ function _removeEventListeners (element) {
     element.removeEventListener('cut', _cut);
     element.removeEventListener('paste', _paste);
     element.removeEventListener('keydown', _keydown);
-    element.removeEventListener('keypress', _keypress);
+    element.removeEventListener('beforeinput', _beforeinput);
 }
-
 
 export function sendPosition (element) {
     if (!element) return;
@@ -278,6 +286,7 @@ export function _dispatchInputEvent(element, content, start, end, prev_start, pr
         element.dispatchEvent(event);
     }   
     let inputEvent = new CustomEvent('input', { bubbles: true });
+    Object.defineProperty(inputEvent, 'stopCCText', { writable: false, value: true });
     Object.defineProperty(inputEvent, 'target', { writable: false, value: element });
     Object.defineProperty(inputEvent, 'detail', { writable: false, value: detail });
     element.dispatchEvent(inputEvent);
