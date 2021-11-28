@@ -19,7 +19,6 @@ function init() {
     document.addEventListener('selectionchange', (e) => {
         let element = document.activeElement;
         sendPosition(element)
-        console.log(element)
     });
 }
 
