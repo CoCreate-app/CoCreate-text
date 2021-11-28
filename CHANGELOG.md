@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.13.0...v1.13.1) (2021-11-28)
+
+
+### Bug Fixes
+
+* replace click and keyup event with selectionchange event ([515da39](https://github.com/CoCreate-app/CoCreate-text/commit/515da39a62af4e350aa2a7857aa48b87c822a5dd))
+
 # [1.13.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.32...v1.13.0) (2021-11-28)
 
 
