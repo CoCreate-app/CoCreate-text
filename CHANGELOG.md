@@ -1,3 +1,15 @@
+# [1.13.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.32...v1.13.0) (2021-11-28)
+
+
+### Bug Fixes
+
+* remove keypress and replaced with beforeinput event to support mobile browsers ([84ae8b1](https://github.com/CoCreate-app/CoCreate-text/commit/84ae8b162657ec028e6a49b627ca104909ff11ad))
+
+
+### Features
+
+* support for undo and redo ([8a727d3](https://github.com/CoCreate-app/CoCreate-text/commit/8a727d3ba5df8bcf03cf96c07c40e889dd359aea))
+
 ## [1.12.32](https://github.com/CoCreate-app/CoCreate-text/compare/v1.12.31...v1.12.32) (2021-11-27)
 
 
