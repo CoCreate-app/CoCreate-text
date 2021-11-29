@@ -1,3 +1,10 @@
+## [1.13.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.13.2...v1.13.3) (2021-11-29)
+
+
+### Bug Fixes
+
+* sendPosition if no element return ([fec4fbb](https://github.com/CoCreate-app/CoCreate-text/commit/fec4fbb20b574af0995f1f49ad16501a83c52b98))
+
 ## [1.13.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.13.1...v1.13.2) (2021-11-28)
 
 
