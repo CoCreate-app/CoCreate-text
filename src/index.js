@@ -186,8 +186,9 @@ export function sendPosition (element) {
     const { start, end } = getSelection(element);
     if (element.tagName == 'HTML' && !element.hasAttribute('collection') || !element.hasAttribute('collection')) 
         element = element.ownerDocument.defaultView.frameElement;
+    if (!element) return;
     const { collection, document_id, name, isCrdt } = crud.getAttr(element);
-    if (isCrdt == 'false') return;
+    if (isCrdt == 'false' || !collection || !document_id || !name) return;
     cursors.sendPosition({ collection, document_id, name, start, end });
 }
 
