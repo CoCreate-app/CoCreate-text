@@ -1,3 +1,10 @@
+## [1.13.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.13.3...v1.13.4) (2021-12-08)
+
+
+### Bug Fixes
+
+* observer attribute contenteditable, get element to update using selection range.element ([2bb32bf](https://github.com/CoCreate-app/CoCreate-text/commit/2bb32bf5650505c76efb44d2f941b1b249deaebf))
+
 ## [1.13.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.13.2...v1.13.3) (2021-11-29)
 
 
