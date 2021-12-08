@@ -33,6 +33,8 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 		curCaret = getSelection(activeElement);
 	else if (activeElement.tagName == 'BODY')
 		curCaret = getSelection(domEl);
+	else
+		curCaret = getSelection(activeElement);
 		
 	if (!value && type != 'isStartTag' && type != 'textNode'){
 		type = 'innerHTML';

@@ -183,7 +183,10 @@ function _removeEventListeners (element) {
 
 export function sendPosition (element) {
     if (!element) return;
-    const { start, end } = getSelection(element);
+
+    const { start, end, range } = getSelection(element);
+    if(range && range.element)
+        element = range.element;
     if (element.tagName == 'HTML' && !element.hasAttribute('collection') || !element.hasAttribute('collection')) 
         element = element.ownerDocument.defaultView.frameElement;
     if (!element) return;
@@ -193,6 +196,8 @@ export function sendPosition (element) {
 }
 
 function updateText ({element, value, start, end, range}) {
+    if(range && range.element)
+        element = range.element;
     if (element.tagName == 'HTML' && !element.hasAttribute('collection')) 
         element = element.ownerDocument.defaultView.frameElement;
     const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(element);
@@ -310,7 +315,7 @@ observer.init({
 observer.init({
     name: 'CoCreateTextAttribtes',
     observe: ['attributes'],
-    attributeName: ['collection', 'document_id', 'name'],
+    attributeName: ['collection', 'document_id', 'name', 'contenteditable'],
     target: selectors,
     callback (mutation) {
         initElement(mutation.target);
