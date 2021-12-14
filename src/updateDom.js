@@ -3,13 +3,16 @@ import {getSelection, processSelection, getElementPosition} from '@cocreate/sele
 import {domParser} from '@cocreate/utils';
 
 export function updateDom({domTextEditor, value, start, end, html}) {
+	if (!domTextEditor.htmlString)
+		domTextEditor.htmlString = html;
 	if(start < 0 || start > domTextEditor.htmlString.length)
 		throw new Error('position is out of range');
     
     let {element, path, position, type} = getElementPosition(domTextEditor.htmlString, start, end);
-		parseHtml(domTextEditor);
+		parseHtml(domTextEditor, html);
 		
-	let domEl, newEl = element, oldEl, curCaret;
+	let domEl, oldEl, curCaret;
+	let newEl = domTextEditor.newHtml.querySelector(path);
 	if(!newEl){
 		newEl = domTextEditor.cloneNode(true);
 		if (html != undefined)
@@ -26,6 +29,15 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 	else if(path) {
 		domEl = domTextEditor.querySelector(path);
 		oldEl = domTextEditor.oldHtml.querySelector(path);
+		if (!domEl || !oldEl){
+		    let eid = newEl.getAttribute('eid');
+			if (!domEl && eid){
+				domEl = domTextEditor.querySelector(`[eid='${eid}']`);
+			}
+			if (!oldEl && eid){
+				oldEl = domTextEditor.oldHtml.querySelector(`[eid='${eid}']`);
+			}
+		}
 	}
 
 	let activeElement = domEl.ownerDocument.activeElement;
@@ -69,6 +81,7 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 		else if (type == 'innerHTML') {
 			domEl.replaceChildren(...newEl.childNodes);
 		}
+		domTextEditor.htmlString = html;
 	}
 	if(curCaret && start >= 0 && end >= 0) {
 		if (curCaret.range && curCaret.start >= curCaret.range.startOffset) {
@@ -97,8 +110,8 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 	}
 }
 
-function parseHtml(domTextEditor) {
-	var dom = domParser(domTextEditor.htmlString);
+function parseHtml(domTextEditor, html) {
+	var dom = domParser(html);
 	if (domTextEditor.newHtml) {
 		domTextEditor.oldHtml = domTextEditor.newHtml;
 	} else {

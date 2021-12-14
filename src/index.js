@@ -3,6 +3,7 @@ import observer from '@cocreate/observer';
 import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
 import cursors from '@cocreate/cursors';
+import uuid from '@cocreate/uuid';
 import {updateDom} from './updateDom';
 import {insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, setClassStyle, replaceInnerText} from './updateText';
 import {getSelection, processSelection} from '@cocreate/selection';
@@ -16,10 +17,7 @@ function init() {
     let elements = document.querySelectorAll(selectors);
     initElements(elements);
     _crdtUpdateListener();
-    document.addEventListener('selectionchange', (e) => {
-        let element = document.activeElement;
-        sendPosition(element)
-    });
+    initDocument(document);
 }
 
 function initElements (elements) {
@@ -38,11 +36,9 @@ function initElement (element) {
         if (!isCrdt) {
             if (element.tagName == 'IFRAME'){
                 _addEventListeners(element.contentDocument.documentElement);
-                let Document = element.contentDocument
-                Document.addEventListener('selectionchange', (e) => {
-                    let element = Document.activeElement;
-                    sendPosition(element)
-                });            }  
+                let Document = element.contentDocument;
+                initDocument(Document);
+            }  
             else{ 
                 _addEventListeners(element);
             }
@@ -74,13 +70,59 @@ function initElement (element) {
     }
 }
 
+function initDocument(doc) {
+    let documents = window.top.textDocuments;
+    if (!documents){
+        documents = new Map();
+        window.top.textDocuments = documents;
+    }
+    if (!documents.has(doc)) {
+        documents.set(doc);
+        doc.addEventListener('selectionchange', (e) => {
+            let element = doc.activeElement;
+            sendPosition(element);
+        }); 
+        // doc.removeEventListener('selectionchange', _selectionchange);
+        // doc.addEventListener('selectionchange', _selectionchange)
+    }
+}
+
+// function _selectionchange(event){
+//     let element = event.currentTarget.activeElement;
+//     sendPosition(element);
+// }
+
 export function _addEventListeners (element) {
+    element.addEventListener('mousedown', _mousedown);
     element.addEventListener('blur', _blur);
     element.addEventListener('cut', _cut);
     element.addEventListener('paste', _paste);
     element.addEventListener('keydown', _keydown);
     element.addEventListener('beforeinput', _beforeinput);
     element.addEventListener('input', _input);
+}
+
+function _mousedown (event) {
+    let domTextEditor = event.currentTarget;
+    if (domTextEditor.tagName === "INPUT" || domTextEditor.tagName === "TEXTAREA") return;
+    let target = event.target;
+    // const path = event.path || (event.composedPath && event.composedPath());
+    // console.log(path)
+	if(!target.id){
+	    let eid = target.getAttribute('eid');
+		if(!eid){
+			eid = uuid.generate(6);
+            setAttribute({ domTextEditor, target, name: 'eid', value: eid });
+		}
+	}
+	let contentEditable = target.closest('[collection][document_id][name]');
+	if (contentEditable){
+        target = contentEditable;
+        const { collection, document_id, name } = crud.getAttr(target);
+        if (collection && document_id && name && !target.hasAttribute('contenteditable'))
+            target.setAttribute('contenteditable', 'true');
+    }
+    // sendPosition(element)
 }
 
 function _blur (event) {
@@ -181,27 +223,40 @@ function _removeEventListeners (element) {
     element.removeEventListener('beforeinput', _beforeinput);
 }
 
+let previousPosition = {};
 export function sendPosition (element) {
-    if (!element) return;
-
+    // if (!element) return;
     const { start, end, range } = getSelection(element);
-    if(range && range.element)
-        element = range.element;
-    if (element.tagName == 'HTML' && !element.hasAttribute('collection') || !element.hasAttribute('collection')) 
-        element = element.ownerDocument.defaultView.frameElement;
+    if(range) {
+        if (range.element){
+            element = range.element;
+        }
+        if (element.tagName == 'HTML' && !element.hasAttribute('collection') || !element.hasAttribute('collection')) {
+            element = element.ownerDocument.defaultView.frameElement;
+        }
+    }
     if (!element) return;
     const { collection, document_id, name, isCrdt } = crud.getAttr(element);
     if (isCrdt == 'false' || !collection || !document_id || !name) return;
+    let currentPosition = { collection, document_id, name, start, end };
+    if (JSON.stringify(currentPosition) === JSON.stringify(previousPosition))
+        return;
+    previousPosition = currentPosition;
+    element.activeElement = element;
     cursors.sendPosition({ collection, document_id, name, start, end });
 }
 
 function updateText ({element, value, start, end, range}) {
-    if(range && range.element)
-        element = range.element;
-    if (element.tagName == 'HTML' && !element.hasAttribute('collection')) 
-        element = element.ownerDocument.defaultView.frameElement;
+    if(range) {
+        if (range.element)
+            element = range.element;
+        
+        if (element.tagName == 'HTML' && !element.hasAttribute('collection')) 
+            element = element.ownerDocument.defaultView.frameElement;
+    }
     const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(element);
     if(isCrdt == "false") return;
+    
     let length = end - start;
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
         crdt.updateText({ collection, document_id, name, value, start, length, crud: isCrud, save: isSave });
@@ -265,8 +320,8 @@ async function updateElement ({element, collection, document_id, name, value, st
 			}
 			if (value) {
 			    if (element.innerHTML != value) {
-					domTextEditor.htmlString = html;
-					updateDom({ domTextEditor, value, start, end: start });
+				// 	domTextEditor.htmlString = html;
+					updateDom({ domTextEditor, value, start, end: start, html });
 			    }
 			}
         }
