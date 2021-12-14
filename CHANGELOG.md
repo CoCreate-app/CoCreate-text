@@ -1,3 +1,15 @@
+# [1.14.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.13.4...v1.14.0) (2021-12-14)
+
+
+### Bug Fixes
+
+* update dependencies ([4d71711](https://github.com/CoCreate-app/CoCreate-text/commit/4d71711bedf21a3dfa4f28e54b568362d919b535))
+
+
+### Features
+
+* support nested contenteditable and cursor positions ([30cc76d](https://github.com/CoCreate-app/CoCreate-text/commit/30cc76d669203e6b55e271e2a3b26398e9764359))
+
 ## [1.13.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.13.3...v1.13.4) (2021-12-08)
 
 
