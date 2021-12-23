@@ -1,3 +1,10 @@
+## [1.14.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.14.2...v1.14.3) (2021-12-23)
+
+
+### Bug Fixes
+
+* checkAttributeValue collection or document return ([500c156](https://github.com/CoCreate-app/CoCreate-text/commit/500c156c14fafec187ea40481a5f30f389ec4dc6))
+
 ## [1.14.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.14.1...v1.14.2) (2021-12-15)
 
 
