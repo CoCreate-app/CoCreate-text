@@ -1,3 +1,10 @@
+## [1.14.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.14.3...v1.14.4) (2021-12-24)
+
+
+### Bug Fixes
+
+* removed document_id from demo ([62088ae](https://github.com/CoCreate-app/CoCreate-text/commit/62088ae3d1fb8f2bc8bf0a7cbf442a3ade02c9ae))
+
 ## [1.14.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.14.2...v1.14.3) (2021-12-23)
 
 
