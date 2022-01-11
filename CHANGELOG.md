@@ -1,3 +1,10 @@
+## [1.14.7](https://github.com/CoCreate-app/CoCreate-text/compare/v1.14.6...v1.14.7) (2022-01-11)
+
+
+### Bug Fixes
+
+* addEvents if isCrdt != true ([b57f83b](https://github.com/CoCreate-app/CoCreate-text/commit/b57f83ba299f4a27802f48a14c2a252095cb91ba))
+
 ## [1.14.6](https://github.com/CoCreate-app/CoCreate-text/compare/v1.14.5...v1.14.6) (2022-01-01)
 
 
