@@ -35,11 +35,12 @@ function initElement (element) {
 
         if (!isCrdt) {
             if (element.tagName == 'IFRAME'){
-                _addEventListeners(element.contentDocument.documentElement);
+                if (isCrdt != 'true')
+                    _addEventListeners(element.contentDocument.documentElement);
                 let Document = element.contentDocument;
                 initDocument(Document);
             }  
-            else{ 
+            else if (isCrdt != 'true'){ 
                 _addEventListeners(element);
             }
         }   
