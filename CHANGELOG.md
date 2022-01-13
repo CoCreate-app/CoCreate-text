@@ -1,3 +1,10 @@
+## [1.14.8](https://github.com/CoCreate-app/CoCreate-text/compare/v1.14.7...v1.14.8) (2022-01-13)
+
+
+### Bug Fixes
+
+* removed if case that resulted in value not inserting if oldValue and newValue where equal ([187167e](https://github.com/CoCreate-app/CoCreate-text/commit/187167e03fb1cfc5132848f443d32d4f2d3ffe8e))
+
 ## [1.14.7](https://github.com/CoCreate-app/CoCreate-text/compare/v1.14.6...v1.14.7) (2022-01-11)
 
 
