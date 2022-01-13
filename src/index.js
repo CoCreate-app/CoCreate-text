@@ -308,8 +308,7 @@ async function updateElement ({element, collection, document_id, name, value, st
                 _updateElementText(element, "", start, start + length);
             }
             if(value) {
-                if (element.value != value)
-                    _updateElementText(element, value, start, start);
+                _updateElementText(element, value, start, start);
             }
         } 
         else {
