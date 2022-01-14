@@ -1,3 +1,10 @@
+## [1.14.9](https://github.com/CoCreate-app/CoCreate-text/compare/v1.14.8...v1.14.9) (2022-01-14)
+
+
+### Bug Fixes
+
+* saveDomText.js updated to awiat value from crdt.getText ([1b7a433](https://github.com/CoCreate-app/CoCreate-text/commit/1b7a433acda72f4cf12ad283b6aa37b4367fbea5))
+
 ## [1.14.8](https://github.com/CoCreate-app/CoCreate-text/compare/v1.14.7...v1.14.8) (2022-01-13)
 
 
