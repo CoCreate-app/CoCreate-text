@@ -31,16 +31,19 @@ export function setInnerText({ domTextEditor, target, value, start, end }) {
 	updateDomText({ domTextEditor, target, value, pos: {start, end} });
 }
 
-export function setClass({ domTextEditor, target, classname }) {
-	updateDomText({ domTextEditor, target, attribute: 'class', value: classname });
+export function setClass({ domTextEditor, target, value }) {
+	updateDomText({ domTextEditor, target, attribute: 'class', value });
+}
+export function removeClass({ domTextEditor, target, value }) {
+	updateDomText({ domTextEditor, target, attribute: 'class', value, remove: true });
 }
 
-export function setClassStyle({ domTextEditor, target, classname, value, unit }) {
-	updateDomText({ domTextEditor, target, attribute: 'class', value: `${classname}:${value}${unit}` });
+export function setStyle({ domTextEditor, target, property, value }) {
+	updateDomText({ domTextEditor, target, attribute: 'style', property, value });
 }
 
-export function setStyle({ domTextEditor, target, styleName }) {
-	updateDomText({ domTextEditor, target, attribute: 'style', value: styleName });
+export function removeStyle({ domTextEditor, target, property }) {
+	updateDomText({ domTextEditor, target, attribute: 'style', property, remove: true });
 }
 
 export function setAttribute({ domTextEditor, target, name, value }) {
@@ -48,22 +51,22 @@ export function setAttribute({ domTextEditor, target, name, value }) {
 }
 
 export function removeAttribute({ domTextEditor, target, name }) {
-	updateDomText({ domTextEditor, target, attribute: name, removeAttribute: 'true'});
+	updateDomText({ domTextEditor, target, attribute: name, remove: 'true'});
 }
 
 export function replaceInnerText({ domTextEditor, target, value }) {
 	updateDomText({ domTextEditor, target, value });
 }
 
-export function updateDomText({ domTextEditor, target, position, element, elementValue, attribute, value, pos, removeAttribute }) {
-	let	{start, end, newValue} = getStringPosition({ string: domTextEditor.htmlString, target, attribute, value });
+export function updateDomText({ domTextEditor, target, position, element, elementValue, attribute, value, property, pos, remove }) {
+	let	{start, end, newValue} = getStringPosition({ string: domTextEditor.htmlString, target, attribute, property, value, remove });
 	if (pos){
 		start += pos.start;
 		end += pos.end;
 	}
 	if(start != end)
 		_updateText({domTextEditor, start, end});
-	if(attribute && removeAttribute != 'true')
+	if(attribute && remove != 'true' || attribute && value)
 		_updateText({ domTextEditor, value: ` ${attribute}="${newValue}"`, start });
 	else if(value)
 		_updateText({ domTextEditor, value, start });
