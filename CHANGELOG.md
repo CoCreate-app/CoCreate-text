@@ -1,3 +1,10 @@
+## [1.15.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.0...v1.15.1) (2022-01-23)
+
+
+### Bug Fixes
+
+* return if name == _id ([5bd2ce1](https://github.com/CoCreate-app/CoCreate-text/commit/5bd2ce1a21c639f870cbab70288963c126a0ac42))
+
 # [1.15.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.14.9...v1.15.0) (2022-01-22)
 
 
