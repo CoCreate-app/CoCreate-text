@@ -28,7 +28,7 @@ function initElements (elements) {
 function initElement (element) {
     const { collection, document_id, name, isRealtime, isCrdt, isCrud, isSave, isRead } = crud.getAttr(element);
     if(document_id == "pending") return;
-    if(isCrdt == "false" || isRealtime == "false" || element.type == 'number') return;
+    if(isCrdt == "false" || isRealtime == "false" || element.type == 'number' || name == '_id') return;
     if(!crud.checkAttrValue(collection) || !crud.checkAttrValue(document_id)) return;
     if(element.tagName === "INPUT" && ["text", "email", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA" || element.hasAttribute('contenteditable')) {
         if(!collection || !document_id || !name) return;
