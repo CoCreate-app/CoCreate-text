@@ -1,3 +1,10 @@
+## [1.15.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.1...v1.15.2) (2022-01-31)
+
+
+### Bug Fixes
+
+* use string param provided by crdt-update event ([6c05759](https://github.com/CoCreate-app/CoCreate-text/commit/6c05759ac0dd45e5c8123324192d5993ae25b05c))
+
 ## [1.15.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.0...v1.15.1) (2022-01-23)
 
 
