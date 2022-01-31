@@ -279,7 +279,7 @@ function _crdtUpdateListener () {
     });
 }
 
-function updateElements({elements, collection, document_id, name, value, start, length}){
+function updateElements({elements, collection, document_id, name, value, start, length, string}){
     if(!elements){
         let selectors = `[collection='${collection}'][document_id='${document_id}'][name='${name}']`;
         elements = document.querySelectorAll(`input${selectors}, textarea${selectors}, [contenteditable]${selectors}, [editor='dom']${selectors}`);
@@ -292,11 +292,11 @@ function updateElements({elements, collection, document_id, name, value, start, 
             // let isEditable = element.getAttribute('contenteditable');
         if (!element.hasAttribute('contenteditable') && isCrdt == 'false') return;
 
-        updateElement({element, collection, document_id, name, value, start, length});
+        updateElement({element, collection, document_id, name, value, start, length, string});
     });
 }
 
-async function updateElement ({element, collection, document_id, name, value, start, length }) {
+async function updateElement ({element, collection, document_id, name, value, start, length, string }) {
     if (element.tagName == 'IFRAME') {
         element = element.contentDocument.documentElement;
         if (element.contenteditable != 'false')
@@ -313,14 +313,15 @@ async function updateElement ({element, collection, document_id, name, value, st
         } 
         else {
 			let domTextEditor = element;
-            let html = await crdt.getText({collection, document_id, name});
+            if (string == undefined)
+                string = await crdt.getText({collection, document_id, name});
+            let html = string;
 			if (length) {
                 let end = start + length;
 				updateDom({ domTextEditor, start, end, html });
 			}
 			if (value) {
 			    if (element.innerHTML != value) {
-				// 	domTextEditor.htmlString = html;
 					updateDom({ domTextEditor, value, start, end: start, html });
 			    }
 			}
