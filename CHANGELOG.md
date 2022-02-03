@@ -1,3 +1,10 @@
+## [1.15.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.3...v1.15.4) (2022-02-03)
+
+
+### Bug Fixes
+
+* replaced show and hide class hidden with attribute hidden ([1249d5d](https://github.com/CoCreate-app/CoCreate-text/commit/1249d5d188f285db365f6bc31e8fedf2dfee263b))
+
 ## [1.15.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.2...v1.15.3) (2022-02-01)
 
 
