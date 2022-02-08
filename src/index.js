@@ -47,6 +47,8 @@ function initElement (element) {
         element.setAttribute('crdt', 'true');
         element.crdt = {init: true};
         crdt.getText({ collection, document_id, name, crud: isCrud, save: isSave, read: isRead }).then(response => {
+            if(response === undefined) 
+                return;
             if (!response){
                 let value;
                 if (element.hasAttribute('contenteditable')){
