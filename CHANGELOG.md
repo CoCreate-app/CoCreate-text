@@ -1,3 +1,11 @@
+## [1.15.6](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.5...v1.15.6) (2022-02-08)
+
+
+### Bug Fixes
+
+* updated crdt dependency ([5855a68](https://github.com/CoCreate-app/CoCreate-text/commit/5855a68d664d157d5548c8067abd1e95dd5b9a93))
+* value duplication resolved ([11727ae](https://github.com/CoCreate-app/CoCreate-text/commit/11727ae539988db062136fbd8bcf05619dd818d2))
+
 ## [1.15.5](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.4...v1.15.5) (2022-02-07)
 
 
