@@ -24,7 +24,7 @@ function save(btn){
 }
 
 action.init({
-	action: "saveDomText",
+	name: "saveDomText",
 	endEvent: "savedDomText",
 	callback: (btn, data) => {
 		save(btn);
