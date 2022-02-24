@@ -1,3 +1,10 @@
+## [1.15.10](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.9...v1.15.10) (2022-02-24)
+
+
+### Bug Fixes
+
+* CoCreate.config replace CoCreate.app with * ([0f6dedb](https://github.com/CoCreate-app/CoCreate-text/commit/0f6dedba0f88a05e82b3683e92834519bc395b98))
+
 ## [1.15.9](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.8...v1.15.9) (2022-02-16)
 
 
