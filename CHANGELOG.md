@@ -1,3 +1,10 @@
+## [1.15.11](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.10...v1.15.11) (2022-03-07)
+
+
+### Bug Fixes
+
+* if crdt=false return before event prevent default for crud ([342411c](https://github.com/CoCreate-app/CoCreate-text/commit/342411c4ec654b554e9d92e071a932d1155cec09))
+
 ## [1.15.10](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.9...v1.15.10) (2022-02-24)
 
 
