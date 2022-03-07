@@ -138,6 +138,8 @@ function _blur (event) {
 
 function _cut (event) {
     let element = event.currentTarget;
+    if (element.getAttribute('crdt') == 'false')
+        return;
     const { start, end, range } = getSelection(element);
     const selection = document.getSelection();
     console.log(selection.toString());
@@ -159,6 +161,8 @@ function _cut (event) {
 
 function _paste (event) {
     let element = event.currentTarget;
+    if (element.getAttribute('crdt') == 'false')
+        return;
     let value = event.clipboardData.getData('Text');
     const { start, end, range } = getSelection(element);
     if(start != end) {
@@ -171,6 +175,8 @@ function _paste (event) {
 function _keydown (event) {
     if(event.stopCCText) return;
     let element = event.currentTarget;
+    if (element.getAttribute('crdt') == 'false')
+        return;
     const { start, end, range } = getSelection(element);
     if(event.key == "Backspace" || event.key == "Tab" || event.key == "Enter") {
         eventObj = event;
@@ -200,6 +206,8 @@ function _keydown (event) {
 function _beforeinput (event) {
     if(event.stopCCText) return;
     let element = event.currentTarget;
+    if (element.getAttribute('crdt') == 'false')
+        return;
     let { start, end, range } = getSelection(element);
     if (event.data) {
         if(start != end) {
@@ -258,7 +266,7 @@ function updateText ({element, value, start, end, range}) {
             element = element.ownerDocument.defaultView.frameElement;
     }
     const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(element);
-    if(isCrdt == "false") return;
+    if (isCrdt == "false") return;
     
     let length = end - start;
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
