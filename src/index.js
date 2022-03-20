@@ -27,11 +27,11 @@ function initElements (elements) {
 
 function initElement (element) {
     const { collection, document_id, name, isRealtime, isCrdt, isCrud, isSave, isRead } = crud.getAttr(element);
-    if(document_id == "pending") return;
-    if(isCrdt == "false" || isRealtime == "false" || element.type == 'number' || name == '_id') return;
-    if(!crud.checkAttrValue(collection) || !crud.checkAttrValue(document_id)) return;
-    if(element.tagName === "INPUT" && ["text", "email", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA" || element.hasAttribute('contenteditable')) {
-        if(!collection || !document_id || !name) return;
+    if (document_id == "pending") return;
+    if (isCrdt == "false" || isRealtime == "false" || element.type == 'number' || name == '_id') return;
+    if (!crud.checkAttrValue(collection) || !crud.checkAttrValue(document_id)) return;
+    if (element.tagName === "INPUT" && ["text", "email", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA" || element.hasAttribute('contenteditable')) {
+        if (!collection || !document_id || !name) return;
 
         if (!isCrdt) {
             if (element.tagName == 'IFRAME'){
@@ -47,7 +47,7 @@ function initElement (element) {
         element.setAttribute('crdt', 'true');
         element.crdt = {init: true};
         crdt.getText({ collection, document_id, name, crud: isCrud, save: isSave, read: isRead }).then(response => {
-            if(response === undefined) 
+            if (response === undefined) 
                 return;
             if (!response){
                 let value;
@@ -111,9 +111,9 @@ function _mousedown (event) {
     let target = event.target;
     // const path = event.path || (event.composedPath && event.composedPath());
     // console.log(path)
-	if(!target.id){
+	if (!target.id){
 	    let eid = target.getAttribute('eid');
-		if(!eid){
+		if (!eid){
 			eid = uuid.generate(6);
             setAttribute({ domTextEditor, target, name: 'eid', value: eid });
 		}
@@ -153,7 +153,7 @@ function _cut (event) {
           /* clipboard write failed */
         });
     }
-    if(start != end) {
+    if (start != end) {
         updateText({element, start, end, range});
     }
     event.preventDefault();
@@ -165,7 +165,7 @@ function _paste (event) {
         return;
     let value = event.clipboardData.getData('text/plain').replace(/(\r\n|\r)/gm, "\n");;
     const { start, end, range } = getSelection(element);
-    if(start != end) {
+    if (start != end) {
         updateText({element, start, end, range});
     }
     updateText({element, value, start, range});
@@ -173,24 +173,24 @@ function _paste (event) {
 }
 
 function _keydown (event) {
-    if(event.stopCCText) return;
+    if (event.stopCCText) return;
     let element = event.currentTarget;
     if (element.getAttribute('crdt') == 'false')
         return;
     const { start, end, range } = getSelection(element);
-    if(event.key == "Backspace" || event.key == "Tab" || event.key == "Enter") {
+    if (event.key == "Backspace" || event.key == "Tab" || event.key == "Enter") {
         eventObj = event;
-        if(start != end) {
+        if (start != end) {
             updateText({element, start, end, range});
         }
         
-        if(event.key == "Backspace" && start == end) {
+        if (event.key == "Backspace" && start == end) {
             updateText({element, start: start - 1, end, range});
         }
-        else if(event.key == 'Tab') {
+        else if (event.key == 'Tab') {
             updateText({element, value: "\t", start, range});
         }
-        else if(event.key == "Enter") {
+        else if (event.key == "Enter") {
             updateText({element, value: "\n", start, range});
         }
         event.preventDefault();
@@ -204,13 +204,13 @@ function _keydown (event) {
 }
 
 function _beforeinput (event) {
-    if(event.stopCCText) return;
+    if (event.stopCCText) return;
     let element = event.currentTarget;
     if (element.getAttribute('crdt') == 'false')
         return;
     let { start, end, range } = getSelection(element);
     if (event.data) {
-        if(start != end) {
+        if (start != end) {
             updateText({element, start, end, range});
         }
         eventObj = event;
@@ -220,7 +220,7 @@ function _beforeinput (event) {
 }
 
 function _input (event) {
-    if(event.stopCCText) return;
+    if (event.stopCCText) return;
     if (event.data) {
         eventObj = event;
     }
@@ -238,7 +238,7 @@ let previousPosition = {};
 export function sendPosition (element) {
     // if (!element) return;
     const { start, end, range } = getSelection(element);
-    if(range) {
+    if (range) {
         if (range.element){
             element = range.element;
         }
@@ -258,7 +258,7 @@ export function sendPosition (element) {
 }
 
 function updateText ({element, value, start, end, range}) {
-    if(range) {
+    if (range) {
         if (range.element)
             element = range.element;
         
@@ -290,15 +290,15 @@ function _crdtUpdateListener () {
 }
 
 function updateElements({elements, collection, document_id, name, value, start, length, string}){
-    if(!elements){
+    if (!elements){
         let selectors = `[collection='${collection}'][document_id='${document_id}'][name='${name}']`;
         elements = document.querySelectorAll(`input${selectors}, textarea${selectors}, [contenteditable]${selectors}, [editor='dom']${selectors}`);
     }
     
     elements.forEach((element) => {
         let isCrdt = element.getAttribute('crdt');
-        // if(isCrdt == 'false' && !element.hasAttribute('crdt') && !element.contentEditable) return;
-        // if(element.hasAttribute('contenteditable')){
+        // if (isCrdt == 'false' && !element.hasAttribute('crdt') && !element.contentEditable) return;
+        // if (element.hasAttribute('contenteditable')){
             // let isEditable = element.getAttribute('contenteditable');
         if (!element.hasAttribute('contenteditable') && isCrdt == 'false') return;
 
@@ -312,12 +312,12 @@ async function updateElement ({element, collection, document_id, name, value, st
         if (element.contenteditable != 'false')
             element.contentEditable = true;
     }
-    if(value || length) {
+    if (value || length) {
         if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-            if(length) {
+            if (length) {
                 _updateElementText(element, "", start, start + length);
             }
-            if(value) {
+            if (value) {
                 _updateElementText(element, value, start, start);
             }
         } 
@@ -346,14 +346,14 @@ function _updateElementText (element, value, start, end) {
     let activeElement = element.ownerDocument.activeElement;
     element.setRangeText(value, start, end, "end");
 	let p = processSelection(element, value, prev_start, prev_end, start, end);
-	if(activeElement == element)
+	if (activeElement == element)
 	    sendPosition(element);
 	_dispatchInputEvent(element, p.value, p.start, p.end, p.prev_start, p.prev_end);
 }
 
 export function _dispatchInputEvent(element, content, start, end, prev_start, prev_end) {
     let detail = {value: content, start, end, prev_start, prev_end, skip: true};
-    if(eventObj) {
+    if (eventObj) {
         let event = new CustomEvent(eventObj.type, { bubbles: true });
         Object.defineProperty(event, 'stopCCText', { writable: false, value: true });
         Object.defineProperty(event, 'target', { writable: false, value: element });
