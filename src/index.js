@@ -164,7 +164,6 @@ function _paste (event) {
     if (element.getAttribute('crdt') == 'false')
         return;
     let value = event.clipboardData.getData('text/plain').replace(/(\r\n|\r)/gm, "\n");;
-    value = `${value}`
     const { start, end, range } = getSelection(element);
     if(start != end) {
         updateText({element, start, end, range});
