@@ -1,3 +1,10 @@
+## [1.15.12](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.11...v1.15.12) (2022-03-21)
+
+
+### Bug Fixes
+
+* string formating differs between various OS \r\n and  \r are replaced with \n ([87b0183](https://github.com/CoCreate-app/CoCreate-text/commit/87b018354240d6f25b57fb9fc272f52103c4072c))
+
 ## [1.15.11](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.10...v1.15.11) (2022-03-07)
 
 
