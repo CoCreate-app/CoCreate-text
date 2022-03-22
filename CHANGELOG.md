@@ -1,3 +1,10 @@
+## [1.15.13](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.12...v1.15.13) (2022-03-22)
+
+
+### Bug Fixes
+
+* removed emit from message.send and message.listen ([b672bb5](https://github.com/CoCreate-app/CoCreate-text/commit/b672bb57ee7005a0d1933bd014c079a6faa96cbd))
+
 ## [1.15.12](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.11...v1.15.12) (2022-03-21)
 
 
