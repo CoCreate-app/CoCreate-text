@@ -112,11 +112,14 @@ function _mousedown (event) {
     // const path = event.path || (event.composedPath && event.composedPath());
     // console.log(path)
 	if (!target.id){
-	    let eid = target.getAttribute('eid');
-		if (!eid){
-			eid = uuid.generate(6);
-            setAttribute({ domTextEditor, target, name: 'eid', value: eid });
-		}
+        let isEid = domTextEditor.getAttribute('eid');
+		if (isEid != 'false' && isEid != null && isEid != undefined){
+            let eid = target.getAttribute('eid');
+            if (!eid){
+                eid = uuid.generate(6);
+                setAttribute({ domTextEditor, target, name: 'eid', value: eid });
+            }
+        }
 	}
 	let contentEditable = target.closest('[collection][document_id][name]');
 	if (contentEditable){
@@ -308,7 +311,10 @@ function updateElements({elements, collection, document_id, name, value, start, 
 
 async function updateElement ({element, collection, document_id, name, value, start, length, string }) {
     if (element.tagName == 'IFRAME') {
+        let eid = element.getAttribute('eid')
         element = element.contentDocument.documentElement;
+        if (eid != 'false' && eid != null && eid != undefined)
+            element.setAttribute('eid', eid)
         if (element.contenteditable != 'false')
             element.contentEditable = true;
     }
