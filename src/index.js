@@ -257,6 +257,7 @@ export function sendPosition (element) {
         return;
     previousPosition = currentPosition;
     element.activeElement = element;
+    window.activeElement = element;
     cursors.sendPosition({ collection, document_id, name, start, end });
 }
 
