@@ -1,3 +1,10 @@
+## [1.15.14](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.13...v1.15.14) (2022-04-30)
+
+
+### Bug Fixes
+
+* activeCursor element defined on window object ([88e4575](https://github.com/CoCreate-app/CoCreate-text/commit/88e457592fac304ffd02e56c491688d598838e6f))
+
 ## [1.15.13](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.12...v1.15.13) (2022-03-22)
 
 
