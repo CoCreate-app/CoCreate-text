@@ -1,3 +1,10 @@
+## [1.15.15](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.14...v1.15.15) (2022-05-06)
+
+
+### Bug Fixes
+
+* update config organization_Id to organization_id ([4c363f2](https://github.com/CoCreate-app/CoCreate-text/commit/4c363f2c0709082f85a59b514ca57fcbb0d19627))
+
 ## [1.15.14](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.13...v1.15.14) (2022-04-30)
 
 
