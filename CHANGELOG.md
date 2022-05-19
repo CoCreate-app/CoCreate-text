@@ -1,3 +1,10 @@
+## [1.15.16](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.15...v1.15.16) (2022-05-19)
+
+
+### Bug Fixes
+
+* update document_id on link index.css ([6b65da1](https://github.com/CoCreate-app/CoCreate-text/commit/6b65da1be856e5f30d3adda18a2406ee8f505c97))
+
 ## [1.15.15](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.14...v1.15.15) (2022-05-06)
 
 
