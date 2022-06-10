@@ -199,10 +199,15 @@ function _keydown (event) {
         event.preventDefault();
     }
     else if (event.ctrlKey) {
-        if (event.keyCode == 90) 
+        const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(element);
+        if (event.keyCode == 90) {
+            crdt.undoText({ collection, document_id, name })
             console.log('Undo');
-        else if (event.keyCode == 89) 
+        }
+        else if (event.keyCode == 89) {
+            crdt.redoText({ collection, document_id, name })
             console.log('Redo');
+        }
     }
 }
 
@@ -259,6 +264,11 @@ export function sendPosition (element) {
     element.activeElement = element;
     window.activeElement = element;
     cursors.sendPosition({ collection, document_id, name, start, end });
+}
+
+function undoRedo ({element, type}) {
+    const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(element);
+
 }
 
 function updateText ({element, value, start, end, range}) {
