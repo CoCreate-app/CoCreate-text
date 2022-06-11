@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.17...v1.16.0) (2022-06-11)
+
+
+### Features
+
+* undo and redo text ([fb9292e](https://github.com/CoCreate-app/CoCreate-text/commit/fb9292e74dde4b02e5dc977b1afecebb7bc33e73))
+
 ## [1.15.17](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.16...v1.15.17) (2022-05-23)
 
 
