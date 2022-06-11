@@ -7,6 +7,7 @@ import uuid from '@cocreate/uuid';
 import {updateDom} from './updateDom';
 import {insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, setClassStyle, replaceInnerText} from './updateText';
 import {getSelection, processSelection} from '@cocreate/selection';
+import action from '@cocreate/actions';
 import './saveDomText';
 
 let eventObj;
@@ -85,15 +86,8 @@ function initDocument(doc) {
             let element = doc.activeElement;
             sendPosition(element);
         }); 
-        // doc.removeEventListener('selectionchange', _selectionchange);
-        // doc.addEventListener('selectionchange', _selectionchange)
     }
 }
-
-// function _selectionchange(event){
-//     let element = event.currentTarget.activeElement;
-//     sendPosition(element);
-// }
 
 export function _addEventListeners (element) {
     element.addEventListener('mousedown', _mousedown);
@@ -201,12 +195,10 @@ function _keydown (event) {
     else if (event.ctrlKey) {
         const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(element);
         if (event.keyCode == 90) {
-            crdt.undoText({ collection, document_id, name })
-            console.log('Undo');
+            crdt.undoText({ collection, document_id, name, isCrud, isCrdt, isSave })
         }
         else if (event.keyCode == 89) {
-            crdt.redoText({ collection, document_id, name })
-            console.log('Redo');
+            crdt.redoText({ collection, document_id, name, isCrud, isCrdt, isSave })
         }
     }
 }
@@ -266,11 +258,6 @@ export function sendPosition (element) {
     cursors.sendPosition({ collection, document_id, name, start, end });
 }
 
-function undoRedo ({element, type}) {
-    const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(element);
-
-}
-
 function updateText ({element, value, start, end, range}) {
     if (range) {
         if (range.element)
@@ -311,9 +298,6 @@ function updateElements({elements, collection, document_id, name, value, start, 
     
     elements.forEach((element) => {
         let isCrdt = element.getAttribute('crdt');
-        // if (isCrdt == 'false' && !element.hasAttribute('crdt') && !element.contentEditable) return;
-        // if (element.hasAttribute('contenteditable')){
-            // let isEditable = element.getAttribute('contenteditable');
         if (!element.hasAttribute('contenteditable') && isCrdt == 'false') return;
 
         updateElement({element, collection, document_id, name, value, start, length, string});
@@ -403,6 +387,24 @@ observer.init({
     callback (mutation) {
         initElement(mutation.target);
     }
+});
+
+action.init({
+	name: "undo",
+	endEvent: "undo",
+	callback: (btn, data) => {
+        const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(btn);
+        crdt.undoText({ collection, document_id, name, isCrud, isCrdt, isSave })
+	}
+});
+
+action.init({
+	name: "redo",
+	endEvent: "redo",
+	callback: (btn, data) => {
+        const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(btn);
+        crdt.redoText({ collection, document_id, name, isCrud, isCrdt, isSave })
+	}
 });
 
 init();

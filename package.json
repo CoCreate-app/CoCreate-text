@@ -61,7 +61,7 @@
     "webpack-log": "^3.0.1"
   },
   "dependencies": {
-    "@cocreate/actions": "^1.4.1",
+    "@cocreate/actions": "^1.4.2",
     "@cocreate/crdt": "^1.10.0",
     "@cocreate/crud-client": "^1.6.2",
     "@cocreate/cursors": "^1.11.19",
