@@ -1,3 +1,11 @@
+## [1.16.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.16.0...v1.16.1) (2022-06-12)
+
+
+### Bug Fixes
+
+* update dependencies ([91842bc](https://github.com/CoCreate-app/CoCreate-text/commit/91842bcba271485f840064498784250fdf49bfab))
+* update docs css document_id ([8a48ea0](https://github.com/CoCreate-app/CoCreate-text/commit/8a48ea0745c36f4f8a5954fe76252e98864ebfdf))
+
 # [1.16.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.15.17...v1.16.0) (2022-06-11)
 
 
