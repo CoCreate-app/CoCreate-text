@@ -1,3 +1,10 @@
+## [1.16.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.16.1...v1.16.2) (2022-06-13)
+
+
+### Bug Fixes
+
+* updateElementText if input ant type = text,tel, url ([7eabd9a](https://github.com/CoCreate-app/CoCreate-text/commit/7eabd9acf331ed5012e49a519a9270dd59c2d3bf))
+
 ## [1.16.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.16.0...v1.16.1) (2022-06-12)
 
 
