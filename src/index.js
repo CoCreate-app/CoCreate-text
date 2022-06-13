@@ -31,7 +31,7 @@ function initElement (element) {
     if (document_id == "pending") return;
     if (isCrdt == "false" || isRealtime == "false" || element.type == 'number' || name == '_id') return;
     if (!crud.checkAttrValue(collection) || !crud.checkAttrValue(document_id)) return;
-    if (element.tagName === "INPUT" && ["text", "email", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA" || element.hasAttribute('contenteditable')) {
+    if (element.tagName === "INPUT" && ["text", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA" || element.hasAttribute('contenteditable')) {
         if (!collection || !document_id || !name) return;
 
         if (!isCrdt) {
@@ -341,15 +341,16 @@ async function updateElement ({element, collection, document_id, name, value, st
 }
 
 function _updateElementText (element, value, start, end) {
-    if (element.tagName == 'HTML' || element.type == 'number') return;
-    let prev_start = element.selectionStart;
-    let prev_end = element.selectionEnd;
-    let activeElement = element.ownerDocument.activeElement;
-    element.setRangeText(value, start, end, "end");
-	let p = processSelection(element, value, prev_start, prev_end, start, end);
-	if (activeElement == element)
-	    sendPosition(element);
-	_dispatchInputEvent(element, p.value, p.start, p.end, p.prev_start, p.prev_end);
+    if (element.tagName === "INPUT" && ["text", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA") {
+        let prev_start = element.selectionStart;
+        let prev_end = element.selectionEnd;
+        let activeElement = element.ownerDocument.activeElement;
+        element.setRangeText(value, start, end, "end");
+        let p = processSelection(element, value, prev_start, prev_end, start, end);
+        if (activeElement == element)
+            sendPosition(element);
+        _dispatchInputEvent(element, p.value, p.start, p.end, p.prev_start, p.prev_end);
+    }
 }
 
 export function _dispatchInputEvent(element, content, start, end, prev_start, prev_end) {
