@@ -193,12 +193,11 @@ function _keydown (event) {
         event.preventDefault();
     }
     else if (event.ctrlKey) {
-        const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(element);
         if (event.keyCode == 90) {
-            crdt.undoText({ collection, document_id, name, isCrud, isCrdt, isSave })
+            updateText({element, range, undoRedo: 'undo'});
         }
         else if (event.keyCode == 89) {
-            crdt.redoText({ collection, document_id, name, isCrud, isCrdt, isSave })
+            updateText({element, range, undoRedo: 'redo'});
         }
     }
 }
@@ -258,7 +257,7 @@ export function sendPosition (element) {
     cursors.sendPosition({ collection, document_id, name, start, end });
 }
 
-function updateText ({element, value, start, end, range}) {
+function updateText ({element, value, start, end, range, undoRedo}) {
     if (range) {
         if (range.element)
             element = range.element;
@@ -269,6 +268,11 @@ function updateText ({element, value, start, end, range}) {
     const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(element);
     if (isCrdt == "false") return;
     
+    if (undoRedo == 'undo')
+        return crdt.undoText({ collection, document_id, name, isCrud, isCrdt, isSave })
+    if (undoRedo == 'redo')
+        return crdt.redoText({ collection, document_id, name, isCrud, isCrdt, isSave })
+
     let length = end - start;
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
         crdt.updateText({ collection, document_id, name, value, start, length, crud: isCrud, save: isSave });
