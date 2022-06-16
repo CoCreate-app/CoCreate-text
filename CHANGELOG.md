@@ -1,3 +1,10 @@
+## [1.16.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.16.2...v1.16.3) (2022-06-16)
+
+
+### Bug Fixes
+
+* when iframe need to get iframe elements attributes to send to crdt undo and redo ([ddfc15e](https://github.com/CoCreate-app/CoCreate-text/commit/ddfc15e1184ff7adf4bfabb9a7d147a531b645d6))
+
 ## [1.16.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.16.1...v1.16.2) (2022-06-13)
 
 
