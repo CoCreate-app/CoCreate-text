@@ -359,6 +359,9 @@ function _updateElementText (element, value, start, end) {
 
 export function _dispatchInputEvent(element, content, start, end, prev_start, prev_end) {
     let detail = {value: content, start, end, prev_start, prev_end, skip: true};
+    let activeElement = element.ownerDocument.activeElement;
+    if (activeElement == element)
+        detail.skip = false;
     if (eventObj) {
         let event = new CustomEvent(eventObj.type, { bubbles: true });
         Object.defineProperty(event, 'stopCCText', { writable: false, value: true });
