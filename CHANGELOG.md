@@ -1,3 +1,10 @@
+## [1.16.5](https://github.com/CoCreate-app/CoCreate-text/compare/v1.16.4...v1.16.5) (2022-06-22)
+
+
+### Bug Fixes
+
+* ifactiveElement  inputEvent skip = false ([0b61519](https://github.com/CoCreate-app/CoCreate-text/commit/0b61519e2bd9592502ebb7a2ba88b71a16e11e55))
+
 ## [1.16.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.16.3...v1.16.4) (2022-06-18)
 
 
