@@ -1,3 +1,15 @@
+# [1.17.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.16.5...v1.17.0) (2022-06-23)
+
+
+### Bug Fixes
+
+* try to update parent element of previous element rather then html tag ([37ab36c](https://github.com/CoCreate-app/CoCreate-text/commit/37ab36ce79fa270b3a43daaf14597e765f42e371))
+
+
+### Features
+
+* if newEl can not be found using path, update path to query parent element ([2c637f1](https://github.com/CoCreate-app/CoCreate-text/commit/2c637f1e0c3d15f00d1664c4d744d4ee9c4581c6))
+
 ## [1.16.5](https://github.com/CoCreate-app/CoCreate-text/compare/v1.16.4...v1.16.5) (2022-06-22)
 
 
