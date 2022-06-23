@@ -2,6 +2,7 @@ import {sendPosition, _dispatchInputEvent} from './index';
 import {getSelection, processSelection, getElementPosition} from '@cocreate/selection';
 import {domParser} from '@cocreate/utils';
 
+let lastChange;
 export function updateDom({domTextEditor, value, start, end, html}) {
 	if (!domTextEditor.htmlString)
 		domTextEditor.htmlString = html;
@@ -11,14 +12,19 @@ export function updateDom({domTextEditor, value, start, end, html}) {
     let {element, path, position, type} = getElementPosition(domTextEditor.htmlString, start, end);
 		parseHtml(domTextEditor, html);
 		
-	let domEl, oldEl, curCaret;
-	let newEl = domTextEditor.newHtml.querySelector(path);
+	let domEl, oldEl, curCaret, newEl;
+	try {
+		newEl = domTextEditor.newHtml.querySelector(path);
+	} catch(err) {
+		console.log('error', err)
+	}
 	if(!newEl){
 		newEl = domTextEditor.cloneNode(true);
 		if (html != undefined)
 			newEl.innerHTML = html;
 		else
 			newEl.innerHTML = domTextEditor.htmlString;
+		// ToDo: check prevous position and new postion if with in range use previous parent element
 		domEl = domTextEditor;
 		type = 'innerHTML';
 	}
@@ -39,47 +45,73 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 			}
 		}
 	}
+	 try {
+		let activeElement = domEl.ownerDocument.activeElement;
+		if (activeElement == domEl)
+			curCaret = getSelection(activeElement);
+		else if (activeElement.tagName == 'BODY')
+			curCaret = getSelection(domEl);
+		else
+			curCaret = getSelection(activeElement);
+	} catch(err){
+		console.log('curCaret', err)
+	}
 
-	let activeElement = domEl.ownerDocument.activeElement;
-	if (activeElement == domEl)
-		curCaret = getSelection(activeElement);
-	else if (activeElement.tagName == 'BODY')
-		curCaret = getSelection(domEl);
-	else
-		curCaret = getSelection(activeElement);
-		
 	if (!value && type != 'isStartTag' && type != 'textNode'){
 		type = 'innerHTML';
 	}
 	
 	if(domEl && newEl) {
+		lastChange = {
+			domEl: domEl.parentElement || domEl,
+			newEl: domEl.parentElement || newEl,
+			start,
+			end
+		}
+		if (domEl.nodeType == 3 && newEl.nodeType == 1){
+			console.log('nodeTypes', domEl, newEl)
+		}
+
 		if(start != end && type == 'innerHTML') {
 			domTextEditor.htmlString = html;
 			if (domEl.tagName != 'HTML'){
-				if (newEl.parentElement)
+				if (newEl.parentElement) {
 					domEl.parentElement.replaceChildren(...newEl.parentElement.childNodes);
-				else
+					console.log('parent', domEl.parentElement)
+				} else {
 					domEl.replaceChildren(...newEl.childNodes);
+					console.log('domEl', domEl)
+				}
 			}
-			else
+			else {
 				domEl.replaceChildren(...newEl.childNodes);	
+				console.log('Html tag', domEl)
+			}
 			// domEl = newEl;
 			if (curCaret && curCaret.range) {
 				curCaret.range.startContainer = domEl;
 				curCaret.range.endContainer = domEl;
 			}
 		}
-		else if (type == 'isStartTag')
+		else if (type == 'isStartTag') {
 			assignAttributes(newEl, oldEl, domEl);
-		else if (type == 'insertAdjacent')
+			console.log('isStartTag', domEl, newEl)
+
+		}
+		else if (type == 'insertAdjacent') {
 			domEl.insertAdjacentHTML(position, value);
+			console.log('insertAdjacent', domEl, value)
+		}
 		else if (type == 'textNode'){
 			if(start != end)
 				domTextEditor.htmlString = html;
 			domEl.innerHTML = newEl.innerHTML;
+			console.log('textnode', domEl.innerHTML, newEl.innerHTML)
+
 		}
 		else if (type == 'innerHTML') {
 			domEl.replaceChildren(...newEl.childNodes);
+			console.log('innerHtml', domEl, newEl)
 		}
 		domTextEditor.htmlString = html;
 	}
