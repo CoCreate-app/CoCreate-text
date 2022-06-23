@@ -2,7 +2,7 @@ import {sendPosition, _dispatchInputEvent} from './index';
 import {getSelection, processSelection, getElementPosition} from '@cocreate/selection';
 import {domParser} from '@cocreate/utils';
 
-let lastChange;
+let updates = [];
 export function updateDom({domTextEditor, value, start, end, html}) {
 	if (!domTextEditor.htmlString)
 		domTextEditor.htmlString = html;
@@ -24,8 +24,9 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 			newEl.innerHTML = html;
 		else
 			newEl.innerHTML = domTextEditor.htmlString;
-		// ToDo: check prevous position and new postion if with in range use previous parent element
+		// ToDo: check prevous position and new postion if with in range use previous parent element		
 		domEl = domTextEditor;
+
 		type = 'innerHTML';
 	}
 	else if(element.tagName == 'HTML') {
@@ -45,7 +46,7 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 			}
 		}
 	}
-	 try {
+	try {
 		let activeElement = domEl.ownerDocument.activeElement;
 		if (activeElement == domEl)
 			curCaret = getSelection(activeElement);
@@ -62,12 +63,37 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 	}
 	
 	if(domEl && newEl) {
-		lastChange = {
+		let lastUpdate = updates[updates.length - 1];
+		let firstUpdate = updates[0];
+		let flag = false;
+		let update = {
 			domEl: domEl.parentElement || domEl,
 			newEl: domEl.parentElement || newEl,
 			start,
-			end
+			end,
+			path
 		}
+		if ((lastUpdate.end += 1) == start || (lastUpdate.start += 1) == start)
+			flag = true;
+		else if (start >= lastUpdate.start && start <= lastUpdate.end)
+			flag = true;
+		else if ((firstUpdate.end += 1) == start || (firstUpdate.start += 1) == start)
+			flag = true;
+		else if (start >= firstUpdate.start && start <= firstUpdate.end)
+			flag = true;
+		else {
+			updates = [];
+			updates.push(update)
+		}
+
+		if (flag && domEl.tagName == 'HTML') {
+			domEl = lastChange.domEl
+			update.domEl = domEl
+			
+		}
+		else if (flag && update.domEl == domEl.parentElement || update.domEl == domEl)
+			updates.push(update)
+
 		if (domEl.nodeType == 3 && newEl.nodeType == 1){
 			console.log('nodeTypes', domEl, newEl)
 		}
