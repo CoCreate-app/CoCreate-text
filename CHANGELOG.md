@@ -1,3 +1,10 @@
+## [1.17.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.0...v1.17.1) (2022-06-24)
+
+
+### Bug Fixes
+
+* imporved handeling of path fallback to html element if no matches amoung parentElements ([5c331d0](https://github.com/CoCreate-app/CoCreate-text/commit/5c331d0d32ffd60587f684b44e69766097193c33))
+
 # [1.17.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.16.5...v1.17.0) (2022-06-23)
 
 
