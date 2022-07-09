@@ -1,3 +1,10 @@
+## [1.17.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.1...v1.17.2) (2022-07-09)
+
+
+### Bug Fixes
+
+* updateDom will sendPosition if the currentContainer = domEl ([c1e9f56](https://github.com/CoCreate-app/CoCreate-text/commit/c1e9f56359c88dbff943c3b82d81746d30833fdb))
+
 ## [1.17.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.0...v1.17.1) (2022-06-24)
 
 
