@@ -147,11 +147,12 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 		domTextEditor.htmlString = html;
 
 		if(curCaret && start >= 0 && end >= 0) {
-			if (curCaret.range && curCaret.start >= curCaret.range.startOffset) {
-				let p = processSelection(domEl, value, curCaret.start, curCaret.end, start, end, curCaret.range);
-				sendPosition(domEl);
-				_dispatchInputEvent(p.element, p.value, p.start, p.end, p.prev_start, p.prev_end);
-			}
+			if (curCaret.range.startContainer == domEl)
+				if (curCaret.range && curCaret.start >= curCaret.range.startOffset) {
+					let p = processSelection(domEl, value, curCaret.start, curCaret.end, start, end, curCaret.range);
+					sendPosition(domEl);
+					_dispatchInputEvent(p.element, p.value, p.start, p.end, p.prev_start, p.prev_end);
+				}
 		}
 		
 		if (['HTML', 'HEAD', 'BODY', 'SCRIPT'].includes(newEl.tagName)){
