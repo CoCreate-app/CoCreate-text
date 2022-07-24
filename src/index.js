@@ -29,8 +29,15 @@ function initElements (elements) {
 function initElement (element) {
     const { collection, document_id, name, isRealtime, isCrdt, isCrud, isSave, isRead } = crud.getAttr(element);
     if (document_id == "pending") return;
-    if (isCrdt == "false" || isRealtime == "false" || element.type == 'number' || name == '_id') return;
-    if (!crud.checkAttrValue(collection) || !crud.checkAttrValue(document_id)) return;
+    if (['_id', 'organization_id'].includes(name))
+        return
+    if (isCrdt == "false" || isRealtime == "false" || element.type == 'number') 
+        return;
+    if (!crud.checkAttrValue(collection) || !crud.checkAttrValue(document_id)|| !crud.checkAttrValue(name)) 
+        return;
+    if(name && name.startsWith('$'))
+        return
+
     if (element.tagName === "INPUT" && ["text", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA" || element.hasAttribute('contenteditable')) {
         if (!collection || !document_id || !name) return;
 
