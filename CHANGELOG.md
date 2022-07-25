@@ -1,3 +1,10 @@
+## [1.17.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.2...v1.17.3) (2022-07-25)
+
+
+### Bug Fixes
+
+* if name includes_id, organization_id or beginswith $ return ([a7dbfeb](https://github.com/CoCreate-app/CoCreate-text/commit/a7dbfebda7eddaef5b0abe58c2e0615f2250b5d3))
+
 ## [1.17.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.1...v1.17.2) (2022-07-09)
 
 
