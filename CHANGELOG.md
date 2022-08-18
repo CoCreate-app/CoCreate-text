@@ -1,3 +1,10 @@
+## [1.17.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.3...v1.17.4) (2022-08-18)
+
+
+### Bug Fixes
+
+* if CurCaret.range ([a0a1678](https://github.com/CoCreate-app/CoCreate-text/commit/a0a1678236f1805ec246def322eedad4267ce498))
+
 ## [1.17.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.2...v1.17.3) (2022-07-25)
 
 
