@@ -4,19 +4,19 @@ import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
 
 function save(btn){
-	const { collection, document_id, name, namespace, room, isBroadcast, isBroadcastSender, isUpsert} = crud.getAttr(btn);
+	const { collection, document_id, name, namespace, room, broadcast, broadcastSender, isUpsert} = crud.getAttr(btn);
 	crdt.getText({collection, document_id, name}).then(response => {
 		crud.updateDocument({
-			collection: collection,
-			document_id: document_id,
+			collection,
+			document_id,
 			data: {
 				[name]: response
 			},
 			upsert: isUpsert,
-			namespace: namespace,
-			room: room,
-			broadcast: isBroadcast,
-			broadcast_sender: isBroadcastSender
+			namespace,
+			room,
+			broadcast,
+			broadcastSender
 		});
 		
 		document.dispatchEvent(new CustomEvent('savedDomText'));
