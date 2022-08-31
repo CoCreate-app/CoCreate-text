@@ -1,3 +1,10 @@
+## [1.17.5](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.4...v1.17.5) (2022-08-31)
+
+
+### Bug Fixes
+
+* rename variables isBroadcast and isBroadcastSender to broadcast and broadcastSender ([57bcc6f](https://github.com/CoCreate-app/CoCreate-text/commit/57bcc6fc40df63491d24565d987140f0a83593aa))
+
 ## [1.17.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.3...v1.17.4) (2022-08-18)
 
 
