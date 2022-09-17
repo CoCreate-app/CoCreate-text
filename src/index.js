@@ -5,7 +5,7 @@ import crdt from '@cocreate/crdt';
 import cursors from '@cocreate/cursors';
 import uuid from '@cocreate/uuid';
 import {updateDom} from './updateDom';
-import {insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, setClassStyle, replaceInnerText} from './updateText';
+import {insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, replaceInnerText} from './updateText';
 import {getSelection, processSelection} from '@cocreate/selection';
 import action from '@cocreate/actions';
 import './saveDomText';
@@ -424,4 +424,4 @@ action.init({
 
 init();
 
-export default {initElements, initElement, updateText, updateElement, _addEventListeners, insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, setClassStyle, replaceInnerText};
+export default {initElements, initElement, updateText, updateElement, _addEventListeners, insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, replaceInnerText};
