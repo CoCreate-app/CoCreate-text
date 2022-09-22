@@ -1,3 +1,10 @@
+## [1.17.7](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.6...v1.17.7) (2022-09-22)
+
+
+### Bug Fixes
+
+* removed setClassStyle ([972a5c7](https://github.com/CoCreate-app/CoCreate-text/commit/972a5c75b5df9d4f59dac9c0ee87184a84a8a5bc))
+
 ## [1.17.6](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.5...v1.17.6) (2022-09-01)
 
 
