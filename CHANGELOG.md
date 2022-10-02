@@ -1,3 +1,10 @@
+## [1.17.15](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.14...v1.17.15) (2022-10-02)
+
+
+### Bug Fixes
+
+* bump @cocreate/hosting and @cocreate/socket-client ([848f685](https://github.com/CoCreate-app/CoCreate-text/commit/848f685b8f23a803066b52c4453c026e5ff2e6dc))
+
 ## [1.17.14](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.13...v1.17.14) (2022-10-01)
 
 
