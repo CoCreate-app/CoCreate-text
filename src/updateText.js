@@ -1,7 +1,12 @@
-import crud from '@cocreate/crud-client';
+import CRUD from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
 import {getStringPosition} from '@cocreate/selection';
 
+let crud
+if(CRUD && CRUD.default)
+	crud = CRUD.default
+else
+	crud = CRUD
 
 export function insertAdjacentElement({ domTextEditor, target, position, element, elementValue }) {
 	let remove;

@@ -1,15 +1,21 @@
 /*globals CustomEvent*/
 import action from '@cocreate/actions';
-import crud from '@cocreate/crud-client';
+import CRUD from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
+
+let crud
+if(CRUD && CRUD.default)
+	crud = CRUD.default
+else
+	crud = CRUD
 
 function save(btn){
 	const { collection, document_id, name, namespace, room, broadcast, broadcastSender, isUpsert} = crud.getAttr(btn);
 	crdt.getText({collection, document_id, name}).then(response => {
 		crud.updateDocument({
 			collection,
-			document_id,
 			data: {
+				_id: document_id,
 				[name]: response
 			},
 			upsert: isUpsert,

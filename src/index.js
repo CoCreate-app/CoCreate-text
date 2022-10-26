@@ -1,6 +1,6 @@
 /*global CustomEvent, navigator*/
 import observer from '@cocreate/observer';
-import crud from '@cocreate/crud-client';
+import CRUD from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
 import cursors from '@cocreate/cursors';
 import uuid from '@cocreate/uuid';
@@ -9,6 +9,12 @@ import {insertAdjacentElement, removeElement, setInnerText, setAttribute, remove
 import {getSelection, processSelection} from '@cocreate/selection';
 import action from '@cocreate/actions';
 import './saveDomText';
+
+let crud
+if(CRUD && CRUD.default)
+	crud = CRUD.default
+else
+	crud = CRUD
 
 let eventObj;
 let selector = `[collection][document_id][name]`;
