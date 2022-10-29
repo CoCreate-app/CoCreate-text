@@ -14,7 +14,7 @@ function save(btn){
 	crdt.getText({collection, document_id, name}).then(response => {
 		crud.updateDocument({
 			collection,
-			data: {
+			document: {
 				_id: document_id,
 				[name]: response
 			},
