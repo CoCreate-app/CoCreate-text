@@ -33,19 +33,23 @@ function initElements (elements) {
 }
 
 function initElement (element) {
-    const { collection, document_id, name, isRealtime, isCrdt, isCrud, isSave, isRead } = crud.getAttr(element);
-    if (document_id == "pending") return;
+    let { collection, document_id, name, isRealtime, isCrdt, isCrud, isSave, isRead } = crud.getAttr(element);    
+    if (!collection || !document_id || !name)
+        return
+    if (document_id == 'pending') {
+       element.pendingDocument = true
+       return
+    }
     if (['_id', 'organization_id'].includes(name))
         return
     if (isCrdt == "false" || isRealtime == "false" || element.type == 'number') 
-        return;
+        return
     if (!crud.checkAttrValue(collection) || !crud.checkAttrValue(document_id)|| !crud.checkAttrValue(name)) 
-        return;
-    if(name && name.startsWith('$'))
+        return 
+    if (name && name.startsWith('$'))
         return
 
     if (element.tagName === "INPUT" && ["text", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA" || element.hasAttribute('contenteditable')) {
-        if (!collection || !document_id || !name) return;
 
         if (!isCrdt) {
             if (element.tagName == 'IFRAME'){
@@ -60,13 +64,34 @@ function initElement (element) {
         }   
         element.setAttribute('crdt', 'true');
         element.crdt = {init: true};
-        crdt.getText({ collection, document_id, name, crud: isCrud, save: isSave, read: isRead }).then(response => {
+
+        // ToDo: newDocument name consideration. its value is used for setting or overwriting existing value
+        let newDocument = ''
+        if (element.pendingDocument) {
+            
+            let value;
+            if (element.hasAttribute('contenteditable'))
+                value = element.innerHTML;
+            else
+                value = element.value;
+            if (value)
+                newDocument = value
+
+            delete element.pendingDocument
+         }
+     
+        crdt.getText({ collection, document_id, name, crud: isCrud, save: isSave, read: isRead, newDocument }).then(response => {
             if (response === undefined) 
                 return;
             if (!response){
+                // if (element.pendingDocument) {
+                //     isRead = 'true'
+                //     delete element.pendingDocument
+                //  }
+        
                 let value;
                 if (element.hasAttribute('contenteditable')){
-                   value = element.innerHTML;
+                    value = element.innerHTML;
                 }
                 else {
                     value = element.value;
@@ -76,7 +101,7 @@ function initElement (element) {
             }
             else {
                 if (element.hasAttribute('contenteditable')){
-                   element.innerHTML = '';
+                element.innerHTML = '';
                 }
                 else {
                     element.value = '';
@@ -239,11 +264,13 @@ function _input (event) {
 }
 
 function _removeEventListeners (element) {
+    element.removeEventListener('mousedown', _mousedown);
     element.removeEventListener('blur', _blur);
     element.removeEventListener('cut', _cut);
     element.removeEventListener('paste', _paste);
     element.removeEventListener('keydown', _keydown);
     element.removeEventListener('beforeinput', _beforeinput);
+    element.removeEventListener('input', _input);
 }
 
 let previousPosition = {};
@@ -279,7 +306,7 @@ function updateText ({element, value, start, end, range, undoRedo}) {
             element = element.ownerDocument.defaultView.frameElement;
     }
     const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(element);
-    if (isCrdt == "false") return;
+    if (isCrdt == "false" || !collection || !document_id || !name) return;
     
     if (undoRedo == 'undo')
         return crdt.undoText({ collection, document_id, name, isCrud, isCrdt, isSave })
@@ -406,7 +433,13 @@ observer.init({
     attributeName: ['collection', 'document_id', 'name', 'contenteditable'],
     target: selectors,
     callback (mutation) {
-        initElement(mutation.target);
+        let _id = mutation.target.getAttribute('document_id')
+        if (!_id) {
+            _removeEventListeners(mutation.target)
+            mutation.target.removeAttribute('crdt')
+        } else {
+            initElement(mutation.target);
+        }
     }
 });
 
