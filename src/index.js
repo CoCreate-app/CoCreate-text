@@ -101,7 +101,7 @@ function initElement (element) {
             }
             else {
                 if (element.hasAttribute('contenteditable')){
-                element.innerHTML = '';
+                    element.innerHTML = '';
                 }
                 else {
                     element.value = '';
