@@ -44,7 +44,7 @@ function initElement (element) {
         return
     if (isCrdt == "false" || isRealtime == "false" || element.type == 'number') 
         return
-    if (!crud.checkAttrValue(collection) || !crud.checkAttrValue(document_id)|| !crud.checkAttrValue(name)) 
+    if (!crud.checkValue(collection) || !crud.checkValue(document_id)|| !crud.checkValue(name)) 
         return 
     if (name && name.startsWith('$'))
         return
