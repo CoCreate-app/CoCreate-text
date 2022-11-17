@@ -430,7 +430,7 @@ observer.init({
 observer.init({
     name: 'CoCreateTextAttribtes',
     observe: ['attributes'],
-    attributeName: ['collection', 'document_id', 'name', 'contenteditable'],
+    attributeName: [...crud.getAttributeNames(['collection', 'document_id', 'name']), 'contenteditable'],
     target: selectors,
     callback (mutation) {
         let _id = mutation.target.getAttribute('document_id')
