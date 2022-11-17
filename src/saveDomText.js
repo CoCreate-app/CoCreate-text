@@ -10,7 +10,7 @@ else
 	crud = CRUD
 
 function save(btn){
-	const { collection, document_id, name, namespace, room, broadcast, broadcastSender, isUpsert} = crud.getAttr(btn);
+	const { collection, document_id, name, namespace, room, broadcast, broadcastSender, isUpsert} = crud.getAttributes(btn);
 	crdt.getText({collection, document_id, name}).then(response => {
 		crud.updateDocument({
 			collection,

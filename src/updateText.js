@@ -80,6 +80,6 @@ export function updateDomText({ domTextEditor, target, position, element, elemen
 function _updateText({ domTextEditor, value, start, end}) {
     if(domTextEditor.tagName =='HTML')
         domTextEditor = domTextEditor.ownerDocument.defaultView.frameElement;
-    const { collection, document_id, name, isCrud } = crud.getAttr(domTextEditor);
+    const { collection, document_id, name, isCrud } = crud.getAttributes(domTextEditor);
 	crdt.updateText({ collection, document_id, name, value, start, length: end - start, crud: isCrud });
 }

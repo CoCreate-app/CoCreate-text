@@ -33,7 +33,7 @@ function initElements (elements) {
 }
 
 function initElement (element) {
-    let { collection, document_id, name, isRealtime, isCrdt, isCrud, isSave, isRead } = crud.getAttr(element);    
+    let { collection, document_id, name, isRealtime, isCrdt, isCrud, isSave, isRead } = crud.getAttributes(element);    
     if (!collection || !document_id || !name)
         return
     if (document_id == 'pending') {
@@ -156,7 +156,7 @@ function _mousedown (event) {
 	let contentEditable = target.closest('[collection][document_id][name]');
 	if (contentEditable){
         target = contentEditable;
-        const { collection, document_id, name } = crud.getAttr(target);
+        const { collection, document_id, name } = crud.getAttributes(target);
         if (collection && document_id && name && !target.hasAttribute('contenteditable'))
             target.setAttribute('contenteditable', 'true');
     }
@@ -165,7 +165,7 @@ function _mousedown (event) {
 
 function _blur (event) {
     let element = event.currentTarget;
-    const { collection, document_id, name } = crud.getAttr(element);
+    const { collection, document_id, name } = crud.getAttributes(element);
     let start = null;
     let end = null;
     cursors.sendPosition({collection, document_id, name, start, end});
@@ -286,7 +286,7 @@ export function sendPosition (element) {
         }
     }
     if (!element) return;
-    const { collection, document_id, name, isCrdt } = crud.getAttr(element);
+    const { collection, document_id, name, isCrdt } = crud.getAttributes(element);
     if (isCrdt == 'false' || !collection || !document_id || !name) return;
     let currentPosition = { collection, document_id, name, start, end };
     if (JSON.stringify(currentPosition) === JSON.stringify(previousPosition))
@@ -305,7 +305,7 @@ function updateText ({element, value, start, end, range, undoRedo}) {
         if (element.tagName == 'HTML' && !element.hasAttribute('collection')) 
             element = element.ownerDocument.defaultView.frameElement;
     }
-    const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(element);
+    const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttributes(element);
     if (isCrdt == "false" || !collection || !document_id || !name) return;
     
     if (undoRedo == 'undo')
@@ -447,7 +447,7 @@ action.init({
 	name: "undo",
 	endEvent: "undo",
 	callback: (btn, data) => {
-        const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(btn);
+        const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttributes(btn);
         crdt.undoText({ collection, document_id, name, isCrud, isCrdt, isSave })
 	}
 });
@@ -456,7 +456,7 @@ action.init({
 	name: "redo",
 	endEvent: "redo",
 	callback: (btn, data) => {
-        const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttr(btn);
+        const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttributes(btn);
         crdt.redoText({ collection, document_id, name, isCrud, isCrdt, isSave })
 	}
 });
