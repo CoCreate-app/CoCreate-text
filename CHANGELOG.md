@@ -1,3 +1,19 @@
+# [1.18.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.16...v1.18.0) (2022-11-21)
+
+
+### Bug Fixes
+
+* crud.getAttr renamed to crud.getAttributes ([3f2195c](https://github.com/CoCreate-app/CoCreate-text/commit/3f2195c37d31183cf3233373ab4cbdb020ddd957))
+* renamed crud.checkAttrValue to crud.checkValue ([fd58a70](https://github.com/CoCreate-app/CoCreate-text/commit/fd58a70db438677256b04aff803f435b38cf2a37))
+* renamed data.data to data.document ([708ea76](https://github.com/CoCreate-app/CoCreate-text/commit/708ea76fff5c26f8cb891e8922f45515385d3ee4))
+* update crud functions to receive an array of objects as the response ([f374922](https://github.com/CoCreate-app/CoCreate-text/commit/f37492263db651eb1ab86f8e6af4374141abd9cd))
+
+
+### Features
+
+* added crud.getAttributeNames to observer attributeName param, this will allow observing custom attributes ([fe08a4d](https://github.com/CoCreate-app/CoCreate-text/commit/fe08a4d64424105ab2211faa5f46e21ca03d6e98))
+* newDocument param to  define a new value or overwrite an existing value ([0ba44dc](https://github.com/CoCreate-app/CoCreate-text/commit/0ba44dcb128c07b118c1d542ee8528553a15d52e))
+
 ## [1.17.16](https://github.com/CoCreate-app/CoCreate-text/compare/v1.17.15...v1.17.16) (2022-10-02)
 
 
