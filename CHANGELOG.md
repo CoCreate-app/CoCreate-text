@@ -1,3 +1,11 @@
+## [1.18.5](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.4...v1.18.5) (2022-11-22)
+
+
+### Bug Fixes
+
+* apply src: {{source}} to CoCreate.config ([48985c6](https://github.com/CoCreate-app/CoCreate-text/commit/48985c6e4083b6b467ea683e781ab22e2f921ce7))
+* workflow docs ([dda8f5d](https://github.com/CoCreate-app/CoCreate-text/commit/dda8f5d589b02d57e076da6abce70d82cb3c8702))
+
 ## [1.18.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.3...v1.18.4) (2022-11-21)
 
 
