@@ -5,7 +5,7 @@ import {domParser} from '@cocreate/utils';
 export function updateDom({domTextEditor, value, start, end, html}) {
 	if (!domTextEditor.htmlString)
 		domTextEditor.htmlString = html;
-	if(start < 0 || start > domTextEditor.htmlString.length)
+	if (start < 0 || start > domTextEditor.htmlString.length)
 		throw new Error('position is out of range');
     
     let {element, path, position, type} = getElementPosition(domTextEditor.htmlString, start, end);
@@ -31,7 +31,7 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 		} while (!newEl && index != -1)
 	}
 
-	if(!newEl){
+	if (!newEl){
 		// console.log("no newEL", path)
 		newEl = domTextEditor.cloneNode(true);
 		if (html != undefined)
@@ -41,12 +41,12 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 		domEl = domTextEditor;
 		type = 'innerHTML';
 	}
-	else if(element.tagName == 'HTML') {
+	else if (element.tagName == 'HTML') {
 		// console.log('element = html')
 		domEl = domTextEditor;
 		type = 'innerHTML';
 	}
-	else if(path) {
+	else if (path) {
 		// console.log("else path", path)
 		domEl = domTextEditor.querySelector(path);
 		// if (!domEl || !oldEl){
@@ -85,7 +85,7 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 		}
 	}
 
-	if(domEl && newEl) {
+	if (domEl && newEl) {
 		let activeElement = domEl.ownerDocument.activeElement;
 		if (activeElement == domEl)
 			curCaret = getSelection(activeElement);
@@ -101,7 +101,7 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 
 		// console.log('domEl', domEl)
 		// console.log('newEl', newEl)
-		if(start != end && type == 'innerHTML') {
+		if (start != end && type == 'innerHTML') {
 			domTextEditor.htmlString = html;
 			if (domEl.tagName != 'HTML'){
 				if (newEl.parentElement) {
@@ -134,7 +134,7 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 			// console.log('insertAdjacent', domEl, value)
 		}
 		else if (type == 'textNode'){
-			if(start != end)
+			if (start != end)
 				domTextEditor.htmlString = html;
 			domEl.innerHTML = newEl.innerHTML;
 			// console.log('textnode', domEl.innerHTML, newEl.innerHTML)
@@ -146,7 +146,7 @@ export function updateDom({domTextEditor, value, start, end, html}) {
 		}
 		domTextEditor.htmlString = html;
 
-		if(curCaret && start >= 0 && end >= 0) {
+		if (curCaret && start >= 0 && end >= 0) {
 			if (curCaret.range && curCaret.range.startContainer == domEl)
 				if (curCaret.start >= curCaret.range.startOffset) {
 					let p = processSelection(domEl, value, curCaret.start, curCaret.end, start, end, curCaret.range);
@@ -188,7 +188,7 @@ function parseHtml(domTextEditor, html) {
 function assignAttributes(newEl, oldEl, domEl) {
 	if (!oldEl) return;
 	for(let newElAtt of newEl.attributes) {
-		if(!oldEl.attributes[newElAtt.name] || oldEl.attributes[newElAtt.name].value !== newElAtt.value)
+		if (!oldEl.attributes[newElAtt.name] || oldEl.attributes[newElAtt.name].value !== newElAtt.value)
 			try {
 				domEl.setAttribute(newElAtt.name, newElAtt.value);
 			}
@@ -197,10 +197,10 @@ function assignAttributes(newEl, oldEl, domEl) {
 		}
 	}
 
-	if(newEl.attributes.length !== oldEl.attributes.length) {
+	if (newEl.attributes.length !== oldEl.attributes.length) {
 		for(let i = 0, len = oldEl.attributes.length; i < len; i++) {
 			let oldElAtt = oldEl.attributes[i];
-			if(!newEl.attributes[oldElAtt.name]) {
+			if (!newEl.attributes[oldElAtt.name]) {
 				domEl.removeAttribute(oldElAtt.name);
 				i--, len--;
 			}

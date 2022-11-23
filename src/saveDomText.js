@@ -4,7 +4,7 @@ import CRUD from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
 
 let crud
-if(CRUD && CRUD.default)
+if (CRUD && CRUD.default)
 	crud = CRUD.default
 else
 	crud = CRUD

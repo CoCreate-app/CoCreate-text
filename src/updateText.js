@@ -3,7 +3,7 @@ import crdt from '@cocreate/crdt';
 import {getStringPosition} from '@cocreate/selection';
 
 let crud
-if(CRUD && CRUD.default)
+if (CRUD && CRUD.default)
 	crud = CRUD.default
 else
 	crud = CRUD
@@ -12,7 +12,7 @@ export function insertAdjacentElement({ domTextEditor, target, position, element
 	let remove;
 	if (element && !elementValue) {
 		remove = getStringPosition({ string: domTextEditor.htmlString, target: element });
-		if(!remove.start && !remove.end)
+		if (!remove.start && !remove.end)
 			throw new Error('insertAdjacentElement: element not found');
 		elementValue = domTextEditor.htmlString.substring(remove.start, remove.end);
 	}
@@ -69,16 +69,16 @@ export function updateDomText({ domTextEditor, target, position, element, elemen
 		start += pos.start;
 		end += pos.end;
 	}
-	if(start != end)
+	if (start != end)
 		_updateText({domTextEditor, start, end});
-	if(attribute && remove != 'true' || attribute && value)
+	if (attribute && remove != 'true' || attribute && value)
 		_updateText({ domTextEditor, value: ` ${attribute}="${newValue}"`, start });
-	else if(value)
+	else if (value)
 		_updateText({ domTextEditor, value, start });
 }
 
 function _updateText({ domTextEditor, value, start, end}) {
-    if(domTextEditor.tagName =='HTML')
+    if (domTextEditor.tagName =='HTML')
         domTextEditor = domTextEditor.ownerDocument.defaultView.frameElement;
     const { collection, document_id, name, isCrud } = crud.getAttributes(domTextEditor);
 	crdt.updateText({ collection, document_id, name, value, start, length: end - start, crud: isCrud });
