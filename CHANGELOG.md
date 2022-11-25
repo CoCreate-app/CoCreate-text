@@ -1,3 +1,11 @@
+## [1.18.8](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.7...v1.18.8) (2022-11-25)
+
+
+### Bug Fixes
+
+* bump dependencies ([56d1168](https://github.com/CoCreate-app/CoCreate-text/commit/56d11687bc22fd753c8bf0fc125e39827deeab03))
+* CoCreate.crud.default removed bug causing default object ([b7b3f2b](https://github.com/CoCreate-app/CoCreate-text/commit/b7b3f2b0123efc7e126079f3250be3d6d7de1086))
+
 ## [1.18.7](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.6...v1.18.7) (2022-11-24)
 
 
