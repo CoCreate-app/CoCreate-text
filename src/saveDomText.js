@@ -1,13 +1,7 @@
 /*globals CustomEvent*/
 import action from '@cocreate/actions';
-import CRUD from '@cocreate/crud-client';
+import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
-
-let crud
-if (CRUD && CRUD.default)
-	crud = CRUD.default
-else
-	crud = CRUD
 
 function save(btn){
 	const { collection, document_id, name, namespace, room, broadcast, broadcastSender, isUpsert} = crud.getAttributes(btn);
