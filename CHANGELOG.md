@@ -1,3 +1,10 @@
+## [1.18.13](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.12...v1.18.13) (2022-12-02)
+
+
+### Bug Fixes
+
+* bump dependencies ([1bd11e2](https://github.com/CoCreate-app/CoCreate-text/commit/1bd11e24487b089b2dc771a9b8c50e843127419e))
+
 ## [1.18.12](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.11...v1.18.12) (2022-11-28)
 
 
