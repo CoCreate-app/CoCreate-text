@@ -34,7 +34,7 @@ function initElement (element) {
        element.pendingDocument = true
        return
     }
-    if (['_id', 'organization_id'].includes(name))
+    if (['_id', 'organization_id', 'db', 'database', 'collection'].includes(name))
         return
     if (isCrdt == "false" || isRealtime == "false" || element.type == 'number') 
         return
