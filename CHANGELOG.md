@@ -1,3 +1,10 @@
+## [1.18.22](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.21...v1.18.22) (2022-12-13)
+
+
+### Bug Fixes
+
+* removed un used devDependencies ([77f5ef9](https://github.com/CoCreate-app/CoCreate-text/commit/77f5ef9b3ee310bb450311b076cec132c5f3ebcf))
+
 ## [1.18.21](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.20...v1.18.21) (2022-12-13)
 
 
