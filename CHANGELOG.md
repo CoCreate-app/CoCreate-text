@@ -1,3 +1,10 @@
+## [1.18.34](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.33...v1.18.34) (2023-01-01)
+
+
+### Bug Fixes
+
+* docs sanbox overflow ([1fb0aaa](https://github.com/CoCreate-app/CoCreate-text/commit/1fb0aaaadcfa2d01ed3882967a6e0529434be0a6))
+
 ## [1.18.33](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.32...v1.18.33) (2022-12-31)
 
 
