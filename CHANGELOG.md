@@ -1,3 +1,11 @@
+## [1.18.36](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.35...v1.18.36) (2023-01-06)
+
+
+### Bug Fixes
+
+* bump dependencies, worklow [@v3](https://github.com/v3) ([f9d8837](https://github.com/CoCreate-app/CoCreate-text/commit/f9d8837d91d714841dbaa51b3a8f7fc867a51713))
+* edit in github btn styles ([64350e7](https://github.com/CoCreate-app/CoCreate-text/commit/64350e7ab946769cff06e5d77f1d8a85fd7b3e5a))
+
 ## [1.18.35](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.34...v1.18.35) (2023-01-05)
 
 
