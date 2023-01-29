@@ -57,9 +57,9 @@
   },
   "dependencies": {
     "@cocreate/actions": "^1.5.55",
-    "@cocreate/crdt": "^1.15.9",
-    "@cocreate/crud-client": "^1.18.0",
-    "@cocreate/cursors": "^1.13.18",
+    "@cocreate/crdt": "^1.16.0",
+    "@cocreate/crud-client": "^1.18.2",
+    "@cocreate/cursors": "^1.14.0",
     "@cocreate/docs": "^1.5.9",
     "@cocreate/hosting": "^1.7.9",
     "@cocreate/observer": "^1.5.59",
