@@ -1,3 +1,10 @@
+## [1.18.43](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.42...v1.18.43) (2023-01-30)
+
+
+### Bug Fixes
+
+* catch cross-origin error when accessing window.top ([2753de1](https://github.com/CoCreate-app/CoCreate-text/commit/2753de13aac3973358bcfac2b256a152a35b2b9e))
+
 ## [1.18.42](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.41...v1.18.42) (2023-01-29)
 
 
