@@ -107,10 +107,20 @@ function initElement (element) {
 }
 
 function initDocument(doc) {
-    let documents = window.top.textDocuments;
+    let documents;
+    try {
+        documents = window.top.textDocuments;
+    } catch(e) {
+        console.log('cross-origin failed')
+    }
+
     if (!documents){
         documents = new Map();
-        window.top.textDocuments = documents;
+        try {
+            window.top.textDocuments = documents;
+        } catch(e) {
+            console.log('cross-origin failed')
+        }
     }
     if (!documents.has(doc)) {
         documents.set(doc);
