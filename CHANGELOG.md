@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.46...v1.19.0) (2023-03-16)
+
+
+### Features
+
+* replaced get-value and set-value with a super charged version of CoCreate-events ([603922a](https://github.com/CoCreate-app/CoCreate-text/commit/603922ac79c207153b4d20b55438ef2ce5d8dd29))
+
 ## [1.18.46](https://github.com/CoCreate-app/CoCreate-text/compare/v1.18.45...v1.18.46) (2023-02-01)
 
 
