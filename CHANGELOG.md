@@ -1,3 +1,10 @@
+## [1.19.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.19.3...v1.19.4) (2023-04-11)
+
+
+### Bug Fixes
+
+* renamed domains to hosts ([14c7639](https://github.com/CoCreate-app/CoCreate-text/commit/14c7639491da82595ce6642c1e90d9474e7487b1))
+
 ## [1.19.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.19.2...v1.19.3) (2023-03-30)
 
 
