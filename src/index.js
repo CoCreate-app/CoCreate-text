@@ -40,7 +40,7 @@ function initElement (element) {
         return
     if (!crud.checkValue(collection) || !crud.checkValue(document_id)|| !crud.checkValue(name)) 
         return 
-    if (name && name.startsWith('$'))
+    if (name && name.startsWith("$"))
         return
 
     if (element.tagName === "INPUT" && ["text", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA" || element.hasAttribute('contenteditable')) {
