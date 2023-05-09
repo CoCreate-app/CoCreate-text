@@ -1,3 +1,10 @@
+## [1.20.8](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.7...v1.20.8) (2023-05-09)
+
+
+### Bug Fixes
+
+* replace $ single quotes will double quotes t prevent db from escaping character ([44f5162](https://github.com/CoCreate-app/CoCreate-text/commit/44f5162c8009d96eab9f0bdb160ab1b9b3ec6702))
+
 ## [1.20.7](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.6...v1.20.7) (2023-05-06)
 
 
