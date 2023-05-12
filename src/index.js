@@ -59,7 +59,7 @@ function initElement (element) {
         element.setAttribute('crdt', 'true');
         element.crdt = {init: true};
 
-        // ToDo: newDocument name consideration. its value is used for setting or overwriting existing value
+        // TODO: newDocument name consideration. its value is used for setting or overwriting existing value
         let newDocument = ''
         if (element.pendingDocument) {
             
