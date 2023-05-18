@@ -1,3 +1,10 @@
+## [1.20.9](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.8...v1.20.9) (2023-05-18)
+
+
+### Bug Fixes
+
+* apikey renamed to key ([1f24c67](https://github.com/CoCreate-app/CoCreate-text/commit/1f24c671ec57abd334b7ca51145c61237cf86233))
+
 ## [1.20.8](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.7...v1.20.8) (2023-05-09)
 
 
