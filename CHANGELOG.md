@@ -1,3 +1,10 @@
+## [1.20.10](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.9...v1.20.10) (2023-05-19)
+
+
+### Bug Fixes
+
+* update packages to latest version. This commit updates various packages in the dependencies section of the package.json file to their latest published versions, thereby fixing multiple bugs and improving overall performance. ([ce5aa24](https://github.com/CoCreate-app/CoCreate-text/commit/ce5aa249a561197813b38858e920a3b7c11a754f))
+
 ## [1.20.9](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.8...v1.20.9) (2023-05-18)
 
 
