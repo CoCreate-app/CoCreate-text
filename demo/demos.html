@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Text | CoCreate</title>
+        <link rel="manifest" href="/manifest.webmanifest" />
+    </head>
 
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Text | CoCreate</title>
-		<link rel="manifest" href="/manifest.webmanifest" />
-	</head>
+    <body class="padding:20px">
+        <form collection="test" document_id="62a3f5d5e6dfc91d581cdd2d">
+            <input type="email" name="email" />
+            <input type="tel" name="tel" />
+            <input type="url" name="url" />
+            <h1 name="name" collection="test"></h1>
+            <!-- <textarea name="name2"></textarea> -->
+            <!--<h1 name='name' contenteditable>I will be replaced by crdt</h1>-->
+            <!-- <div name='name2' contenteditable>I will be replaced by crud</div> -->
 
-	<body class="padding:20px">
-		<form collection="test" document_id="62a3f5d5e6dfc91d581cdd2d">
-			<input type="email" name="email">
-			<input type="tel" name="tel">
-			<input type="url" name="url">
-			<h1 name='name' collection="test"></h1>
-			<!-- <textarea name="name2"></textarea> -->
-			<!--<h1 name='name' contenteditable>I will be replaced by crdt</h1>-->
-			<!-- <div name='name2' contenteditable>I will be replaced by crud</div> -->
+            <div class="padding:20px">
+                CoCreateCrdt.init({collection: "apples1", document_id:
+                "60bea334b25613e8da1b4bdf", name: "src"});
+            </div>
+            <div class="padding:20px">
+                CoCreateCrdt.getText({collection: "apples1", document_id:
+                "60bea334b25613e8da1b4bdf", name: "src"});
+            </div>
+            <div class="padding:20px">
+                CoCreate.crdt.getText({collection: "apples1", document_id:
+                "5fe9e0a11b4a703e71c51ba8", name: "name"});
+            </div>
+        </form>
 
-			<div class="padding:20px">
-				CoCreateCrdt.init({collection: "apples1", document_id: "60bea334b25613e8da1b4bdf", name: "src"});
-			</div>
-			<div class="padding:20px">
-				CoCreateCrdt.getText({collection: "apples1", document_id: "60bea334b25613e8da1b4bdf", name: "src"});
-			</div>
-			<div class="padding:20px">
-				CoCreate.crdt.getText({collection: "apples1", document_id: "5fe9e0a11b4a703e71c51ba8", name: "name"});
-			</div>
-		</form>
-
-		<!--<script src="../dist/CoCreate-text.js" ></script>-->
-		<script src="https://cdn.cocreate.app/latest/CoCreate.min.js"></script>
-
-	</body>
-
+        <!--<script src="../dist/CoCreate-text.js"  ></script>-->
+        <script src="https://cdn.cocreate.app/latest/CoCreate.min.js"></script>
+    </body>
 </html>
