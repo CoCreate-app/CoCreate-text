@@ -1,3 +1,11 @@
+## [1.20.12](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.11...v1.20.12) (2023-06-02)
+
+
+### Bug Fixes
+
+* format demo html ([2c0b945](https://github.com/CoCreate-app/CoCreate-text/commit/2c0b9458e322a1d85dd3990635cf453a6e428e3c))
+* Update dependencies versions for [@cocreate](https://github.com/cocreate) libraries ([fcc0161](https://github.com/CoCreate-app/CoCreate-text/commit/fcc0161c5ef30b22cc2eb8a9103b4654ccec0ef4))
+
 ## [1.20.11](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.10...v1.20.11) (2023-05-21)
 
 
