@@ -1,3 +1,11 @@
+## [1.20.14](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.13...v1.20.14) (2023-06-04)
+
+
+### Bug Fixes
+
+* replaced secert GITHUB_TOKEN with GITHUB ([88104b5](https://github.com/CoCreate-app/CoCreate-text/commit/88104b513ce340cff27492ee1afee833577d1ee0))
+* Update dependencies versions for [@cocreate](https://github.com/cocreate) libraries ([dc04f9c](https://github.com/CoCreate-app/CoCreate-text/commit/dc04f9c7ce5b33a6b6465c7000e8e102986fb5b5))
+
 ## [1.20.13](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.12...v1.20.13) (2023-06-04)
 
 
