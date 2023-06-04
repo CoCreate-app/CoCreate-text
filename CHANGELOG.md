@@ -1,3 +1,10 @@
+## [1.20.15](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.14...v1.20.15) (2023-06-04)
+
+
+### Bug Fixes
+
+* Refactor CoCreate.config.js to remove hard-coded credentials ([c775a5f](https://github.com/CoCreate-app/CoCreate-text/commit/c775a5f1650e1508e26c385aa43e2739b8bff603))
+
 ## [1.20.14](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.13...v1.20.14) (2023-06-04)
 
 
