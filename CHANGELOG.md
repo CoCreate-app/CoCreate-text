@@ -1,3 +1,10 @@
+## [1.20.17](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.16...v1.20.17) (2023-06-10)
+
+
+### Bug Fixes
+
+* Update dependencies versions for [@cocreate](https://github.com/cocreate) libraries ([44451b4](https://github.com/CoCreate-app/CoCreate-text/commit/44451b49adef3ef3872ceec9f6c85755f4201f76))
+
 ## [1.20.16](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.15...v1.20.16) (2023-06-10)
 
 
