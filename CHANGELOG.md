@@ -1,3 +1,10 @@
+## [1.20.23](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.22...v1.20.23) (2023-06-11)
+
+
+### Bug Fixes
+
+* testing workflow ([0897679](https://github.com/CoCreate-app/CoCreate-text/commit/0897679a5972f34cd7f49e4d413460b84c4ee335))
+
 ## [1.20.22](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.21...v1.20.22) (2023-06-11)
 
 
