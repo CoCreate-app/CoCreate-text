@@ -1,3 +1,10 @@
+## [1.20.21](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.20...v1.20.21) (2023-06-11)
+
+
+### Bug Fixes
+
+* postintall error ([f6dfb42](https://github.com/CoCreate-app/CoCreate-text/commit/f6dfb42e3ff9d6296be6ab720928cdf01ed104f3))
+
 ## [1.20.20](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.19...v1.20.20) (2023-06-11)
 
 
