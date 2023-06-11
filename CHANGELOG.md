@@ -1,3 +1,10 @@
+## [1.20.20](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.19...v1.20.20) (2023-06-11)
+
+
+### Bug Fixes
+
+* @cocreate/cli moved to dependencies ([1a220aa](https://github.com/CoCreate-app/CoCreate-text/commit/1a220aa4e3a5456738d6c3243dcab95c4e61077a))
+
 ## [1.20.19](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.18...v1.20.19) (2023-06-11)
 
 
