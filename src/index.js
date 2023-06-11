@@ -4,9 +4,9 @@ import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
 import cursors from '@cocreate/cursors';
 import uuid from '@cocreate/uuid';
-import {updateDom} from './updateDom';
-import {insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, replaceInnerText} from './updateText';
-import {getSelection, processSelection} from '@cocreate/selection';
+import { updateDom } from './updateDom';
+import { insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, replaceInnerText } from './updateText';
+import { getSelection, processSelection } from '@cocreate/selection';
 import action from '@cocreate/actions';
 import './saveDomText';
 
@@ -21,48 +21,48 @@ function init() {
     initDocument(document);
 }
 
-function initElements (elements) {
-    for(let element of elements)
+function initElements(elements) {
+    for (let element of elements)
         initElement(element);
 }
 
-function initElement (element) {
-    let { collection, document_id, name, isRealtime, isCrdt, isCrud, isSave, isRead } = crud.getAttributes(element);    
+function initElement(element) {
+    let { collection, document_id, name, isRealtime, isCrdt, isCrud, isSave, isRead } = crud.getAttributes(element);
     if (!collection || !document_id || !name)
         return
     if (document_id == 'pending') {
-       element.pendingDocument = true
-       return
+        element.pendingDocument = true
+        return
     }
-    if (['_id', 'organization_id', 'db', 'database', 'collection'].includes(name))
+    if (['_id', 'organization_id', 'storage', 'database', 'collection'].includes(name))
         return
-    if (isCrdt == "false" || isRealtime == "false" || element.type == 'number') 
+    if (isCrdt == "false" || isRealtime == "false" || element.type == 'number')
         return
-    if (!crud.checkValue(collection) || !crud.checkValue(document_id)|| !crud.checkValue(name)) 
-        return 
+    if (!crud.checkValue(collection) || !crud.checkValue(document_id) || !crud.checkValue(name))
+        return
     if (name && name.startsWith("$"))
         return
 
     if (element.tagName === "INPUT" && ["text", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA" || element.hasAttribute('contenteditable')) {
 
         if (!isCrdt) {
-            if (element.tagName == 'IFRAME'){
+            if (element.tagName == 'IFRAME') {
                 if (isCrdt != 'true')
                     _addEventListeners(element.contentDocument.documentElement);
                 let Document = element.contentDocument;
                 initDocument(Document);
-            }  
-            else if (isCrdt != 'true'){ 
+            }
+            else if (isCrdt != 'true') {
                 _addEventListeners(element);
             }
-        }   
+        }
         element.setAttribute('crdt', 'true');
-        element.crdt = {init: true};
+        element.crdt = { init: true };
 
         // TODO: newDocument name consideration. its value is used for setting or overwriting existing value
         let newDocument = ''
         if (element.pendingDocument) {
-            
+
             let value;
             if (element.hasAttribute('contenteditable'))
                 value = element.innerHTML;
@@ -72,19 +72,19 @@ function initElement (element) {
                 newDocument = value
 
             delete element.pendingDocument
-         }
-     
+        }
+
         crdt.getText({ collection, document_id, name, crud: isCrud, save: isSave, read: isRead, newDocument }).then(response => {
-            if (response === undefined) 
+            if (response === undefined)
                 return;
-            if (!response){
+            if (!response) {
                 // if (element.pendingDocument) {
                 //     isRead = 'true'
                 //     delete element.pendingDocument
                 //  }
-        
+
                 let value;
-                if (element.hasAttribute('contenteditable')){
+                if (element.hasAttribute('contenteditable')) {
                     value = element.innerHTML;
                 }
                 else {
@@ -94,7 +94,7 @@ function initElement (element) {
                     crdt.replaceText({ collection, document_id, name, value, crud: isCrud, save: isSave, read: isRead });
             }
             else {
-                if (element.hasAttribute('contenteditable')){
+                if (element.hasAttribute('contenteditable')) {
                     element.innerHTML = '';
                 }
                 else {
@@ -110,15 +110,15 @@ function initDocument(doc) {
     let documents;
     try {
         documents = window.top.textDocuments;
-    } catch(e) {
+    } catch (e) {
         console.log('cross-origin failed')
     }
 
-    if (!documents){
+    if (!documents) {
         documents = new Map();
         try {
             window.top.textDocuments = documents;
-        } catch(e) {
+        } catch (e) {
             console.log('cross-origin failed')
         }
     }
@@ -127,11 +127,11 @@ function initDocument(doc) {
         doc.addEventListener('selectionchange', (e) => {
             let element = doc.activeElement;
             sendPosition(element);
-        }); 
+        });
     }
 }
 
-export function _addEventListeners (element) {
+export function _addEventListeners(element) {
     element.addEventListener('mousedown', _mousedown);
     element.addEventListener('blur', _blur);
     element.addEventListener('cut', _cut);
@@ -141,24 +141,24 @@ export function _addEventListeners (element) {
     element.addEventListener('input', _input);
 }
 
-function _mousedown (event) {
+function _mousedown(event) {
     let domTextEditor = event.currentTarget;
     if (domTextEditor.tagName === "INPUT" || domTextEditor.tagName === "TEXTAREA") return;
     let target = event.target;
     // const path = event.path || (event.composedPath && event.composedPath());
     // console.log(path)
-	if (!target.id){
+    if (!target.id) {
         let isEid = domTextEditor.getAttribute('eid');
-		if (isEid != 'false' && isEid != null && isEid != undefined){
+        if (isEid != 'false' && isEid != null && isEid != undefined) {
             let eid = target.getAttribute('eid');
-            if (!eid){
+            if (!eid) {
                 eid = uuid.generate(6);
                 setAttribute({ domTextEditor, target, name: 'eid', value: eid });
             }
         }
-	}
-	let contentEditable = target.closest('[collection][document_id][name]');
-	if (contentEditable){
+    }
+    let contentEditable = target.closest('[collection][document_id][name]');
+    if (contentEditable) {
         target = contentEditable;
         const { collection, document_id, name } = crud.getAttributes(target);
         if (collection && document_id && name && !target.hasAttribute('contenteditable'))
@@ -167,15 +167,15 @@ function _mousedown (event) {
     // sendPosition(element)
 }
 
-function _blur (event) {
+function _blur(event) {
     let element = event.currentTarget;
     const { collection, document_id, name } = crud.getAttributes(element);
     let start = null;
     let end = null;
-    cursors.sendPosition({collection, document_id, name, start, end});
+    cursors.sendPosition({ collection, document_id, name, start, end });
 }
 
-function _cut (event) {
+function _cut(event) {
     let element = event.currentTarget;
     if (element.getAttribute('crdt') == 'false')
         return;
@@ -186,32 +186,32 @@ function _cut (event) {
         event.clipboardData.setData('text/plain', selection.toString());
     }
     else {
-        navigator.clipboard.writeText(selection.toString()).then(function() {
-          /* clipboard successfully set */
-        }, function() {
-          /* clipboard write failed */
+        navigator.clipboard.writeText(selection.toString()).then(function () {
+            /* clipboard successfully set */
+        }, function () {
+            /* clipboard write failed */
         });
     }
     if (start != end) {
-        updateText({element, start, end, range});
+        updateText({ element, start, end, range });
     }
     event.preventDefault();
 }
 
-function _paste (event) {
+function _paste(event) {
     let element = event.currentTarget;
     if (element.getAttribute('crdt') == 'false')
         return;
     let value = event.clipboardData.getData('text/plain').replace(/(\r\n|\r)/gm, "\n");;
     const { start, end, range } = getSelection(element);
     if (start != end) {
-        updateText({element, start, end, range});
+        updateText({ element, start, end, range });
     }
-    updateText({element, value, start, range});
+    updateText({ element, value, start, range });
     event.preventDefault();
 }
 
-function _keydown (event) {
+function _keydown(event) {
     if (event.stopCCText) return;
     let element = event.currentTarget;
     if (element.getAttribute('crdt') == 'false')
@@ -220,31 +220,31 @@ function _keydown (event) {
     if (event.key == "Backspace" || event.key == "Tab" || event.key == "Enter") {
         eventObj = event;
         if (start != end) {
-            updateText({element, start, end, range});
+            updateText({ element, start, end, range });
         }
-        
+
         if (event.key == "Backspace" && start == end) {
-            updateText({element, start: start - 1, end, range});
+            updateText({ element, start: start - 1, end, range });
         }
         else if (event.key == 'Tab') {
-            updateText({element, value: "\t", start, range});
+            updateText({ element, value: "\t", start, range });
         }
         else if (event.key == "Enter") {
-            updateText({element, value: "\n", start, range});
+            updateText({ element, value: "\n", start, range });
         }
         event.preventDefault();
     }
     else if (event.ctrlKey) {
         if (event.keyCode == 90) {
-            updateText({element, range, undoRedo: 'undo'});
+            updateText({ element, range, undoRedo: 'undo' });
         }
         else if (event.keyCode == 89) {
-            updateText({element, range, undoRedo: 'redo'});
+            updateText({ element, range, undoRedo: 'redo' });
         }
     }
 }
 
-function _beforeinput (event) {
+function _beforeinput(event) {
     if (event.stopCCText) return;
     let element = event.currentTarget;
     if (element.getAttribute('crdt') == 'false')
@@ -252,22 +252,22 @@ function _beforeinput (event) {
     let { start, end, range } = getSelection(element);
     if (event.data) {
         if (start != end) {
-            updateText({element, start, end, range});
+            updateText({ element, start, end, range });
         }
         eventObj = event;
-        updateText({element, value: event.data, start, range});
+        updateText({ element, value: event.data, start, range });
         event.preventDefault();
     }
 }
 
-function _input (event) {
+function _input(event) {
     if (event.stopCCText) return;
     if (event.data) {
         eventObj = event;
     }
 }
 
-function _removeEventListeners (element) {
+function _removeEventListeners(element) {
     element.removeEventListener('mousedown', _mousedown);
     element.removeEventListener('blur', _blur);
     element.removeEventListener('cut', _cut);
@@ -278,11 +278,11 @@ function _removeEventListeners (element) {
 }
 
 let previousPosition = {};
-export function sendPosition (element) {
+export function sendPosition(element) {
     // if (!element) return;
     const { start, end, range } = getSelection(element);
     if (range) {
-        if (range.element){
+        if (range.element) {
             element = range.element;
         }
         if (element.tagName == 'HTML' && !element.hasAttribute('collection') || !element.hasAttribute('collection')) {
@@ -301,17 +301,17 @@ export function sendPosition (element) {
     cursors.sendPosition({ collection, document_id, name, start, end });
 }
 
-function updateText ({element, value, start, end, range, undoRedo}) {
+function updateText({ element, value, start, end, range, undoRedo }) {
     if (range) {
         if (range.element)
             element = range.element;
-        
-        if (element.tagName == 'HTML' && !element.hasAttribute('collection')) 
+
+        if (element.tagName == 'HTML' && !element.hasAttribute('collection'))
             element = element.ownerDocument.defaultView.frameElement;
     }
     const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttributes(element);
     if (isCrdt == "false" || !collection || !document_id || !name) return;
-    
+
     if (undoRedo == 'undo')
         return crdt.undoText({ collection, document_id, name, isCrud, isCrdt, isSave })
     if (undoRedo == 'redo')
@@ -321,38 +321,38 @@ function updateText ({element, value, start, end, range, undoRedo}) {
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
         crdt.updateText({ collection, document_id, name, value, start, length, crud: isCrud, save: isSave });
     } else {
-        let startEl =  range.startContainer.parentElement;
-        let endEl =  range.endContainer.parentElement;
+        let startEl = range.startContainer.parentElement;
+        let endEl = range.endContainer.parentElement;
         if (startEl != endEl) {
-        //     target = range.commonAncestorContainer;
-        //     // value = target.innerHTML;
-        //     // replaceInnerText(domTextEditor, target, value)
+            //     target = range.commonAncestorContainer;
+            //     // value = target.innerHTML;
+            //     // replaceInnerText(domTextEditor, target, value)
         }
         crdt.updateText({ collection, document_id, value, name, start, length, crud: isCrud, save: isSave });
     }
 }
 
-function _crdtUpdateListener () {
-    window.addEventListener('cocreate-crdt-update', function(event) {
-        updateElements({...event.detail});
+function _crdtUpdateListener() {
+    window.addEventListener('cocreate-crdt-update', function (event) {
+        updateElements({ ...event.detail });
     });
 }
 
-function updateElements({elements, collection, document_id, name, value, start, length, string}){
-    if (!elements){
+function updateElements({ elements, collection, document_id, name, value, start, length, string }) {
+    if (!elements) {
         let selectors = `[collection='${collection}'][document_id='${document_id}'][name='${name}']`;
         elements = document.querySelectorAll(`input${selectors}, textarea${selectors}, [contenteditable]${selectors}, [editor='dom']${selectors}`);
     }
-    
+
     elements.forEach((element) => {
         let isCrdt = element.getAttribute('crdt');
         if (!element.hasAttribute('contenteditable') && isCrdt == 'false') return;
 
-        updateElement({element, collection, document_id, name, value, start, length, string});
+        updateElement({ element, collection, document_id, name, value, start, length, string });
     });
 }
 
-async function updateElement ({element, collection, document_id, name, value, start, length, string }) {
+async function updateElement({ element, collection, document_id, name, value, start, length, string }) {
     if (element.tagName == 'IFRAME') {
         let eid = element.getAttribute('eid')
         element = element.contentDocument.documentElement;
@@ -369,26 +369,26 @@ async function updateElement ({element, collection, document_id, name, value, st
             if (value) {
                 _updateElementText(element, value, start, start);
             }
-        } 
+        }
         else {
-			let domTextEditor = element;
+            let domTextEditor = element;
             if (string == undefined)
-                string = await crdt.getText({collection, document_id, name});
+                string = await crdt.getText({ collection, document_id, name });
             let html = string;
-			if (length) {
+            if (length) {
                 let end = start + length;
-				updateDom({ domTextEditor, start, end, html });
-			}
-			if (value) {
-			    if (element.innerHTML != value) {
-					updateDom({ domTextEditor, value, start, end: start, html });
-			    }
-			}
+                updateDom({ domTextEditor, start, end, html });
+            }
+            if (value) {
+                if (element.innerHTML != value) {
+                    updateDom({ domTextEditor, value, start, end: start, html });
+                }
+            }
         }
     }
 }
 
-function _updateElementText (element, value, start, end) {
+function _updateElementText(element, value, start, end) {
     if (element.tagName === "INPUT" && ["text", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA") {
         let prev_start = element.selectionStart;
         let prev_end = element.selectionEnd;
@@ -402,7 +402,7 @@ function _updateElementText (element, value, start, end) {
 }
 
 export function _dispatchInputEvent(element, content, start, end, prev_start, prev_end) {
-    let detail = {value: content, start, end, prev_start, prev_end, skip: true};
+    let detail = { value: content, start, end, prev_start, prev_end, skip: true };
     let activeElement = element.ownerDocument.activeElement;
     if (activeElement == element)
         detail.skip = false;
@@ -412,7 +412,7 @@ export function _dispatchInputEvent(element, content, start, end, prev_start, pr
         Object.defineProperty(event, 'target', { writable: false, value: element });
         Object.defineProperty(event, 'detail', { writable: false, value: detail });
         element.dispatchEvent(event);
-    }   
+    }
     let inputEvent = new CustomEvent('input', { bubbles: true });
     Object.defineProperty(inputEvent, 'stopCCText', { writable: false, value: true });
     Object.defineProperty(inputEvent, 'target', { writable: false, value: element });
@@ -424,7 +424,7 @@ observer.init({
     name: 'CoCreateTextAddedNodes',
     observe: ['addedNodes'],
     target: selectors,
-    callback (mutation) {
+    callback(mutation) {
         let isCrdt = mutation.target.getAttribute('crdt');
         if (isCrdt) return;
         initElement(mutation.target);
@@ -436,7 +436,7 @@ observer.init({
     observe: ['attributes'],
     attributeName: [...crud.getAttributeNames(['collection', 'document_id', 'name']), 'contenteditable'],
     target: selectors,
-    callback (mutation) {
+    callback(mutation) {
         let _id = mutation.target.getAttribute('document_id')
         if (!_id) {
             _removeEventListeners(mutation.target)
@@ -448,23 +448,23 @@ observer.init({
 });
 
 action.init({
-	name: "undo",
-	endEvent: "undo",
-	callback: (btn, data) => {
+    name: "undo",
+    endEvent: "undo",
+    callback: (btn, data) => {
         const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttributes(btn);
         crdt.undoText({ collection, document_id, name, isCrud, isCrdt, isSave })
-	}
+    }
 });
 
 action.init({
-	name: "redo",
-	endEvent: "redo",
-	callback: (btn, data) => {
+    name: "redo",
+    endEvent: "redo",
+    callback: (btn, data) => {
         const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttributes(btn);
         crdt.redoText({ collection, document_id, name, isCrud, isCrdt, isSave })
-	}
+    }
 });
 
 init();
 
-export default {initElements, initElement, updateText, updateElement, _addEventListeners, insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, replaceInnerText};
+export default { initElements, initElement, updateText, updateElement, _addEventListeners, insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, replaceInnerText };
