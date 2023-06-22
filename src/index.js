@@ -450,8 +450,8 @@ observer.init({
 action.init({
     name: "undo",
     endEvent: "undo",
-    callback: (btn, data) => {
-        const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttributes(btn);
+    callback: (data) => {
+        const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttributes(data.element);
         crdt.undoText({ collection, document_id, name, isCrud, isCrdt, isSave })
     }
 });
@@ -459,8 +459,8 @@ action.init({
 action.init({
     name: "redo",
     endEvent: "redo",
-    callback: (btn, data) => {
-        const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttributes(btn);
+    callback: (data) => {
+        const { collection, document_id, name, isCrud, isCrdt, isSave } = crud.getAttributes(data.element);
         crdt.redoText({ collection, document_id, name, isCrud, isCrdt, isSave })
     }
 });
