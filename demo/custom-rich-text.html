@@ -6,22 +6,22 @@
             var oDoc, sDefTxt;
 
             function initDoc() {
-                oDoc = document.getElementById("textBox");
+                oDoc = object.getElementById("textBox");
                 sDefTxt = oDoc.innerHTML;
-                if (document.compForm.switchMode.checked) {
+                if (object.compForm.switchMode.checked) {
                     setDocMode(true);
                 }
             }
 
             function formatDoc(sCmd, sValue) {
                 if (validateMode()) {
-                    document.execCommand(sCmd, false, sValue);
+                    object.execCommand(sCmd, false, sValue);
                     oDoc.focus();
                 }
             }
 
             function validateMode() {
-                if (!document.compForm.switchMode.checked) {
+                if (!object.compForm.switchMode.checked) {
                     return true;
                 }
                 alert('Uncheck "Show HTML".');
@@ -32,24 +32,24 @@
             function setDocMode(bToSource) {
                 var oContent;
                 if (bToSource) {
-                    oContent = document.createTextNode(oDoc.innerHTML);
+                    oContent = object.createTextNode(oDoc.innerHTML);
                     oDoc.innerHTML = "";
-                    var oPre = document.createElement("pre");
+                    var oPre = object.createElement("pre");
                     oDoc.contentEditable = false;
                     oPre.id = "sourceText";
                     oPre.contentEditable = true;
                     oPre.appendChild(oContent);
                     oDoc.appendChild(oPre);
-                    document.execCommand(
+                    object.execCommand(
                         "defaultParagraphSeparator",
                         false,
                         "div"
                     );
                 } else {
-                    if (document.all) {
+                    if (object.all) {
                         oDoc.innerHTML = oDoc.innerText;
                     } else {
-                        oContent = document.createRange();
+                        oContent = object.createRange();
                         oContent.selectNodeContents(oDoc.firstChild);
                         oDoc.innerHTML = oContent.toString();
                     }
@@ -67,13 +67,13 @@
                     "_blank",
                     "width=450,height=470,left=400,top=100,menubar=yes,toolbar=no,location=no,scrollbars=yes"
                 );
-                oPrntWin.document.open();
-                oPrntWin.document.write(`
+                oPrntWin.object.open();
+                oPrntWin.object.write(`
                     <!doctype html><html><head><title>Print<\/title><\/head><body onload="print();">' +
                         oDoc.innerHTML +
                         "<\/body><\/html>"
                 `);
-                oPrntWin.document.close();
+                oPrntWin.object.close();
             }
         </script>
         <style type="text/css">

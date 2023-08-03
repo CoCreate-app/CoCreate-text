@@ -9,25 +9,25 @@
     </head>
 
     <body class="padding:20px">
-        <form collection="test" document_id="62a3f5d5e6dfc91d581cdd2d">
+        <form array="test" object="62a3f5d5e6dfc91d581cdd2d">
             <input type="email" name="email" />
             <input type="tel" name="tel" />
             <input type="url" name="url" />
-            <h1 name="name" collection="test"></h1>
+            <h1 name="name" array="test"></h1>
             <!-- <textarea name="name2"></textarea> -->
             <!--<h1 name='name' contenteditable>I will be replaced by crdt</h1>-->
             <!-- <div name='name2' contenteditable>I will be replaced by crud</div> -->
 
             <div class="padding:20px">
-                CoCreateCrdt.init({collection: "apples1", document_id:
+                CoCreateCrdt.init({array: "apples1", object:
                 "60bea334b25613e8da1b4bdf", name: "src"});
             </div>
             <div class="padding:20px">
-                CoCreateCrdt.getText({collection: "apples1", document_id:
+                CoCreateCrdt.getText({array: "apples1", object:
                 "60bea334b25613e8da1b4bdf", name: "src"});
             </div>
             <div class="padding:20px">
-                CoCreate.crdt.getText({collection: "apples1", document_id:
+                CoCreate.crdt.getText({array: "apples1", object:
                 "5fe9e0a11b4a703e71c51ba8", name: "name"});
             </div>
         </form>

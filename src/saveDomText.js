@@ -4,12 +4,13 @@ import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
 
 function save(btn) {
-    const { collection, document_id, name, namespace, room, broadcast, broadcastSender, isUpsert } = crud.getAttributes(btn);
-    crdt.getText({ collection, document_id, name }).then(response => {
-        crud.updateDocument({
-            collection,
-            document: {
-                _id: document_id,
+    const { array, object, name, namespace, room, broadcast, broadcastSender, isUpsert } = crud.getAttributes(btn);
+    crdt.getText({ array, object, name }).then(response => {
+        crud.send({
+            method: 'update.object',
+            array,
+            object: {
+                _id: object,
                 [name]: response
             },
             upsert: isUpsert,
