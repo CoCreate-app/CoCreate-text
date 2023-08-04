@@ -11,7 +11,7 @@ import action from '@cocreate/actions';
 import './saveDomText';
 
 let eventObj;
-let selector = `[array][object][name]`;
+let selector = `[array][object][key]`;
 let selectors = `input${selector}, textarea${selector}, [contenteditable]${selector}:not([contenteditable='false'])`;
 
 function init() {
@@ -27,20 +27,20 @@ function initElements(elements) {
 }
 
 function initElement(element) {
-    let { array, object, name, isRealtime, isCrdt, isCrud, isSave, isRead } = crud.getAttributes(element);
-    if (!array || !object || !name)
+    let { array, object, key, isRealtime, isCrdt, isCrud, isSave, isRead } = crud.getAttributes(element);
+    if (!array || !object || !key)
         return
     if (object == 'pending') {
         element.pendingObject = true
         return
     }
-    if (['_id', 'organization_id', 'storage', 'database', 'array'].includes(name))
+    if (['_id', 'organization_id', 'storage', 'database', 'array'].includes(key))
         return
     if (isCrdt == "false" || isRealtime == "false" || element.type == 'number')
         return
-    if (!crud.checkValue(array) || !crud.checkValue(object) || !crud.checkValue(name))
+    if (!crud.checkValue(array) || !crud.checkValue(object) || !crud.checkValue(key))
         return
-    if (name && name.startsWith("$"))
+    if (key && key.startsWith("$"))
         return
 
     if (element.tagName === "INPUT" && ["text", "tel", "url"].includes(element.type) || element.tagName === "TEXTAREA" || element.hasAttribute('contenteditable')) {
@@ -74,7 +74,7 @@ function initElement(element) {
             delete element.pendingObject
         }
 
-        crdt.getText({ array, object, name, crud: isCrud, save: isSave, read: isRead, newObject }).then(response => {
+        crdt.getText({ array, object, key, crud: isCrud, save: isSave, read: isRead, newObject }).then(response => {
             if (response === undefined)
                 return;
             if (!response) {
@@ -91,7 +91,7 @@ function initElement(element) {
                     value = element.value;
                 }
                 if (value)
-                    crdt.replaceText({ array, object, name, value, crud: isCrud, save: isSave, read: isRead });
+                    crdt.replaceText({ array, object, key, value, crud: isCrud, save: isSave, read: isRead });
             }
             else {
                 if (element.hasAttribute('contenteditable')) {
@@ -100,7 +100,7 @@ function initElement(element) {
                 else {
                     element.value = '';
                 }
-                updateElement({ element, array, object, name, value: response, start: 0 })
+                updateElement({ element, array, object, key, value: response, start: 0 })
             }
         });
     }
@@ -157,11 +157,11 @@ function _mousedown(event) {
             }
         }
     }
-    let contentEditable = target.closest('[array][object][name]');
+    let contentEditable = target.closest('[array][object][key]');
     if (contentEditable) {
         target = contentEditable;
-        const { array, object, name } = crud.getAttributes(target);
-        if (array && object && name && !target.hasAttribute('contenteditable'))
+        const { array, object, key } = crud.getAttributes(target);
+        if (array && object && key && !target.hasAttribute('contenteditable'))
             target.setAttribute('contenteditable', 'true');
     }
     // sendPosition(element)
@@ -169,10 +169,10 @@ function _mousedown(event) {
 
 function _blur(event) {
     let element = event.currentTarget;
-    const { array, object, name } = crud.getAttributes(element);
+    const { array, object, key } = crud.getAttributes(element);
     let start = null;
     let end = null;
-    cursors.sendPosition({ array, object, name, start, end });
+    cursors.sendPosition({ array, object, key, start, end });
 }
 
 function _cut(event) {
@@ -290,15 +290,15 @@ export function sendPosition(element) {
         }
     }
     if (!element) return;
-    const { array, object, name, isCrdt } = crud.getAttributes(element);
-    if (isCrdt == 'false' || !array || !object || !name) return;
-    let currentPosition = { array, object, name, start, end };
+    const { array, object, key, isCrdt } = crud.getAttributes(element);
+    if (isCrdt == 'false' || !array || !object || !key) return;
+    let currentPosition = { array, object, key, start, end };
     if (JSON.stringify(currentPosition) === JSON.stringify(previousPosition))
         return;
     previousPosition = currentPosition;
     element.activeElement = element;
     window.activeElement = element;
-    cursors.sendPosition({ array, object, name, start, end });
+    cursors.sendPosition({ array, object, key, start, end });
 }
 
 function updateText({ element, value, start, end, range, undoRedo }) {
@@ -309,17 +309,17 @@ function updateText({ element, value, start, end, range, undoRedo }) {
         if (element.tagName == 'HTML' && !element.hasAttribute('array'))
             element = element.ownerDocument.defaultView.frameElement;
     }
-    const { array, object, name, isCrud, isCrdt, isSave } = crud.getAttributes(element);
-    if (isCrdt == "false" || !array || !object || !name) return;
+    const { array, object, key, isCrud, isCrdt, isSave } = crud.getAttributes(element);
+    if (isCrdt == "false" || !array || !object || !key) return;
 
     if (undoRedo == 'undo')
-        return crdt.undoText({ array, object, name, isCrud, isCrdt, isSave })
+        return crdt.undoText({ array, object, key, isCrud, isCrdt, isSave })
     if (undoRedo == 'redo')
-        return crdt.redoText({ array, object, name, isCrud, isCrdt, isSave })
+        return crdt.redoText({ array, object, key, isCrud, isCrdt, isSave })
 
     let length = end - start;
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-        crdt.updateText({ array, object, name, value, start, length, crud: isCrud, save: isSave });
+        crdt.updateText({ array, object, key, value, start, length, crud: isCrud, save: isSave });
     } else {
         let startEl = range.startContainer.parentElement;
         let endEl = range.endContainer.parentElement;
@@ -328,7 +328,7 @@ function updateText({ element, value, start, end, range, undoRedo }) {
             //     // value = target.innerHTML;
             //     // replaceInnerText(domTextEditor, target, value)
         }
-        crdt.updateText({ array, object, value, name, start, length, crud: isCrud, save: isSave });
+        crdt.updateText({ array, object, value, key, start, length, crud: isCrud, save: isSave });
     }
 }
 
@@ -338,9 +338,9 @@ function _crdtUpdateListener() {
     });
 }
 
-function updateElements({ elements, array, object, name, value, start, length, string }) {
+function updateElements({ elements, array, object, key, value, start, length, string }) {
     if (!elements) {
-        let selectors = `[array='${array}'][object='${object}'][name='${name}']`;
+        let selectors = `[array='${array}'][object='${object}'][key='${key}']`;
         elements = document.querySelectorAll(`input${selectors}, textarea${selectors}, [contenteditable]${selectors}, [editor='dom']${selectors}`);
     }
 
@@ -348,11 +348,11 @@ function updateElements({ elements, array, object, name, value, start, length, s
         let isCrdt = element.getAttribute('crdt');
         if (!element.hasAttribute('contenteditable') && isCrdt == 'false') return;
 
-        updateElement({ element, array, object, name, value, start, length, string });
+        updateElement({ element, array, object, key, value, start, length, string });
     });
 }
 
-async function updateElement({ element, array, object, name, value, start, length, string }) {
+async function updateElement({ element, array, object, key, value, start, length, string }) {
     if (element.tagName == 'IFRAME') {
         let eid = element.getAttribute('eid')
         element = element.contentDocument.documentElement;
@@ -373,7 +373,7 @@ async function updateElement({ element, array, object, name, value, start, lengt
         else {
             let domTextEditor = element;
             if (string == undefined)
-                string = await crdt.getText({ array, object, name });
+                string = await crdt.getText({ array, object, key });
             let html = string;
             if (length) {
                 let end = start + length;
@@ -434,7 +434,7 @@ observer.init({
 observer.init({
     name: 'CoCreateTextAttribtes',
     observe: ['attributes'],
-    attributeName: [...crud.getAttributeNames(['array', 'object', 'name']), 'contenteditable'],
+    attributeName: [...crud.getAttributeNames(['array', 'object', 'key']), 'contenteditable'],
     target: selectors,
     callback(mutation) {
         let _id = mutation.target.getAttribute('object')
@@ -451,8 +451,8 @@ action.init({
     name: "undo",
     endEvent: "undo",
     callback: (data) => {
-        const { array, object, name, isCrud, isCrdt, isSave } = crud.getAttributes(data.element);
-        crdt.undoText({ array, object, name, isCrud, isCrdt, isSave })
+        const { array, object, key, isCrud, isCrdt, isSave } = crud.getAttributes(data.element);
+        crdt.undoText({ array, object, key, isCrud, isCrdt, isSave })
     }
 });
 
@@ -460,8 +460,8 @@ action.init({
     name: "redo",
     endEvent: "redo",
     callback: (data) => {
-        const { array, object, name, isCrud, isCrdt, isSave } = crud.getAttributes(data.element);
-        crdt.redoText({ array, object, name, isCrud, isCrdt, isSave })
+        const { array, object, key, isCrud, isCrdt, isSave } = crud.getAttributes(data.element);
+        crdt.redoText({ array, object, key, isCrud, isCrdt, isSave })
     }
 });
 

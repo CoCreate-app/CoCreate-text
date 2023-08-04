@@ -74,6 +74,6 @@ export function updateDomText({ domTextEditor, target, position, element, elemen
 function _updateText({ domTextEditor, value, start, end }) {
     if (domTextEditor.tagName == 'HTML')
         domTextEditor = domTextEditor.ownerDocument.defaultView.frameElement;
-    const { array, object, name, isCrud } = crud.getAttributes(domTextEditor);
-    crdt.updateText({ array, object, name, value, start, length: end - start, crud: isCrud });
+    const { array, object, key, isCrud } = crud.getAttributes(domTextEditor);
+    crdt.updateText({ array, object, key, value, start, length: end - start, crud: isCrud });
 }

@@ -107,11 +107,11 @@
     </head>
     <body onload="initDoc();">
         <form
-            name="compForm"
+            key="compForm"
             method="post"
             action="sample.php"
             onsubmit="if (validateMode()){this.myDoc.value=oDoc.innerHTML;return true;}return false;">
-            <input type="hidden" name="myDoc" />
+            <input type="hidden" key="myDoc" />
             <div id="toolBar1">
                 <select
                     onchange="formatDoc('formatblock',this[this.selectedIndex].value);this.selectedIndex=0;">
@@ -266,7 +266,7 @@
             <p id="editMode">
                 <input
                     type="checkbox"
-                    name="switchMode"
+                    key="switchMode"
                     id="switchBox"
                     onchange="setDocMode(this.checked);" />
                 <label for="switchBox">Show HTML</label>
