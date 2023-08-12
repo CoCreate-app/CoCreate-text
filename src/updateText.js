@@ -1,5 +1,5 @@
-import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
+import {getAttributes} from '@cocreate/elements';
 import { getStringPosition } from '@cocreate/selection';
 
 export function insertAdjacentElement({ domTextEditor, target, position, element, elementValue }) {
@@ -74,6 +74,6 @@ export function updateDomText({ domTextEditor, target, position, element, elemen
 function _updateText({ domTextEditor, value, start, end }) {
     if (domTextEditor.tagName == 'HTML')
         domTextEditor = domTextEditor.ownerDocument.defaultView.frameElement;
-    const { array, object, key, isCrud } = crud.getAttributes(domTextEditor);
+    const { array, object, key, isCrud } = getAttributes(domTextEditor);
     crdt.updateText({ array, object, key, value, start, length: end - start, crud: isCrud });
 }

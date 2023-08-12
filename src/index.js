@@ -1,9 +1,9 @@
 /*global CustomEvent, navigator*/
 import observer from '@cocreate/observer';
-import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
 import cursors from '@cocreate/cursors';
 import uuid from '@cocreate/uuid';
+import { getAttributes, getAttributeNames, checkValue } from '@cocreate/utils';
 import { updateDom } from './updateDom';
 import { insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, replaceInnerText } from './updateText';
 import { getSelection, processSelection } from '@cocreate/selection';
@@ -27,7 +27,7 @@ function initElements(elements) {
 }
 
 function initElement(element) {
-    let { array, object, key, isRealtime, isCrdt, isCrud, isSave, isRead } = crud.getAttributes(element);
+    let { array, object, key, isRealtime, isCrdt, isCrud, isSave, isRead } = getAttributes(element);
     if (!array || !object || !key)
         return
     if (object == 'pending') {
@@ -38,7 +38,7 @@ function initElement(element) {
         return
     if (isCrdt == "false" || isRealtime == "false" || element.type == 'number')
         return
-    if (!crud.checkValue(array) || !crud.checkValue(object) || !crud.checkValue(key))
+    if (!checkValue(array) || !checkValue(object) || !checkValue(key))
         return
     if (key && key.startsWith("$"))
         return
@@ -160,7 +160,7 @@ function _mousedown(event) {
     let contentEditable = target.closest('[array][object][key]');
     if (contentEditable) {
         target = contentEditable;
-        const { array, object, key } = crud.getAttributes(target);
+        const { array, object, key } = getAttributes(target);
         if (array && object && key && !target.hasAttribute('contenteditable'))
             target.setAttribute('contenteditable', 'true');
     }
@@ -169,7 +169,7 @@ function _mousedown(event) {
 
 function _blur(event) {
     let element = event.currentTarget;
-    const { array, object, key } = crud.getAttributes(element);
+    const { array, object, key } = getAttributes(element);
     let start = null;
     let end = null;
     cursors.sendPosition({ array, object, key, start, end });
@@ -290,7 +290,7 @@ export function sendPosition(element) {
         }
     }
     if (!element) return;
-    const { array, object, key, isCrdt } = crud.getAttributes(element);
+    const { array, object, key, isCrdt } = getAttributes(element);
     if (isCrdt == 'false' || !array || !object || !key) return;
     let currentPosition = { array, object, key, start, end };
     if (JSON.stringify(currentPosition) === JSON.stringify(previousPosition))
@@ -309,7 +309,7 @@ function updateText({ element, value, start, end, range, undoRedo }) {
         if (element.tagName == 'HTML' && !element.hasAttribute('array'))
             element = element.ownerDocument.defaultView.frameElement;
     }
-    const { array, object, key, isCrud, isCrdt, isSave } = crud.getAttributes(element);
+    const { array, object, key, isCrud, isCrdt, isSave } = getAttributes(element);
     if (isCrdt == "false" || !array || !object || !key) return;
 
     if (undoRedo == 'undo')
@@ -434,7 +434,7 @@ observer.init({
 observer.init({
     name: 'CoCreateTextAttribtes',
     observe: ['attributes'],
-    attributeName: [...crud.getAttributeNames(['array', 'object', 'key']), 'contenteditable'],
+    attributeName: [...getAttributeNames(['array', 'object', 'key']), 'contenteditable'],
     target: selectors,
     callback(mutation) {
         let _id = mutation.target.getAttribute('object')
@@ -451,7 +451,7 @@ action.init({
     name: "undo",
     endEvent: "undo",
     callback: (data) => {
-        const { array, object, key, isCrud, isCrdt, isSave } = crud.getAttributes(data.element);
+        const { array, object, key, isCrud, isCrdt, isSave } = getAttributes(data.element);
         crdt.undoText({ array, object, key, isCrud, isCrdt, isSave })
     }
 });
@@ -460,7 +460,7 @@ action.init({
     name: "redo",
     endEvent: "redo",
     callback: (data) => {
-        const { array, object, key, isCrud, isCrdt, isSave } = crud.getAttributes(data.element);
+        const { array, object, key, isCrud, isCrdt, isSave } = getAttributes(data.element);
         crdt.redoText({ array, object, key, isCrud, isCrdt, isSave })
     }
 });

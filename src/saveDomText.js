@@ -2,9 +2,10 @@
 import action from '@cocreate/actions';
 import crud from '@cocreate/crud-client';
 import crdt from '@cocreate/crdt';
+import { getAttributes } from '@cocreate/utils';
 
 function save(btn) {
-    const { array, object, key, namespace, room, broadcast, broadcastSender, isUpsert } = crud.getAttributes(btn);
+    const { array, object, key, namespace, room, broadcast, broadcastSender, isUpsert } = getAttributes(btn);
     crdt.getText({ array, object, key }).then(response => {
         crud.send({
             method: 'update.object',
