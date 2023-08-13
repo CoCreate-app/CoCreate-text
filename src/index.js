@@ -8,7 +8,6 @@ import { updateDom } from './updateDom';
 import { insertAdjacentElement, removeElement, setInnerText, setAttribute, removeAttribute, setClass, setStyle, replaceInnerText } from './updateText';
 import { getSelection, processSelection } from '@cocreate/selection';
 import action from '@cocreate/actions';
-import './saveDomText';
 
 let eventObj;
 let selector = `[array][object][key]`;
@@ -103,6 +102,10 @@ function initElement(element) {
                 updateElement({ element, array, object, key, value: response, start: 0 })
             }
         });
+
+        element.getValue = async () => {
+            return await crdt.getText({ array, object, key })
+        }
     }
 }
 
