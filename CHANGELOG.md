@@ -1,3 +1,22 @@
+# [1.21.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.29...v1.21.0) (2023-08-16)
+
+
+### Bug Fixes
+
+* crud and utils function usage ([4b35c41](https://github.com/CoCreate-app/CoCreate-text/commit/4b35c419eb4fe5f29d3b568f3ab252fcd1bb4f11))
+* crud attributes renamed ([3ca322f](https://github.com/CoCreate-app/CoCreate-text/commit/3ca322fb4ced8352caeedb8a77f510df45340d4e))
+* removed @cocreate/crud-client ([7436f4a](https://github.com/CoCreate-app/CoCreate-text/commit/7436f4aba24dc934f1b19c45b267c8ee3c210279))
+* replace -target -selector ([2a5bac2](https://github.com/CoCreate-app/CoCreate-text/commit/2a5bac2ed1dace214d013037eabf44fa415565b0))
+* updated actions callback data object ([76cd64b](https://github.com/CoCreate-app/CoCreate-text/commit/76cd64b60a20dff7f21701b50c7c17f95e00d8a6))
+* webpack.config and package.json make use of mode=production instead of process.env ([a67e920](https://github.com/CoCreate-app/CoCreate-text/commit/a67e9205cf21002cffb2446d2bf065fe4933f2db))
+
+
+### Features
+
+* name attribute and variable renamed to key ([3dba2ae](https://github.com/CoCreate-app/CoCreate-text/commit/3dba2ae37a88f9e757e6887081be4f7a6c303d78))
+* removed @cocreate/crud-client and add element.setValue ([8b95ff7](https://github.com/CoCreate-app/CoCreate-text/commit/8b95ff71d8fbf774dbea8e81301eedd661689af8))
+* removed saveDomText.js as it can be handled by elelement.save() or action save ([7b5b627](https://github.com/CoCreate-app/CoCreate-text/commit/7b5b6273122873b501b8128c74f902ce02bc3ee0))
+
 ## [1.20.29](https://github.com/CoCreate-app/CoCreate-text/compare/v1.20.28...v1.20.29) (2023-06-14)
 
 
