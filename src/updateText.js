@@ -1,5 +1,5 @@
 import crdt from '@cocreate/crdt';
-import {getAttributes} from '@cocreate/elements';
+import { getAttributes } from '@cocreate/utils';
 import { getStringPosition } from '@cocreate/selection';
 
 export function insertAdjacentElement({ domTextEditor, target, position, element, elementValue }) {
