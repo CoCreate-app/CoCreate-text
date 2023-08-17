@@ -1,3 +1,10 @@
+## [1.22.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.22.0...v1.22.1) (2023-08-17)
+
+
+### Bug Fixes
+
+* typo calling getAttributes from elements instead of utils ([ef048d9](https://github.com/CoCreate-app/CoCreate-text/commit/ef048d9bb89744f92749bde484197dbc40292721))
+
 # [1.22.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.21.0...v1.22.0) (2023-08-17)
 
 
