@@ -1,3 +1,12 @@
+## [1.22.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.22.1...v1.22.2) (2023-08-21)
+
+
+### Bug Fixes
+
+* /dist/CoCreate.js updated to https://CoCreate.app/dist/CoCreate.js ([615bf14](https://github.com/CoCreate-app/CoCreate-text/commit/615bf14bd586c4a9abf038171bb5158ccb47a976))
+* replace cdn with /dist ([8c479af](https://github.com/CoCreate-app/CoCreate-text/commit/8c479af1624a75c625125d77175a5db19bab5e9c))
+* update file uploader ([ae39025](https://github.com/CoCreate-app/CoCreate-text/commit/ae390256841305235244d19f7d36b15d183f57b6))
+
 ## [1.22.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.22.0...v1.22.1) (2023-08-17)
 
 
