@@ -1,3 +1,11 @@
+## [1.23.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.23.1...v1.23.2) (2023-09-18)
+
+
+### Bug Fixes
+
+*  Add path and pathname ([9382464](https://github.com/CoCreate-app/CoCreate-text/commit/9382464aa2d708024cdea9ca6f616b8ed7c331df))
+* Update CoCreate depndencies to latest versions ([a064f44](https://github.com/CoCreate-app/CoCreate-text/commit/a064f447c87ca93ce21c75eedb648f0dc7e662ea))
+
 ## [1.23.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.23.0...v1.23.1) (2023-08-21)
 
 
