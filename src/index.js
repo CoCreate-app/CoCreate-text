@@ -50,8 +50,7 @@ function initElement(element) {
                     _addEventListeners(element.contentDocument.documentElement);
                 let Document = element.contentDocument;
                 initDocument(Document);
-            }
-            else if (isCrdt != 'true') {
+            } else if (isCrdt != 'true') {
                 _addEventListeners(element);
             }
         }
@@ -85,18 +84,16 @@ function initElement(element) {
                 let value;
                 if (element.hasAttribute('contenteditable')) {
                     value = element.innerHTML;
-                }
-                else {
+                } else {
                     value = element.value;
                 }
+
                 if (value)
                     crdt.replaceText({ array, object, key, value, crud: isCrud, save: isSave, read: isRead });
-            }
-            else {
+            } else {
                 if (element.hasAttribute('contenteditable')) {
                     element.innerHTML = '';
-                }
-                else {
+                } else {
                     element.value = '';
                 }
                 updateElement({ element, array, object, key, value: response, start: 0 })
@@ -187,8 +184,7 @@ function _cut(event) {
     console.log(selection.toString());
     if (event.clipboardData) {
         event.clipboardData.setData('text/plain', selection.toString());
-    }
-    else {
+    } else {
         navigator.clipboard.writeText(selection.toString()).then(function () {
             /* clipboard successfully set */
         }, function () {
@@ -228,20 +224,16 @@ function _keydown(event) {
 
         if (event.key == "Backspace" && start == end) {
             updateText({ element, start: start - 1, end, range });
-        }
-        else if (event.key == 'Tab') {
+        } else if (event.key == 'Tab') {
             updateText({ element, value: "\t", start, range });
-        }
-        else if (event.key == "Enter") {
+        } else if (event.key == "Enter") {
             updateText({ element, value: "\n", start, range });
         }
         event.preventDefault();
-    }
-    else if (event.ctrlKey) {
+    } else if (event.ctrlKey) {
         if (event.keyCode == 90) {
             updateText({ element, range, undoRedo: 'undo' });
-        }
-        else if (event.keyCode == 89) {
+        } else if (event.keyCode == 89) {
             updateText({ element, range, undoRedo: 'redo' });
         }
     }
@@ -372,8 +364,7 @@ async function updateElement({ element, array, object, key, value, start, length
             if (value) {
                 _updateElementText(element, value, start, start);
             }
-        }
-        else {
+        } else {
             let domTextEditor = element;
             if (string == undefined)
                 string = await crdt.getText({ array, object, key });
