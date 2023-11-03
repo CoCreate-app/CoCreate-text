@@ -1,3 +1,11 @@
+## [1.23.7](https://github.com/CoCreate-app/CoCreate-text/compare/v1.23.6...v1.23.7) (2023-11-03)
+
+
+### Bug Fixes
+
+* favicon.ico path ([fe79d99](https://github.com/CoCreate-app/CoCreate-text/commit/fe79d99305aba5beb5d50fc6247bab8f39ac20a9))
+* update dependencies to the lates versions ([5eb6961](https://github.com/CoCreate-app/CoCreate-text/commit/5eb69619fac6b997755aa04583d7a2236bca7ee5))
+
 ## [1.23.6](https://github.com/CoCreate-app/CoCreate-text/compare/v1.23.5...v1.23.6) (2023-10-25)
 
 
