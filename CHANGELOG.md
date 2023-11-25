@@ -1,3 +1,15 @@
+# [1.26.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.25.0...v1.26.0) (2023-11-25)
+
+
+### Bug Fixes
+
+* update licensing details ([8d6a61e](https://github.com/CoCreate-app/CoCreate-text/commit/8d6a61e0b95c975928820a5611ba009681989e87))
+
+
+### Features
+
+* upgrade dependencies for latest features and fixes ([fdd8a66](https://github.com/CoCreate-app/CoCreate-text/commit/fdd8a6688d16b850af0ce862178a162412317ee9))
+
 # [1.25.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.24.0...v1.25.0) (2023-11-25)
 
 
