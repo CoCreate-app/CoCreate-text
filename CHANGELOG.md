@@ -1,3 +1,10 @@
+## [1.26.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.26.0...v1.26.1) (2023-12-09)
+
+
+### Bug Fixes
+
+* typo ([1bd234a](https://github.com/CoCreate-app/CoCreate-text/commit/1bd234aab34e1b0ef0da7aeb2f872259926507d7))
+
 # [1.26.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.25.0...v1.26.0) (2023-11-25)
 
 
