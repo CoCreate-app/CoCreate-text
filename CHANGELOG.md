@@ -1,3 +1,10 @@
+## [1.26.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.26.1...v1.26.2) (2024-02-05)
+
+
+### Bug Fixes
+
+* Removed https://cdn.cocreate.app/latest/CoCreate.min.css ([a45eeae](https://github.com/CoCreate-app/CoCreate-text/commit/a45eeae3a513060f4795720f3ff549eb4cb54b14))
+
 ## [1.26.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.26.0...v1.26.1) (2023-12-09)
 
 
