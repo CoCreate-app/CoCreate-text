@@ -1,3 +1,10 @@
+## [1.26.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.26.2...v1.26.3) (2024-02-14)
+
+
+### Bug Fixes
+
+* realtime defaults to false ([bb50bda](https://github.com/CoCreate-app/CoCreate-text/commit/bb50bda41000223ae64836e3826283c3c47d6dff))
+
 ## [1.26.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.26.1...v1.26.2) (2024-02-05)
 
 
