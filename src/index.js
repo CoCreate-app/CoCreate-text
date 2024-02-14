@@ -35,7 +35,7 @@ function initElement(element) {
     }
     if (['_id', 'organization_id', 'storage', 'database', 'array'].includes(key))
         return
-    if (isCrdt == "false" || isRealtime == "false" || element.type == 'number')
+    if (!isRealtime || isCrdt == "false" || isRealtime == "false" || element.type == 'number' || element.type == 'file' || element.getAttribute('type') === 'file')
         return
     if (!checkValue(array) || !checkValue(object) || !checkValue(key))
         return
