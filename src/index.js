@@ -126,7 +126,10 @@ function initDocument(doc) {
         documents.set(doc);
         doc.addEventListener('selectionchange', (e) => {
             let element = doc.activeElement;
-            sendPosition(element);
+            let { isRealtime, isCrdt } = getAttributes(element);
+
+            if (isRealtime && isCrdt)
+                sendPosition(element);
         });
     }
 }
