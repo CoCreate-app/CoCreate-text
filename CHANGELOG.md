@@ -1,3 +1,10 @@
+## [1.26.5](https://github.com/CoCreate-app/CoCreate-text/compare/v1.26.4...v1.26.5) (2024-05-08)
+
+
+### Bug Fixes
+
+* check if realtime and crdt prior to sendPosition ([c50954d](https://github.com/CoCreate-app/CoCreate-text/commit/c50954d98ed012dde171c8a00ef4cd6ed509f73e))
+
 ## [1.26.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.26.3...v1.26.4) (2024-04-29)
 
 
