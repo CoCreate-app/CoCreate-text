@@ -128,8 +128,10 @@ function initDocument(doc) {
             let element = doc.activeElement;
             let { isRealtime, isCrdt } = getAttributes(element);
 
-            if (isRealtime && isCrdt)
+            if (isRealtime && isCrdt) {
+                doc.activeSelection = getSelection(element);
                 sendPosition(element);
+            }
         });
     }
 }
@@ -294,6 +296,7 @@ export function sendPosition(element) {
     if (JSON.stringify(currentPosition) === JSON.stringify(previousPosition))
         return;
     previousPosition = currentPosition;
+    // console.log('activeElement: ', element)
     element.activeElement = element;
     window.activeElement = element;
     cursors.sendPosition({ array, object, key, start, end });
@@ -307,6 +310,9 @@ function updateText({ element, value, start, end, range, undoRedo }) {
         if (element.tagName == 'HTML' && !element.hasAttribute('array'))
             element = element.ownerDocument.defaultView.frameElement;
     }
+
+    if (!element) return
+
     const { array, object, key, isCrud, isCrdt, isSave } = getAttributes(element);
     if (isCrdt == "false" || !array || !object || !key) return;
 
