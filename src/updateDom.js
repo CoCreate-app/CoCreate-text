@@ -158,6 +158,8 @@ export function updateDom({ domTextEditor, value, start, end, html }) {
                 _dispatchInputEvent(p.element, p.value, p.start, p.end, p.prev_start, p.prev_end);
 
             }
+        } else {
+            _dispatchInputEvent(domTextEditor);
         }
 
         if (['HTML', 'HEAD', 'BODY', 'SCRIPT'].includes(newEl.tagName)) {
