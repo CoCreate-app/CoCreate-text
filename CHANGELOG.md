@@ -1,3 +1,18 @@
+# [1.27.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.26.5...v1.27.0) (2024-06-12)
+
+
+### Bug Fixes
+
+* bump cocreate dependencies ([5f04198](https://github.com/CoCreate-app/CoCreate-text/commit/5f0419854eca2a8707a0140d31547308fb1ae604))
+* dispatch input event when value is set in contenteditable elements ([1509928](https://github.com/CoCreate-app/CoCreate-text/commit/1509928a5df4d2d70d7d0d06d1124ae924901ae6))
+* formating ([5f751e7](https://github.com/CoCreate-app/CoCreate-text/commit/5f751e718f71b07b754022fea8d4f55e84b11158))
+* svg icon class ([3716b92](https://github.com/CoCreate-app/CoCreate-text/commit/3716b929a9806d585ba16c40c015a3cb469d4ab4))
+
+
+### Features
+
+* set activeSelection on document ([e85b59a](https://github.com/CoCreate-app/CoCreate-text/commit/e85b59a89af4a2951e63600e88ea3a7927b33581))
+
 ## [1.26.5](https://github.com/CoCreate-app/CoCreate-text/compare/v1.26.4...v1.26.5) (2024-05-08)
 
 
