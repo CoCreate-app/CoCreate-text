@@ -103,6 +103,10 @@ function initElement(element) {
         element.getValue = async () => {
             return await crdt.getText({ array, object, key })
         }
+        element.setValue = (value) => {
+            crdt.replaceText({ array, object, key, value, crud: isCrud, save: isSave, read: isRead });
+
+        }
     }
 }
 
