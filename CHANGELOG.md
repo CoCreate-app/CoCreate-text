@@ -1,3 +1,10 @@
+## [1.27.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.27.0...v1.27.1) (2024-06-19)
+
+
+### Bug Fixes
+
+* apply custom setValue function on element ([938088a](https://github.com/CoCreate-app/CoCreate-text/commit/938088a9d2caa3046fbac34d7bebf6858296ab74))
+
 # [1.27.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.26.5...v1.27.0) (2024-06-12)
 
 
