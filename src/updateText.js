@@ -58,7 +58,9 @@ export function replaceInnerText({ domTextEditor, target, value }) {
 }
 
 export function updateDomText({ domTextEditor, target, position, element, elementValue, attribute, value, property, pos, remove }) {
-    let { start, end, newValue } = getStringPosition({ string: domTextEditor.htmlString, target, attribute, property, value, remove });
+    let selection = getStringPosition({ string: domTextEditor.htmlString, target, attribute, property, value, remove });
+    if (!selection) return
+    let { start, end, newValue } = selection;
     if (pos) {
         start += pos.start;
         end += pos.end;
