@@ -173,7 +173,7 @@ function _mousedown(event) {
         if (array && object && key && !target.hasAttribute('contenteditable'))
             target.setAttribute('contenteditable', 'true');
     }
-    // sendPosition(element)
+    sendPosition(domTextEditor)
 }
 
 function _blur(event) {
@@ -245,6 +245,8 @@ function _keydown(event) {
         } else if (event.keyCode == 89) {
             updateText({ element, range, undoRedo: 'redo' });
         }
+    } else {
+        sendPosition(element)
     }
 }
 
