@@ -6,8 +6,9 @@ export function insertAdjacentElement({ domTextEditor, target, position, element
     let remove;
     if (element && !elementValue) {
         remove = getStringPosition({ string: domTextEditor.htmlString, target: element });
-        if (!remove.start && !remove.end)
+        if (!remove || !remove.start && !remove.end)
             throw new Error('insertAdjacentElement: element not found');
+
         elementValue = domTextEditor.htmlString.substring(remove.start, remove.end);
     }
 
