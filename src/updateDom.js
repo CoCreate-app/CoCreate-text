@@ -40,13 +40,11 @@ export function updateDom({ domTextEditor, value, start, end, html }) {
             newEl.innerHTML = domTextEditor.htmlString;
         domEl = domTextEditor;
         type = 'innerHTML';
-    }
-    else if (element.tagName == 'HTML') {
+    } else if (element.tagName == 'HTML') {
         // console.log('element = html')
         domEl = domTextEditor;
         type = 'innerHTML';
-    }
-    else if (path) {
+    } else if (path) {
         // console.log("else path", path)
         domEl = domTextEditor.querySelector(path);
         // if (!domEl || !oldEl){
@@ -103,44 +101,34 @@ export function updateDom({ domTextEditor, value, start, end, html }) {
         // console.log('newEl', newEl)
         if (start != end && type == 'innerHTML') {
             domTextEditor.htmlString = html;
-            if (domEl.tagName != 'HTML') {
-                if (newEl.parentElement) {
-                    domEl.parentElement.replaceChildren(...newEl.parentElement.childNodes);
-                    // console.log('parent', domEl.parentElement)
-                } else {
-                    domEl.replaceChildren(...newEl.childNodes);
-                    // console.log('domEl', domEl)
-                }
-            }
-            else {
+            if (domEl.tagName != 'HTML' && newEl.parentElement) {
+                domEl.parentElement.replaceChildren(...newEl.parentElement.childNodes);
+            } else {
                 domEl.replaceChildren(...newEl.childNodes);
                 // console.log('Html tag', domEl)
             }
+
             if (curCaret && curCaret.range) {
                 curCaret.range.startContainer = domEl;
                 curCaret.range.endContainer = domEl;
             }
-        }
-        else if (type == 'isStartTag') {
+        } else if (type == 'isStartTag') {
             oldEl = domTextEditor.oldHtml.querySelector(path);
             if (!oldEl && domEl.tagName == 'HTML')
                 oldEl = domTextEditor.oldHtml
             assignAttributes(newEl, oldEl, domEl);
             // console.log('isStartTag', domEl, newEl)
 
-        }
-        else if (type == 'insertAdjacent') {
+        } else if (type == 'insertAdjacent') {
             domEl.insertAdjacentHTML(position, value);
             // console.log('insertAdjacent', domEl, value)
-        }
-        else if (type == 'textNode') {
+        } else if (type == 'textNode') {
             if (start != end)
                 domTextEditor.htmlString = html;
             domEl.innerHTML = newEl.innerHTML;
             // console.log('textnode', domEl.innerHTML, newEl.innerHTML)
 
-        }
-        else if (type == 'innerHTML') {
+        } else if (type == 'innerHTML') {
             domEl.replaceChildren(...newEl.childNodes);
             // console.log('innerHtml', domEl, newEl)
         }
