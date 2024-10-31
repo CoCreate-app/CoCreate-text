@@ -432,7 +432,7 @@ export function _dispatchInputEvent(element, content, start, end, prev_start, pr
 observer.init({
     name: 'CoCreateTextAddedNodes',
     observe: ['addedNodes'],
-    target: selectors,
+    selector: selectors,
     callback(mutation) {
         let isCrdt = mutation.target.getAttribute('crdt');
         if (isCrdt) return;
@@ -444,7 +444,7 @@ observer.init({
     name: 'CoCreateTextAttribtes',
     observe: ['attributes'],
     attributeName: [...getAttributeNames(['array', 'object', 'key']), 'contenteditable'],
-    target: selectors,
+    selector: selectors,
     callback(mutation) {
         let _id = mutation.target.getAttribute('object')
         if (!_id) {
