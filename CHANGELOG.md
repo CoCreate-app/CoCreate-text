@@ -1,3 +1,20 @@
+# [1.28.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.27.1...v1.28.0) (2024-11-04)
+
+
+### Bug Fixes
+
+* formating ([df994e2](https://github.com/CoCreate-app/CoCreate-text/commit/df994e2495420d626f1429a8a00f0cd8287d1cbd))
+* if condition remove ([ac7bf6a](https://github.com/CoCreate-app/CoCreate-text/commit/ac7bf6a3cca3c2e876900f5d86d372880295dc73))
+* if no selection return ([a271cb3](https://github.com/CoCreate-app/CoCreate-text/commit/a271cb3c73e74d0b104939a2d6a662dd11da59f8))
+* observer taget has been renamed to selector ([da1e9e9](https://github.com/CoCreate-app/CoCreate-text/commit/da1e9e9eeaddcbafcfb589278ff8fadd10e4dd52))
+* pretier.config.js and file formating ([0ae4aed](https://github.com/CoCreate-app/CoCreate-text/commit/0ae4aed54f9358cd39b4de513684d9949f7e8844))
+* send position on mousedown and arrow keys ([1e63d00](https://github.com/CoCreate-app/CoCreate-text/commit/1e63d00fedef6de42594c592a6171b5c061ebd06))
+
+
+### Features
+
+* add prettier.config.js and format files ([9a8b71d](https://github.com/CoCreate-app/CoCreate-text/commit/9a8b71d52a4fa98a95f723238fbe7cd32e254adc))
+
 ## [1.27.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.27.0...v1.27.1) (2024-06-19)
 
 
