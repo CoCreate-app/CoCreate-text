@@ -1,3 +1,10 @@
+## [1.28.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.28.0...v1.28.1) (2024-12-14)
+
+
+### Bug Fixes
+
+* try catchblock ([ca984f1](https://github.com/CoCreate-app/CoCreate-text/commit/ca984f1276cfed24ee34c21e874905a39b4bfac7))
+
 # [1.28.0](https://github.com/CoCreate-app/CoCreate-text/compare/v1.27.1...v1.28.0) (2024-11-04)
 
 
