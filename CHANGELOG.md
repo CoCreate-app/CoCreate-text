@@ -1,3 +1,11 @@
+## [1.28.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.28.1...v1.28.2) (2025-04-11)
+
+
+### Bug Fixes
+
+* [realtime added to the selector] ([8a54245](https://github.com/CoCreate-app/CoCreate-text/commit/8a54245f7479813e89480cc4c2b1aea0804d7864))
+* update observer observe param to type and and attributeName to attributeFilter ([70ed9c7](https://github.com/CoCreate-app/CoCreate-text/commit/70ed9c780b72948993472ef9e03d53fa75897e53))
+
 ## [1.28.1](https://github.com/CoCreate-app/CoCreate-text/compare/v1.28.0...v1.28.1) (2024-12-14)
 
 
