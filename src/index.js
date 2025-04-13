@@ -606,10 +606,7 @@ observer.init({
 observer.init({
 	name: "CoCreateTextAttribtes",
 	types: ["attributes"],
-	attributeFilter: [
-		...getAttributeNames(["array", "object", "key"]),
-		"contenteditable"
-	],
+	attributeFilter: ["array", "object", "key"],
 	selector: selectors,
 	callback(mutation) {
 		let _id = mutation.target.getAttribute("object");
