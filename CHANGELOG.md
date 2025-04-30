@@ -1,3 +1,14 @@
+## [1.28.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.28.2...v1.28.3) (2025-04-30)
+
+
+### Bug Fixes
+
+* added css-loader ([64e8d78](https://github.com/CoCreate-app/CoCreate-text/commit/64e8d784b7c67496f84ba24908f5517cdf0ffa00))
+* attributeObserver ([9c5db7e](https://github.com/CoCreate-app/CoCreate-text/commit/9c5db7e591e475bc2d31f3052a47855f6ed49f5b))
+* update query attributes ([2223d0b](https://github.com/CoCreate-app/CoCreate-text/commit/2223d0b38389e4d0753323af65d556ceac222a6d))
+* updated cocreate modules versions ([3f3c272](https://github.com/CoCreate-app/CoCreate-text/commit/3f3c272fd68e99e8c508cbe5cec9057e8265a2b7))
+* webpack.config and devdependencies ([f3cfc60](https://github.com/CoCreate-app/CoCreate-text/commit/f3cfc60c793a3c74ed44f6bfdb3a625ea2d71213))
+
 ## [1.28.2](https://github.com/CoCreate-app/CoCreate-text/compare/v1.28.1...v1.28.2) (2025-04-11)
 
 
