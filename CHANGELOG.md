@@ -1,3 +1,10 @@
+## [1.28.4](https://github.com/CoCreate-app/CoCreate-text/compare/v1.28.3...v1.28.4) (2025-05-01)
+
+
+### Bug Fixes
+
+* update [@cocreate](https://github.com/cocreate) dependencies ([d8b70f4](https://github.com/CoCreate-app/CoCreate-text/commit/d8b70f45658c0315e6aec186e1dd3ace412433a0))
+
 ## [1.28.3](https://github.com/CoCreate-app/CoCreate-text/compare/v1.28.2...v1.28.3) (2025-04-30)
 
 
